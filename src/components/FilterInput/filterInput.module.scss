@@ -3,9 +3,18 @@
 .label {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  height: 56px;
+  border: 1px solid rgba(0, 0, 0, 0.38);
+  border-radius: 4px;
+  height: 54px;
+  min-height: 1.4375em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:focus,
+  &:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
 }
 
 .input {

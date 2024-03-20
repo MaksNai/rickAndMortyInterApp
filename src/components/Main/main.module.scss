@@ -1,4 +1,4 @@
-@use '../../styles/mixins.scss';
+@use "../../styles/mixins.scss";
 
 .main {
   @include mixins.sizeComponent;
@@ -11,4 +11,11 @@
 .hero {
   display: flex;
   justify-content: center;
+}
+
+.filterGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
