@@ -1,0 +1,5 @@
+export { Header } from './Header/Header'
+export { Hero } from './Hero/Hero'
+export { Main } from './Main/Main'
+export { Logo } from './Logo/Logo'
+export { Nav } from './Nav/Nav'

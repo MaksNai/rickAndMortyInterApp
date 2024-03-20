@@ -1,0 +1,23 @@
+@use '../../styles/variables.scss';
+@import '@fontsource/roboto/700.css';
+
+.nav {
+  max-width: variables.$content-width;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  list-style: none;
+  font-family: Roboto;
+}
+
+.link {
+  padding: 5px;
+  &:hover {
+    color: grey;
+  }
+}
