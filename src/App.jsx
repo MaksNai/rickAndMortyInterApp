@@ -1,13 +1,13 @@
 import './App.scss';
 import { Container } from '@mui/material';
-import { Header } from './components';
-import { Main } from './components';
+import { Header, Main } from './components';
 
 function App() {
-  console.log('ap')
   return (
-    <Container maxWidth="xl" className="container">
-      <Header></Header>
+    <Container maxWidth="xl" className="container" sx={{
+      display: 'flex'
+    }}>
+      <Header />
       <Main></Main>
       <footer>Footer</footer>
     </Container>

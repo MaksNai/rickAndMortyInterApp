@@ -1,0 +1,6 @@
+@use './variables.scss';
+
+@mixin sizeComponent {
+  min-width: 100%;
+  max-width: variables.$content-width;
+}

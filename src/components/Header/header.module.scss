@@ -1,11 +1,11 @@
-@use '../../styles/variables.scss';
+@use '../../styles/mixins.scss';
 
 .header {
+  @include mixins.sizeComponent;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  max-width: variables.$content-width;
   min-height: 60px;
 }
 

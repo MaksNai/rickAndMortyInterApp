@@ -1,8 +1,7 @@
 import styles from './header.module.scss'
-
-import { Logo } from '../'
-import { Nav } from '../'
 import { Link } from '@mui/material'
+import { Logo, Nav } from '../'
+
 
 const links = [
   {

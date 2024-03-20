@@ -1,11 +1,14 @@
 import styles from "./main.module.scss";
-import { Hero } from "../Hero/Hero";
+import { Hero, FilterInput } from "../";
 
 export function Main() {
   return (
-    <main classList={styles.main}>
+    <main className={styles.main}>
       <div className={styles.hero}>
-        <Hero className={styles.heroImage}/>
+        <Hero className={styles.heroImage} />
+      </div>
+      <div className={styles.filterGroup}>
+        <FilterInput></FilterInput>
       </div>
     </main>
   );
