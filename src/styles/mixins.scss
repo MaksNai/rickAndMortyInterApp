@@ -23,3 +23,17 @@
   font-family: variables.$fontSecond;
   font-weight: 700;
 }
+
+@mixin mainPageStyle {
+  @include sizeComponent;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+@mixin heroStyle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  padding: 5px;
+}

@@ -1,21 +1,7 @@
 import styles from "./header.module.scss";
 import { Link } from "@mui/material";
 import { Logo, Nav } from "../";
-
-const links = [
-  {
-    text: "Characters",
-    url: "#",
-  },
-  {
-    text: "Locations",
-    url: "#",
-  },
-  {
-    text: "Episodes",
-    url: "#",
-  },
-];
+import { LINKS } from './constants'
 
 export function Header() {
   return (
@@ -26,7 +12,7 @@ export function Header() {
           <span className={styles.hiddenText}>Главная страница</span>
         </Link>
 
-        <Nav links={links} />
+        <Nav links={LINKS} />
       </div>
     </header>
   );

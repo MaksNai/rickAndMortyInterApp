@@ -1,0 +1,9 @@
+@use "../../styles/mixins.scss";
+
+.main {
+  @include mixins.mainPageStyle;
+}
+
+.hero {
+  @include mixins.heroStyle;
+}

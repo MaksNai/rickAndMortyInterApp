@@ -1,5 +1,5 @@
-import styles from "./main.module.scss";
-import { Hero, FilterInput, SelectField, CharacterCards, LoadMoreButton } from "../";
+import styles from "./mainCharacters.module.scss";
+import { Hero, FilterInput, SelectField, CharacterCards, LoadMoreButton } from "..";
 
 const testDataLabel = [
   { label: "Species", items: ["Human", "Alien"] },
@@ -18,7 +18,7 @@ for (let i = 0; i < 8; i++) {
   testArray.push(testDataCharacter);
 }
 
-export function Main() {
+export function MainCharacters() {
   return (
     <main className={styles.main}>
       <div className={styles.hero}>
@@ -39,7 +39,7 @@ export function Main() {
                 label: item.label,
                 items: item.items,
               }}
-            ></SelectField>
+            />
           </li>
         ))}
       </ul>

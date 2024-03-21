@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 export function SelectField({ props }) {
-  const id = useId();
+  const idSelect = useId();
   const idLabel = useId();
   const { label, items } = props;
 
@@ -17,7 +17,6 @@ export function SelectField({ props }) {
   };
 
   return (
-    <div>
       <FormControl
         variant="outlined"
         sx={{
@@ -43,7 +42,7 @@ export function SelectField({ props }) {
         </InputLabel>
         <Select
           labelId={idLabel}
-          id={id}
+          id={idSelect}
           value={item}
           onChange={handleChange}
           autoWidth
@@ -55,6 +54,5 @@ export function SelectField({ props }) {
           {menuItems}
         </Select>
       </FormControl>
-    </div>
   );
 }
