@@ -9,9 +9,13 @@ export { LoadMoreButton } from './LoadMoreButton/LoadMoreButton'
 
 export { MainCharacters } from './MainCharacters/MainCharacters'
 export { MainLocations } from './MainLocations/MainLocations'
+export { MainEpisodes } from './MainEpisodes/MainEpisodes' 
 
 export { CharactersCards } from './CharactersCards/CharactersCards'
 export { CharacterCard } from './CharacterCard/CharacterCard'
 
 export { LocationsCards } from './LocationsCards/LocationsCards' 
 export { LocationCard } from './LocationCard/LocationCard' 
+
+export { EpisodesCards } from './EpisodesCards/EpisodesCards'
+export { EpisodeCard } from './EpisodeCard/EpisodeCard'

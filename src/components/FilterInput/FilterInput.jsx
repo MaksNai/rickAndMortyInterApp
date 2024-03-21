@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import styles from './filterInput.module.scss'
 import { FormControl, InputAdornment, TextField } from "@mui/material";
 
-export function FilterInput() {
+export function FilterInput({ text = "Filter by name..."}) {
   return (
     <FormControl
       className={styles.filter}
@@ -14,7 +14,7 @@ export function FilterInput() {
       }}
     >
       <TextField
-        placeholder="Filter by name..."
+        placeholder={text}
         variant="outlined"
         sx={{
           "&:hover": {
