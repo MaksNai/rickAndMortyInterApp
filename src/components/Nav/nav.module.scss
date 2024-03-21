@@ -1,7 +1,9 @@
+@use '../../styles/mixins.scss';
 @use '../../styles/variables.scss';
-@import '@fontsource/roboto/700.css';
+
 
 .nav {
+  @include mixins.fontSecond700;
   max-width: variables.$content-width;
 }
 
@@ -12,7 +14,7 @@
   gap: 24px;
   flex-wrap: wrap;
   list-style: none;
-  font-family: variables.$fontMain;
+  font-weight: 700;
 }
 
 .link {

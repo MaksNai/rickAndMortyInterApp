@@ -1,6 +1,19 @@
 @use './variables.scss';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource-variable/karla';
+
 
 @mixin sizeComponent {
   min-width: 100%;
   max-width: variables.$content-width;
+}
+
+@mixin fontMain400 {
+  font-family: variables.$fontMain;
+  font-weight: 400;
+}
+
+@mixin fontSecond700 {
+  font-family: variables.$fontSecond;
+  font-weight: 700;
 }
