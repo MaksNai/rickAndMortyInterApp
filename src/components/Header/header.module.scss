@@ -1,12 +1,13 @@
-@use '../../styles/mixins.scss';
+@use "../../styles/mixins.scss";
 
 .header {
-  @include mixins.sizeComponent;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
   min-height: 60px;
+  box-shadow: -2px 0px 8px 2px #0000001a;
 }
 
 .hiddenText {
@@ -20,4 +21,12 @@
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+
+.headerContent {
+  @include mixins.sizeComponent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
 }

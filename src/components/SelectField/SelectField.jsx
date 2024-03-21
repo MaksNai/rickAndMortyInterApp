@@ -23,6 +23,7 @@ export function SelectField({ props }) {
         sx={{
           m: 1,
           minWidth: 240,
+          margin: 0,
           borderColor: "#00000061",
           "&:hover": {
             borderColor: "#00000080",

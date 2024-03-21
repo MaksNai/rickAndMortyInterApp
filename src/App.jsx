@@ -1,15 +1,20 @@
-import './App.scss';
-import { Container } from '@mui/material';
-import { Header, Main } from './components';
+import "./App.scss";
+import { Container } from "@mui/material";
+import { Footer, Header, Main } from "./components";
 
 function App() {
   return (
-    <Container maxWidth="xl" className="container" sx={{
-      display: 'flex'
-    }}>
+    <Container
+      className="container"
+      maxWidth="false"
+      disableGutters
+      sx={{
+        display: "flex",
+      }}
+    >
       <Header />
       <Main />
-      <footer>Footer</footer>
+      <Footer />
     </Container>
   );
 }
