@@ -1,9 +1,11 @@
 import SearchIcon from "@mui/icons-material/Search";
+import styles from './filterInput.module.scss'
 import { FormControl, InputAdornment, TextField } from "@mui/material";
 
 export function FilterInput() {
   return (
     <FormControl
+      className={styles.filter}
       sx={{
         "&:hover": {
           color: "#00000080",

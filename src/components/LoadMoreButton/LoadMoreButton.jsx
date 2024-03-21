@@ -17,14 +17,17 @@ const LoadMoreButtonStyle = styled(Button)({
     backgroundColor: "#0069d9",
     borderColor: "#0062cc",
     boxShadow: "none",
+    color: "white"
   },
   "&:active": {
     boxShadow: "none",
     backgroundColor: "#0062cc",
     borderColor: "#005cbf",
+    color: "white"
   },
   "&:focus": {
     boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
+    color: "white"
   },
 });
 

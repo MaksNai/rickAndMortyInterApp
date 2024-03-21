@@ -4,10 +4,14 @@ export { Logo } from './Logo/Logo'
 export { Nav } from './Nav/Nav'
 export { FilterInput } from './FilterInput/FilterInput'
 export { SelectField } from './SelectField/SelectField'
-export { CharacterCards } from './CharacterCards/CharacterCards'
-export { CharacterCard } from './CharacterCard/CharacterCard'
 export { Footer } from './Footer/Footer'
 export { LoadMoreButton } from './LoadMoreButton/LoadMoreButton'
 
 export { MainCharacters } from './MainCharacters/MainCharacters'
 export { MainLocations } from './MainLocations/MainLocations'
+
+export { CharactersCards } from './CharactersCards/CharactersCards'
+export { CharacterCard } from './CharacterCard/CharacterCard'
+
+export { LocationsCards } from './LocationsCards/LocationsCards' 
+export { LocationCard } from './LocationCard/LocationCard' 

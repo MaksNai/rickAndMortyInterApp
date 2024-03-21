@@ -36,6 +36,7 @@ function App() {
     //       <Header />
     //       <Routes>
     //         <Route exact path="/characters" component={MainCharacters} />
+    //         <Route exact path="/locations" component={MainLocations} />
     //       </Routes>
     //       <Navigate to="/characters" />
     //       <Footer />

@@ -1,10 +1,7 @@
 @use "../../styles/mixins.scss";
 
 .main {
-  @include mixins.sizeComponent;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  @include mixins.mainPageStyle;
 }
 
 .hero {
@@ -12,15 +9,7 @@
 }
 
 .filterList {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 23px;
-
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  @include mixins.inputFieldsStyle;
 
   padding-right: 1px;
   margin-bottom: 60px;
@@ -31,9 +20,7 @@
 }
 
 .loadMoreButton {
+  @include mixins.loadButtonStyle;
   margin-top: 48px;
   margin-bottom: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

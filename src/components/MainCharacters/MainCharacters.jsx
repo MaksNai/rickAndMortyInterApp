@@ -1,11 +1,12 @@
 import styles from "./mainCharacters.module.scss";
-import { Hero, FilterInput, SelectField, CharacterCards, LoadMoreButton } from "..";
-
-const testDataLabel = [
-  { label: "Species", items: ["Human", "Alien"] },
-  { label: "Gender", items: ["Male", "Female"] },
-  { label: "Status", items: ["Dead", "Alive"] },
-];
+import { TEST_DATA_LABEL } from "./constants";
+import {
+  Hero,
+  FilterInput,
+  SelectField,
+  CharactersCards,
+  LoadMoreButton,
+} from "..";
 
 const testDataCharacter = {
   img: "./testImage.png",
@@ -28,7 +29,7 @@ export function MainCharacters() {
         <li className={styles.filterItem} key={Date.now()}>
           <FilterInput />
         </li>
-        {testDataLabel.map((item) => (
+        {TEST_DATA_LABEL.map((item) => (
           <li key={item.label} className={styles.filterItem}>
             <SelectField
               sx={{
@@ -44,7 +45,7 @@ export function MainCharacters() {
         ))}
       </ul>
       <section className={styles.contentCard}>
-        <CharacterCards characters={testArray} />
+        <CharactersCards characters={testArray} />
       </section>
       <div className={styles.loadMoreButton}>
         <LoadMoreButton />
