@@ -1,7 +1,15 @@
+import { useState } from 'react';
 import { Link } from '@mui/material'
 import styles from './nav.module.scss'
 
 export function Nav({ links }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const classesBurger = isOpen ? `${styles.burger} ${styles.burgerOpen}` : `${styles.burger}`;
+  const classesList = isOpen ? `${styles.list} ${styles.listOpen}` : `${styles.list}`;
+
+  const handleBurgerCLick = () => {
+    setIsOpen(!isOpen);
+  }
   const linksList = links.map((link) => {
     return (
       <li key={link.text}>
@@ -14,7 +22,8 @@ export function Nav({ links }) {
 
   return (
     <nav className={styles.nav}>
-      <ul className={styles.list}>{linksList}</ul>
+      <div className={classesBurger} onClick={handleBurgerCLick}></div>
+      <ul className={classesList}>{linksList}</ul>
     </nav>
   )
 }

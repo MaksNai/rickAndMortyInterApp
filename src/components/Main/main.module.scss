@@ -10,6 +10,8 @@
 .hero {
   display: flex;
   justify-content: center;
+  margin-bottom: 16px;
+  padding: 5px;
 }
 
 .filterList {
@@ -24,8 +26,17 @@
   list-style: none;
 
   padding-right: 1px;
+  margin-bottom: 60px;
 }
 
 .filterItem {
   flex-basis: 240px;
+}
+
+.loadMoreButton {
+  margin-top: 48px;
+  margin-bottom: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

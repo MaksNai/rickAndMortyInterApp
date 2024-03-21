@@ -1,5 +1,6 @@
 @use './variables.scss';
 @import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
 @import '@fontsource-variable/karla';
 
 
@@ -11,6 +12,11 @@
 @mixin fontMain400 {
   font-family: variables.$fontMain;
   font-weight: 400;
+}
+
+@mixin fontMain500 {
+  font-family: variables.$fontMain;
+  font-weight: 500;
 }
 
 @mixin fontSecond700 {

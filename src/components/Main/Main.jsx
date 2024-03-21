@@ -1,5 +1,5 @@
 import styles from "./main.module.scss";
-import { Hero, FilterInput, SelectField, CharacterCards } from "../";
+import { Hero, FilterInput, SelectField, CharacterCards, LoadMoreButton } from "../";
 
 const testDataLabel = [
   { label: "Species", items: ["Human", "Alien"] },
@@ -46,6 +46,9 @@ export function Main() {
       <section className={styles.contentCard}>
         <CharacterCards characters={testArray} />
       </section>
+      <div className={styles.loadMoreButton}>
+        <LoadMoreButton />
+      </div>
     </main>
   );
 }
