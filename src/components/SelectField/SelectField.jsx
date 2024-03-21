@@ -19,6 +19,7 @@ export function SelectField({ props }) {
   return (
     <div>
       <FormControl
+        variant="outlined"
         sx={{
           m: 1,
           minWidth: 240,
@@ -28,7 +29,17 @@ export function SelectField({ props }) {
           },
         }}
       >
-        <InputLabel id={idLabel}>{label}</InputLabel>
+        <InputLabel
+          id={idLabel}
+          sx={{
+            "&:hover": {
+              color: "#00000080",
+            },
+            color: "#00000099",
+          }}
+        >
+          {label}
+        </InputLabel>
         <Select
           labelId={idLabel}
           id={id}
