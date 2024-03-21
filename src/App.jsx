@@ -8,7 +8,7 @@ function App() {
       display: 'flex'
     }}>
       <Header />
-      <Main></Main>
+      <Main />
       <footer>Footer</footer>
     </Container>
   );
