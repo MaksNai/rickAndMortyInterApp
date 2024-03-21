@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import styles from "./locationCard.module.scss";
 
 export function LocationCard({ locations }) {
-  const { locationName, dimension } = locations;
+  const { locationName = 'Earth', dimension = 'Planet'} = locations;
   return (
     <a href="#" className={styles.cardLink}>
       <Card
@@ -21,10 +21,10 @@ export function LocationCard({ locations }) {
       >
         <CardContent>
           <Typography sx={{ fontSize: 20, marginBottom: 0 }} color="black" gutterBottom>
-            {locationName}
+            {locationName && 'Earth'}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary">
-            {dimension}
+            {dimension && 'Planet'}
           </Typography>
         </CardContent>
       </Card>

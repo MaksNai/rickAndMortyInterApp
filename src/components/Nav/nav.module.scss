@@ -45,15 +45,18 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 20px;
-  border: 1px solid black;
+  width: 18px;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.54);
+;
 
   &::before,
   &::after {
     position: absolute;
     content: "";
-    width: 20px;
-    border: 1px solid black;
+    width: 18px;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.54);
   }
   &::before {
     top: 5px;

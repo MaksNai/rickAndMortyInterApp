@@ -1,10 +1,12 @@
-import styles from './locationsCards.module.scss'
-import { LocationCard } from '..'
+import styles from "./locationsCards.module.scss";
+import { LocationCard } from "..";
 
 export function LocationsCards({ locations }) {
-    const locationsArray = locations.map((location) => (
-      <LocationCard location={location} />
-    ));
-    return <section className={styles.cards}>{locationsArray}</section>;
-  }
-  
+  return (
+    <section className={styles.cards}>
+      {locations.map((location) => (
+        <LocationCard location={location} />
+      ))}
+    </section>
+  );
+}

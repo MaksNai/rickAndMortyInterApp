@@ -28,7 +28,7 @@ function App() {
       }}
     >
       <Header />
-      <MainEpisodes />
+      <MainCharacters />
       <Footer />
     </Container>
     // <Fragment>
