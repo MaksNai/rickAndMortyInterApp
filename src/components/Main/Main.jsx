@@ -1,5 +1,11 @@
 import styles from "./main.module.scss";
-import { Hero, FilterInput, SelectField } from "../";
+import { Hero, FilterInput, SelectField, CharacterCards } from "../";
+
+const testData = [
+  { label: "Species", items: ["Human", "Alien"] },
+  { label: "Gender", items: ["Male", "Female"] },
+  { label: "Status", items: ["Dead", "Alive"] },
+];
 
 export function Main() {
   return (
@@ -7,21 +13,24 @@ export function Main() {
       <div className={styles.hero}>
         <Hero className={styles.heroImage} />
       </div>
-      <div className={styles.filterGroup}>
-        <FilterInput></FilterInput>
-        <SelectField props={{
-          label: "Species",
-          items: ['Human', 'Alien']
-        }}></SelectField>
-        <SelectField props={{
-          label: "Gender",
-          items: ['Male', 'Female']
-        }}></SelectField>
-        <SelectField props={{
-          label: "Status",
-          items: ['Dead', 'Alive']
-        }}></SelectField>
-      </div>
+      <ul className={styles.filterList}>
+        <li className={styles.filterItem} key={Date.now()}>
+          <FilterInput />
+        </li>
+        {testData.map((item) => (
+          <li key={item.label}>
+            <SelectField
+              props={{
+                label: item.label,
+                items: item.items,
+              }}
+            ></SelectField>
+          </li>
+        ))}
+      </ul>
+      <section className={styles.contentCard}>
+        <CharacterCards />
+      </section>
     </main>
   );
 }

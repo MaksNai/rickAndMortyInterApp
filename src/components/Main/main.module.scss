@@ -13,9 +13,17 @@
   justify-content: center;
 }
 
-.filterGroup {
+.filterList {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 20px;
+
+  margin: 0;
+  list-style: none;
+}
+
+.filterItem {
+  flex-basis: 240px;
 }

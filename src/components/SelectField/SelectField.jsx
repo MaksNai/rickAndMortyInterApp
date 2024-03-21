@@ -9,7 +9,7 @@ export function SelectField({ props }) {
   const [item, setItem] = useState("");
 
   const menuItems = items.map((menuItem) => (
-    <MenuItem value={menuItem}>{menuItem}</MenuItem>
+    <MenuItem value={menuItem} key={menuItem}>{menuItem}</MenuItem>
   ));
 
   const handleChange = (event) => {
