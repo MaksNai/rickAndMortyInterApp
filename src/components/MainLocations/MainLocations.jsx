@@ -33,9 +33,9 @@ export function MainLocations() {
       </div>
 
       <div className={styles.advancedFiltersButton}>
-        <button onClick={toggleFilters}>ADVANCED FILTERS</button>
+        <button onClick={toggleFilters}>Advanced filters</button>
       </div>
-      <FiltersModal isOpen={isFiltersVisible} handleClose={toggleFilters}>
+      <FiltersModal modalData={TEST_DATA_LABEL}>
         <div> <ul className={styles.filterList}>
         <li className={`${styles.filterItem} ${styles.filterField}`} key={Date.now()}>
           <FilterInput />
@@ -44,7 +44,6 @@ export function MainLocations() {
           <li key={item.label} className={styles.filterItem}>
             <SelectField
               sx={{
-                maxWidth: "240",
                 margin: "0",
               }}
               props={{
@@ -56,6 +55,7 @@ export function MainLocations() {
         ))}
       </ul></div>
       </FiltersModal>
+
       <ul className={styles.filterList}>
         <li className={`${styles.filterItem} ${styles.filterField}`} key={Date.now()}>
           <FilterInput />
@@ -75,6 +75,7 @@ export function MainLocations() {
           </li>
         ))}
       </ul>
+      
       <section>
         <LocationsCards locations={testArray}/>
       </section>

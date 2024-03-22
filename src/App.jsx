@@ -6,7 +6,6 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import { Fragment } from "react";
 import {
   Footer,
   Header,
@@ -16,7 +15,6 @@ import {
 } from "./components";
 
 const App = () => (
-    <Fragment>
       <Router>
         <Container
           className="container"
@@ -38,7 +36,6 @@ const App = () => (
           <Footer />
         </Container>
       </Router>
-    </Fragment>
   );
 
 export default App;

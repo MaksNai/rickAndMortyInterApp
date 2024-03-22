@@ -1,5 +1,6 @@
 import { useId, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import styles from './selectField.module.scss'
 
 export function SelectField({ props }) {
   const idSelect = useId();
@@ -18,6 +19,7 @@ export function SelectField({ props }) {
 
   return (
       <FormControl
+      className={styles.select}
         variant="outlined"
         sx={{
           m: 1,
@@ -45,7 +47,6 @@ export function SelectField({ props }) {
           id={idSelect}
           value={item}
           onChange={handleChange}
-          autoWidth
           label={label}
         >
           <MenuItem value="">
