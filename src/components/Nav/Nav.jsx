@@ -12,6 +12,7 @@ export function Nav({ links }) {
     : `${styles.list}`;
 
   const handleBurgerCLick = () => {
+    document.querySelector('body').classList.toggle(styles.unScroll)
     setIsOpen(!isOpen);
   };
 

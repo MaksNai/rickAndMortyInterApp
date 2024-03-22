@@ -53,6 +53,8 @@
   padding: 0;
   list-style: none;
 
+  z-index: -1;
+
   @media (max-width: variables.$mobileScreen) {
     flex-direction: column;
   }
@@ -62,6 +64,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: -1;
 }
 
 @mixin mainCardsStyle {

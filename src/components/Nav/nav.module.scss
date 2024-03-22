@@ -52,7 +52,7 @@
 .listOpen {
   display: flex;
   transform: translateX(0);
-  @media (min-width: variables.$mobileScreen) {
+  @media (max-width: variables.$mobileScreen) {
     align-items: center;
     font-size: 24px;
     padding-top: 40px;
@@ -107,4 +107,11 @@
   &::after {
     display: none;
   }
+}
+
+.unScroll {
+  @media (max-width: variables.$mobileScreen) {
+    overflow: hidden;
+  }
+  overflow: auto;
 }
