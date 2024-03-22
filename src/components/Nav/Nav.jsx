@@ -11,13 +11,13 @@ export function Nav({ links }) {
     ? `${styles.list} ${styles.listOpen}`
     : `${styles.list}`;
 
-  const handleBurgerCLick = () => {
+  const handleBurgerClick = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <nav className={styles.nav}>
-      <div className={classesBurger} onClick={handleBurgerCLick}></div>
+      <div className={classesBurger} onClick={handleBurgerClick}></div>
       <ul className={classesList}>
         {links.map((link) => {
           return (

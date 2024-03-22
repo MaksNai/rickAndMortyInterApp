@@ -1,5 +1,5 @@
 import styles from "./mainLocations.module.scss";
-import { TEST_DATA_LABEL } from "./constants";
+import { TEST_DATA_LABEL, TEST_ARRAY } from "./constants";
 import {
   Hero,
   FilterInput,
@@ -8,15 +8,6 @@ import {
   LoadMoreButton
 } from "..";
 
-const testDataPlanet = {
-  locationName: "Earth (C-137)",
-  dimension: "Planet",
-};
-
-let testArray = [];
-for (let i = 0; i < 12; i++) {
-  testArray.push(testDataPlanet);
-}
 
 
 export function MainLocations() {
@@ -45,7 +36,7 @@ export function MainLocations() {
         ))}
       </ul>
       <section>
-        <LocationsCards locations={testArray}/>
+        <LocationsCards locations={TEST_ARRAY}/>
       </section>
       <div className={styles.loadMoreButton}>
         <LoadMoreButton />
