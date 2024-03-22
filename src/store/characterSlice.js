@@ -20,6 +20,7 @@ const initialState = {
   filters: {
     name: "",
     status: "",
+    gender: "",
   },
 };
 

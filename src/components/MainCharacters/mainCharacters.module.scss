@@ -56,3 +56,8 @@
   @include mixins.advancedFiltersButton(48px);
   max-width: 312px;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+}
