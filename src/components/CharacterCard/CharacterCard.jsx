@@ -1,10 +1,11 @@
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import styles from './characterCard.module.scss'
+import { Link } from "react-router-dom";
 
 export function CharacterCard({ character }) {
   const { img, characterName, species } = character;
   return (
-    <a href="#" className={styles.cardLink}>
+    <Link href="#" className={styles.cardLink}>
     <article>
       <Card sx={{ maxWidth: 240 }}>
         <CardMedia
@@ -24,6 +25,6 @@ export function CharacterCard({ character }) {
         </CardContent>
       </Card>
     </article>
-    </a>
+    </Link>
   );
 }

@@ -2,11 +2,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import styles from "./locationCard.module.scss";
+import { Link } from "react-router-dom";
 
 export function LocationCard({ location }) {
   const { locationName = 'Earth', dimension = 'Planet'} = location;
   return (
-    <a href="#" className={styles.cardLink}>
+    <Link href="#" className={styles.cardLink}>
       <Card
         sx={{
           maxWidth: 240,
@@ -28,6 +29,6 @@ export function LocationCard({ location }) {
           </Typography>
         </CardContent>
       </Card>
-    </a>
+    </Link>
   );
 }
