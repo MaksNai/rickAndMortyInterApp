@@ -20,8 +20,7 @@ export function MainCharacters() {
   const dispatch = useDispatch();
   const characters = useSelector(selectAllCharacters);
 
-  const [itemsPerPage, setItemsPerPage] = useState(8)
-
+  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
 
   const characterLoading = useSelector((state) => state.characters.loading);
 
@@ -31,7 +30,6 @@ export function MainCharacters() {
     }
   }, [characterLoading, dispatch]);
 
-  
   let content;
   switch (characterLoading) {
     case "loading":
@@ -42,15 +40,14 @@ export function MainCharacters() {
       );
       break;
     case "succeeded":
-      const charactersPage = characters.slice(0, itemsPerPage)
+      const charactersPage = characters.slice(0, itemsPerPage);
       content = <CharactersCards characters={charactersPage} />;
       break;
   }
 
   const handleLoadMoreClick = () => {
-    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE)
-  }
-
+    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE);
+  };
 
   return (
     <main className={styles.main}>
@@ -85,9 +82,14 @@ export function MainCharacters() {
         <FiltersModal modalData={TEST_DATA_LABEL} />
       </div>
       <section className={styles.contentCard}>{content}</section>
-      <div className={styles.loadMoreButtonContainer} onClick={handleLoadMoreClick}>
-        <LoadMoreButton />
-      </div>
+      {characters.length > itemsPerPage && (
+        <div
+          className={styles.loadMoreButtonContainer}
+          onClick={handleLoadMoreClick}
+        >
+          <LoadMoreButton />
+        </div>
+      )}
     </main>
   );
 }

@@ -5,7 +5,7 @@ import styles from "./locationCard.module.scss";
 import { Link } from "react-router-dom";
 
 export function LocationCard({ location }) {
-  const { locationName = 'Earth', dimension = 'Planet'} = location;
+  const { name, type } = location;
   return (
     <Link href="#" className={styles.cardLink}>
       <Card
@@ -21,10 +21,10 @@ export function LocationCard({ location }) {
       >
         <CardContent>
           <Typography sx={{ fontSize: 20, marginBottom: 0 }} color="black" gutterBottom>
-            {locationName && 'Earth'}
+            {name}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary">
-            {dimension && 'Planet'}
+            {type}
           </Typography>
         </CardContent>
       </Card>

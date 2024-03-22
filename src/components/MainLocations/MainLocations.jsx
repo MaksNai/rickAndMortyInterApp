@@ -1,5 +1,11 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import {
+  selectAllLocations,
+  fetchLocations,
+} from "../../store/locationsSlice";
 import styles from "./mainLocations.module.scss";
-import { TEST_DATA_LABEL, TEST_ARRAY } from "./constants";
+import { TEST_DATA_LABEL, ITEMS_PER_PAGE } from "./constants";
 import {
   Hero,
   FilterInput,
@@ -7,9 +13,43 @@ import {
   LocationsCards,
   LoadMoreButton,
   FiltersModal,
+  Loading
 } from "..";
 
 export function MainLocations() {
+
+  const dispatch = useDispatch();
+  const locations = useSelector(selectAllLocations);
+
+  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
+
+  const locationLoading = useSelector((state) => state.locations.loading);
+
+  useEffect(() => {
+    if (locationLoading === "idle") {
+      dispatch(fetchLocations());
+    }
+  }, [locationLoading, dispatch]);
+
+  let content;
+  switch (locationLoading) {
+    case "loading":
+      content = (
+        <div className={styles.loading}>
+          <Loading />
+        </div>
+      );
+      break;
+    case "succeeded":
+      const locationsPage = locations.slice(0, itemsPerPage);
+      content = <LocationsCards locations={locationsPage} />
+      break;
+  }
+
+  const handleLoadMoreClick = () => {
+    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE);
+  };
+
   const selectInputs = TEST_DATA_LABEL.map((item) => (
     <li key={item.label} className={styles.filterSelect}>
       <SelectField
@@ -45,12 +85,17 @@ export function MainLocations() {
       </div>
 
       <section>
-        <LocationsCards locations={TEST_ARRAY} />
+        {content}
       </section>
       <div className={styles.loadMoreButtonContainer}>
-        <div className={styles.loadMoreButton}>
+      {locations.length > itemsPerPage && (
+        <div
+          className={styles.loadMoreButtonContainer}
+          onClick={handleLoadMoreClick}
+        >
           <LoadMoreButton />
         </div>
+      )}
       </div>
     </main>
   );

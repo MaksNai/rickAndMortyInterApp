@@ -12,6 +12,7 @@ export function CharacterCard({ character }) {
           component="img"
           alt={`${species} ${name}`}
           height="168"
+          width="240"
           image={image}
         />
         <CardContent>
