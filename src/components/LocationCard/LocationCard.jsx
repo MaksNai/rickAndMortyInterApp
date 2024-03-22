@@ -3,8 +3,8 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import styles from "./locationCard.module.scss";
 
-export function LocationCard({ locations }) {
-  const { locationName = 'Earth', dimension = 'Planet'} = locations;
+export function LocationCard({ location }) {
+  const { locationName = 'Earth', dimension = 'Planet'} = location;
   return (
     <a href="#" className={styles.cardLink}>
       <Card
