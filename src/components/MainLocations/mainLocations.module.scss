@@ -15,10 +15,18 @@
   @include mixins.inputFieldsStyle;
   margin-bottom: 65px;
   padding: 0 60px;
+
+  @media (max-width: variables.$mobileScreen) {
+    padding: 0;
+    margin-bottom: 16px;
+  }
 }
 
 .filterField {
   flex-grow: 1;
+  @media (max-width: variables.$mobileScreen) {
+    width: 100%;
+  }
 }
 
 .loadMoreButton {
@@ -27,21 +35,17 @@
   margin-bottom: 25px;
 }
 
-.modalBox {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-}
-
 .advancedFiltersButton {
   display: none;
-
   @media (max-width: variables.$mobileScreen) {
     display: block;
+    width: 100%;
+    margin-bottom: 48px;
+  }
+}
+
+.filterSelect {
+  @media (max-width: variables.$mobileScreen) {
+    display: none;
   }
 }
