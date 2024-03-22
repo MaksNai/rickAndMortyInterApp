@@ -6,6 +6,7 @@ const LoadMoreButtonStyle = styled(Button)({
   backgroundColor: "#F2F9FE",
   borderColor: "#0063cc",
   color: "#2196F3",
+  width: '146px',
   "&:hover": {
     backgroundColor: "#0069d9",
     borderColor: "#0062cc",
