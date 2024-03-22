@@ -1,0 +1,118 @@
+@use "../../styles/mixins.scss";
+@use "../../styles/variables.scss";
+
+.nav {
+  @include mixins.fontSecond700;
+  max-width: variables.$content-width;
+  box-sizing: border-box;
+  @media (max-width: variables.$mobileScreen) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 5px 24px;
+  }
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  list-style: none;
+  font-weight: 700;
+
+  @media (max-width: variables.$mobileScreen) {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: calc(100vh - 61px);
+    width: 100%;
+    background-color: white;
+    z-index: 10;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+}
+
+.backgroundOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+.listOpen {
+  display: flex;
+  transform: translateX(0);
+  @media (max-width: variables.$mobileScreen) {
+    align-items: center;
+    font-size: 24px;
+    padding-top: 40px;
+  }
+}
+
+.backgroundOverlayOpen {
+  display: block;
+}
+
+.link {
+  padding: 5px;
+  &:hover {
+    color: grey;
+  }
+}
+
+.burger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 18px;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.54);
+
+  &::before,
+  &::after {
+    position: absolute;
+    content: "";
+    width: 18px;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.54);
+  }
+  &::before {
+    top: 5px;
+  }
+  &::after {
+    bottom: 5px;
+  }
+
+  @media (min-width: variables.$mobileScreen) {
+    display: none;
+  }
+}
+
+.burgerOpen {
+  transform: rotate(-45deg);
+  &::before {
+    transform: rotate(90deg) translate(-28%);
+  }
+  &::after {
+    display: none;
+  }
+}
+
+.unScroll {
+  @media (max-width: variables.$mobileScreen) {
+    overflow: hidden;
+  }
+  overflow: auto;
+}

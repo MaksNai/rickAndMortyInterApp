@@ -1,0 +1,34 @@
+@use "../../styles/mixins.scss";
+@use "../../styles/variables.scss";
+
+.main {
+  @include mixins.mainPageStyle;
+  width: 100%;
+}
+
+.hero {
+  @include mixins.heroStyle;
+  max-width: 400px;
+  align-self: center;
+}
+
+.filterList {
+  @include mixins.inputFieldsStyle;
+  justify-content: center;
+  margin-bottom: 65px;
+}
+
+.filterField {
+  flex-basis: 500px;
+  @media (max-width: variables.$mobileScreen) {
+    width: 100%;
+    flex-basis: auto;
+    max-width: 312px;
+  }
+}
+
+.loadMoreButton {
+  @include mixins.loadButtonStyle;
+  margin-top: 46px;
+  margin-bottom: 27px;
+}

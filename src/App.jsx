@@ -1,0 +1,41 @@
+import "./App.scss";
+import { Container } from "@mui/material";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import {
+  Footer,
+  Header,
+  MainCharacters,
+  MainLocations,
+  MainEpisodes,
+} from "./components";
+
+const App = () => (
+      <Router>
+        <Container
+          className="container"
+          maxWidth="false"
+          disableGutters
+          sx={{
+            display: "flex",
+            flexDirection: "column", 
+            minHeight: "100vh", 
+          }}
+        >
+          <Header />
+          <Routes>
+            <Route path="/characters" element={<MainCharacters />} />
+            <Route path="/locations" element={<MainLocations />} />
+            <Route path="/episodes" element={<MainEpisodes />} />
+            <Route path="/" element={<Navigate to="/characters" replace />} />
+          </Routes>
+          <Footer />
+        </Container>
+      </Router>
+  );
+
+export default App;
