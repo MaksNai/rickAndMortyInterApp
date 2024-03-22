@@ -15,8 +15,7 @@ import {
   MainEpisodes,
 } from "./components";
 
-function App() {
-  return (
+const App = () => (
     <Fragment>
       <Router>
         <Container
@@ -41,6 +40,5 @@ function App() {
       </Router>
     </Fragment>
   );
-}
 
 export default App;
