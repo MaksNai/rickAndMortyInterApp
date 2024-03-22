@@ -11,13 +11,19 @@ export function Nav({ links }) {
     ? `${styles.list} ${styles.listOpen}`
     : `${styles.list}`;
 
-  const handleBurgerClick = () => {
+  const handleBurgerCLick = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <nav className={styles.nav}>
-      <div className={classesBurger} onClick={handleBurgerClick}></div>
+      {isOpen && (
+        <div
+          className={styles.backgroundOverlayOpen}
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      <div className={classesBurger} onClick={handleBurgerCLick}></div>
       <ul className={classesList}>
         {links.map((link) => {
           return (
@@ -27,6 +33,7 @@ export function Nav({ links }) {
                 href={link.url}
                 color="black"
                 className={styles.link}
+                onClick={() => setIsOpen(false)} 
               >
                 {link.text}
               </Link>

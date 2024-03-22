@@ -7,12 +7,11 @@ export function CharacterCard({ character }) {
   return (
     <Link href="#" className={styles.cardLink}>
     <article>
-      <Card sx={{ maxWidth: 240 }}>
+      <Card sx={{ maxWidth: 312 }}>
         <CardMedia
           component="img"
           alt={`${species} ${characterName}`}
           height="168"
-          width="240"
           image={img}
         />
         <CardContent>

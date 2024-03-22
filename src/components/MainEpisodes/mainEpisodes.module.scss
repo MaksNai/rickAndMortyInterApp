@@ -6,6 +6,8 @@
 
 .hero {
   @include mixins.heroStyle;
+  max-width: 400px;
+  align-self: center;
 }
 
 .filterList {

@@ -4,7 +4,6 @@
 @import "@fontsource-variable/karla";
 
 @mixin sizeComponent {
-  width: 100%;
   max-width: variables.$content-width;
 }
 
@@ -29,6 +28,11 @@
   flex-direction: column;
   justify-content: space-between;
   flex-grow: 1;
+  padding: 0 10px;
+
+  @media (max-width: variables.$mobileScreen) {
+    padding-top: 60px;
+  }
 }
 
 @mixin heroStyle {
@@ -48,6 +52,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
+
+  @media (max-width: variables.$mobileScreen) {
+    flex-direction: column;
+  }
 }
 
 @mixin loadButtonStyle {
@@ -63,11 +71,21 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px 24px;
+
+  @media (max-width: variables.$mobileScreen) {
+    flex-direction: column;
+  }
 }
 
 @mixin mainCardStyle {
   text-decoration: none;
   &:hover {
     outline: 1px solid black;
+  }
+
+  @media (max-width: variables.$mobileScreen) {
+    display: block;
+    width: 100%;
+    max-width: 312px;
   }
 }
