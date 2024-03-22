@@ -1,6 +1,5 @@
 import styles from "./mainLocations.module.scss";
-import { useState } from "react";
-import { TEST_DATA_LABEL } from "./constants";
+import { TEST_DATA_LABEL, TEST_ARRAY } from "./constants";
 import {
   Hero,
   FilterInput,
@@ -10,22 +9,9 @@ import {
   FiltersModal,
 } from "..";
 
-const testDataPlanet = {
-  locationName: "Earth (C-137)",
-  dimension: "Planet",
-};
-
-let testArray = [];
-for (let i = 0; i < 12; i++) {
-  testArray.push(testDataPlanet);
-}
-
 export function MainLocations() {
   const selectInputs = TEST_DATA_LABEL.map((item) => (
-    <li
-      key={item.label}
-      className={`${styles.filterItem} ${styles.filterSelect}`}
-    >
+    <li key={item.label} className={styles.filterSelect}>
       <SelectField
         sx={{
           margin: "0",
@@ -59,10 +45,12 @@ export function MainLocations() {
       </div>
 
       <section>
-        <LocationsCards locations={testArray} />
+        <LocationsCards locations={TEST_ARRAY} />
       </section>
-      <div className={styles.loadMoreButton}>
-        <LoadMoreButton />
+      <div className={styles.loadMoreButtonContainer}>
+        <div className={styles.loadMoreButton}>
+          <LoadMoreButton />
+        </div>
       </div>
     </main>
   );

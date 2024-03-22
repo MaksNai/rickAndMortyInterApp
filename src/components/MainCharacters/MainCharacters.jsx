@@ -1,39 +1,28 @@
 import styles from "./mainCharacters.module.scss";
-import { TEST_DATA_LABEL } from "./constants";
+import { TEST_DATA_LABEL, TEST_ARRAY } from "./constants";
 import {
   Hero,
   FilterInput,
   SelectField,
   CharactersCards,
   LoadMoreButton,
-} from "..";
+  FiltersModal
+} from ".."; 
 
-const testDataCharacter = {
-  img: "./testImage.png",
-  characterName: "Rick Sanchez",
-  species: "Human",
-};
-
-let testArray = [];
-for (let i = 0; i < 8; i++) {
-  testArray.push(testDataCharacter);
-}
-
-export function MainCharacters() {
+export const MainCharacters = () => {
   return (
     <main className={styles.main}>
       <div className={styles.hero}>
         <Hero className={styles.heroImage} />
       </div>
       <ul className={styles.filterList}>
-        <li className={styles.filterItem} key={Date.now()}>
+        <li className={`${styles.filterItem} ${styles.filterField}`} key={Date.now()}>
           <FilterInput />
         </li>
         {TEST_DATA_LABEL.map((item) => (
-          <li key={item.label} className={styles.filterItem}>
+          <li key={item.label} className={`${styles.filterItem} ${styles.filterSelect}`}>
             <SelectField
               sx={{
-                maxWidth: "240",
                 margin: "0",
               }}
               props={{
@@ -44,10 +33,13 @@ export function MainCharacters() {
           </li>
         ))}
       </ul>
+      <div className={styles.advancedFiltersButton}>
+        <FiltersModal modalData={TEST_DATA_LABEL} />
+      </div>
       <section className={styles.contentCard}>
-        <CharactersCards characters={testArray} />
+        <CharactersCards characters={TEST_ARRAY} />
       </section>
-      <div className={styles.loadMoreButton}>
+      <div className={styles.loadMoreButtonContainer}>
         <LoadMoreButton />
       </div>
     </main>

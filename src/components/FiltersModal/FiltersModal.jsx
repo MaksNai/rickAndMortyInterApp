@@ -2,7 +2,7 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import styles from "./filtersModal.module.scss";
-import { AdvancedFiltersButton, FilterInput, SelectField } from "..";
+import { AdvancedFiltersButton, SelectField } from "..";
 
 const ApplyButtonStyle = styled(Button)({
   backgroundColor: "#F2F9FE",
@@ -63,7 +63,6 @@ export function FiltersModal({ modalData }) {
                 className={`${styles.filterItem} ${styles.filterField}`}
                 key={Date.now()}
               >
-                <FilterInput />
               </li>
               {modalData.map((item) => (
                 <li key={item.label} className={styles.filterItem}>

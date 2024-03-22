@@ -10,7 +10,6 @@ export function EpisodeCard({ episodeData }) {
     <Link href="#" className={styles.cardLink}>
       <Card
         sx={{
-          maxWidth: 240,
           minWidth: 240,
           minHeight: 128,
           display: "flex",

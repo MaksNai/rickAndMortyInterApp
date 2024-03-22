@@ -25,7 +25,7 @@ const testDataSeries = {
             <Hero className={styles.heroImage} type="rickAndMorty" />
           </div>
           <ul className={styles.filterList}>
-            <li className={`${styles.filterItem} ${styles.filterField}`} key={Date.now()}>
+            <li className={styles.filterField} key={Date.now()}>
               <FilterInput text='Filter by name or episode (ex. S01 or S01E02)'/>
             </li>
           </ul>

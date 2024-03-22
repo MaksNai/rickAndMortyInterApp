@@ -5,7 +5,9 @@ export const AdvancedFiltersButton = () => {
   return (
     <Button
       variant="contained"
-      startIcon={<FilterListIcon sx={{ color: "#0000008A" }} />}
+      startIcon={
+        <FilterListIcon sx={{ color: "#0000008A", alignSelf: "self-start" }} />
+      }
       sx={{
         backgroundColor: "#E3F2FD",
         color: "#2196F3",
@@ -16,7 +18,7 @@ export const AdvancedFiltersButton = () => {
         padding: "10px 20px",
         textTransform: "uppercase",
         boxShadow: "none",
-        width: "100%"
+        width: "100%",
       }}
     >
       Advanced Filters

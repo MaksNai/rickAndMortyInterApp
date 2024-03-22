@@ -29,9 +29,12 @@
   justify-content: space-between;
   flex-grow: 1;
   padding: 0 10px;
+  box-sizing: border-box;
 
   @media (max-width: variables.$mobileScreen) {
-    padding-top: 60px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 30px;
   }
 }
 
@@ -45,9 +48,9 @@
 @mixin inputFieldsStyle {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 23px;
+  gap: 28px;
 
   margin: 0;
   padding: 0;
@@ -70,7 +73,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 20px 24px;
+  gap: 24px 20px;
+  box-sizing: border-box;
 
   @media (max-width: variables.$mobileScreen) {
     flex-direction: column;
@@ -87,5 +91,14 @@
     display: block;
     width: 100%;
     max-width: 312px;
+  }
+}
+
+@mixin advancedFiltersButton($margin) {
+  display: none;
+  @media (max-width: variables.$mobileScreen) {
+    display: block;
+    width: 100%;
+    margin-bottom: $margin;
   }
 }

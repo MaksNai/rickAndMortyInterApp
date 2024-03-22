@@ -16,6 +16,14 @@
 
   padding-right: 1px;
   margin-bottom: 60px;
+
+  @media (max-width: variables.$mobileScreen) {
+    padding: 0;
+    max-width: 312px;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 16px;
+  }
 }
 
 .filterItem {
@@ -25,8 +33,26 @@
   }
 }
 
-.loadMoreButton {
+.filterField {
+  @media (max-width: variables.$mobileScreen) {
+    width: 100%;
+  }
+}
+
+.loadMoreButtonContainer {
   @include mixins.loadButtonStyle;
   margin-top: 48px;
   margin-bottom: 44px;
+}
+
+.filterSelect {
+  @media (max-width: variables.$mobileScreen) {
+    display: none;
+  }
+}
+
+.advancedFiltersButton {
+  margin: auto;
+  @include mixins.advancedFiltersButton(48px);
+  max-width: 312px;
 }
