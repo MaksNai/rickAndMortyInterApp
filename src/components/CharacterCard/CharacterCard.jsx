@@ -5,7 +5,7 @@ export function CharacterCard({ character }) {
   const { img, characterName, species } = character;
   return (
     <a href="#" className={styles.cardLink}>
-    <article key={Date.now()}>
+    <article>
       <Card sx={{ maxWidth: 240 }}>
         <CardMedia
           component="img"
