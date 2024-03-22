@@ -1,7 +1,7 @@
 import styles from "./mainCharacters.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { TEST_DATA_LABEL } from "./constants";
+import { useEffect, useState } from "react";
+import { TEST_DATA_LABEL, ITEMS_PER_PAGE } from "./constants";
 import {
   selectAllCharacters,
   fetchCharacters,
@@ -20,6 +20,9 @@ export function MainCharacters() {
   const dispatch = useDispatch();
   const characters = useSelector(selectAllCharacters);
 
+  const [itemsPerPage, setItemsPerPage] = useState(8)
+
+
   const characterLoading = useSelector((state) => state.characters.loading);
 
   useEffect(() => {
@@ -28,17 +31,26 @@ export function MainCharacters() {
     }
   }, [characterLoading, dispatch]);
 
+  
   let content;
-
-  if (characterLoading === "loading") {
-    content = (
-      <div className={styles.loading}>
-        <Loading />
-      </div>
-    );
-  } else if (characterLoading === "succeeded") {
-    content = <CharactersCards characters={characters} />;
+  switch (characterLoading) {
+    case "loading":
+      content = (
+        <div className={styles.loading}>
+          <Loading />
+        </div>
+      );
+      break;
+    case "succeeded":
+      const charactersPage = characters.slice(0, itemsPerPage)
+      content = <CharactersCards characters={charactersPage} />;
+      break;
   }
+
+  const handleLoadMoreClick = () => {
+    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE)
+  }
+
 
   return (
     <main className={styles.main}>
@@ -73,7 +85,7 @@ export function MainCharacters() {
         <FiltersModal modalData={TEST_DATA_LABEL} />
       </div>
       <section className={styles.contentCard}>{content}</section>
-      <div className={styles.loadMoreButtonContainer}>
+      <div className={styles.loadMoreButtonContainer} onClick={handleLoadMoreClick}>
         <LoadMoreButton />
       </div>
     </main>
