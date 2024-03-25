@@ -1,21 +1,24 @@
 import { useDispatch } from "react-redux";
 import { setFilter, resetFilters } from "../store/characterSlice";
+import { setFilter as locationSetFilter, resetFilters as locationResetFilters} from "../store/locationsSlice";
 
-export const useFilters = () => {
+export const useFilters = (type = 'characterFilters') => {
+  const filterFunction = type === 'characterFilters' ? setFilter : locationSetFilter
+  const resetFilterFunction = type === 'locationsFilters' ? resetFilters : locationResetFilters
   const dispatch = useDispatch();
 
   const updateFilter = (filterName, value) => {
-    dispatch(setFilter({ filterName, value }));
+    dispatch(filterFunction({ filterName, value }));
     const currentFilters =
-      JSON.parse(localStorage.getItem("characterFilters")) || {};
+      JSON.parse(localStorage.getItem(type)) || {};
 
     currentFilters[filterName] = value;
-    localStorage.setItem("characterFilters", JSON.stringify(currentFilters));
+    localStorage.setItem(type, JSON.stringify(currentFilters));
   };
 
   const resetAllFilters = () => {
-    dispatch(resetFilters()); 
-    localStorage.removeItem("characterFilters"); 
+    dispatch(resetFilterFunction()); 
+    localStorage.removeItem(type); 
   };
 
   return { updateFilter, resetAllFilters };

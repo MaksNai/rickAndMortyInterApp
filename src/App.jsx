@@ -14,7 +14,8 @@ import {
   MainCharacters,
   MainLocations,
   MainEpisodes,
-  MainCharacterDetail
+  MainCharacterDetail,
+  MainLocationDetail
 } from "./components";
 
 const App = () => (
@@ -36,7 +37,8 @@ const App = () => (
           <Route path="/locations" element={<MainLocations />} />
           <Route path="/episodes" element={<MainEpisodes />} />
           <Route path="/characters/:characterId" element={<MainCharacterDetail />} />
-          <Route path="/locations/:locationId" element={<MainLocations />} />
+          <Route path="/locations/:locationId" element={<MainLocationDetail />} />
+          <Route path="/" element={<Navigate to="/characters" replace />} />
         </Routes>
         <Footer />
       </Container>

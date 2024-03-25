@@ -37,10 +37,6 @@ const charactersSlice = createSlice({
       state.filters = {};
       localStorage.removeItem("characterFilters");
     },
-    setCharacterError(state, error) {
-      state.status = 'failed'
-      state.error = error;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -58,7 +54,7 @@ const charactersSlice = createSlice({
   },
 });
 
-export const { setFilter, resetFilters, setCharacterError } = charactersSlice.actions;
+export const { setFilter, resetFilters } = charactersSlice.actions;
 
 export const selectAllCharacters = (state) => state.characters.entities;
 export const selectFilters = (state) => state.characters.filters;

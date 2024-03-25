@@ -17,7 +17,7 @@ const initialState = {
   entities: [],
   loading: "idle",
   error: null,
-  filters: {
+  filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
     name: "",
     type: "",
     dimension: "",
@@ -31,6 +31,11 @@ const locationsSlice = createSlice({
     setFilter(state, action) {
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
+      localStorage.setItem("locationsFilters", JSON.stringify(state.filters));
+    },
+    resetFilters(state) {
+      state.filters = {};
+      localStorage.removeItem("locationsFilters");
     },
   },
   extraReducers: (builder) => {
@@ -49,7 +54,7 @@ const locationsSlice = createSlice({
   },
 });
 
-export const { setFilter } = locationsSlice.actions;
+export const { setFilter, resetFilters } = locationsSlice.actions;
 
 export const selectAllLocations = (state) => state.locations.entities;
 export const selectFilters = (state) => state.locations.filters;
@@ -57,8 +62,10 @@ export const selectFilteredLocations = (state) => {
   const { entities, filters } = state.locations;
   return entities.filter(
     (location) =>
-      location.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-      location.status.toLowerCase().includes(filters.status.toLowerCase()),
+      (!filters.name ||
+        location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+      (!filters.type || location.type === filters.type) &&
+      (!filters.dimension || location.dimension === filters.dimension),
   );
 };
 

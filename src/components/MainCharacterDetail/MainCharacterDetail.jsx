@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import styles from "./mainCharacterDetail.module.scss";
 import { fetchCharacters } from "../../store/characterSlice";
+import { GoBackLink } from "../";
 import { INFORMATION_FIELDS } from './constants';
 import { extractNumbersFromEnd } from "./helpers";
 
@@ -21,10 +21,12 @@ export const MainCharacterDetail = () => {
     }
   }, [characterLoading, dispatch]);
 
-  const imageSrc = useMemo(() => character?.image || '', [character]);
-  const nameCharacter = useMemo(() => character?.name || '', [character]);
-
-  console.log(character)
+  const imageSrc = useMemo(() => {
+    if (characterLoading === "succeeded" && character) return character.image 
+  }, [character, characterLoading]);
+  const nameCharacter = useMemo(() => {
+    if (characterLoading === "succeeded" && character) return character.name 
+  }, [character, characterLoading]);
 
   const informationContent = useMemo(() => {
     if (characterLoading === "succeeded" && character) {
@@ -74,10 +76,7 @@ export const MainCharacterDetail = () => {
     <main className={styles.main}>
       <div className={styles.top}>
         <nav className={styles.nav}>
-          <Link to="/characters" className={styles.link}>
-            <ArrowBackIcon />
-            Go back
-          </Link>
+          <GoBackLink url="/characters"/>
         </nav>
         <div className={styles.charactersInfo}>{mainCharacterInfo}</div>
       </div>
