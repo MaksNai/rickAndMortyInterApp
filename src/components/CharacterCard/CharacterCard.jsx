@@ -1,29 +1,30 @@
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
-import styles from './characterCard.module.scss'
+import styles from "./characterCard.module.scss";
 import { Link } from "react-router-dom";
 
 export function CharacterCard({ character }) {
-  const { img, characterName, species } = character;
+  const { id, image, name, species } = character;
+  const characterLink = `/characters/${id}`;
+
   return (
-    <Link href="#" className={styles.cardLink}>
-    <article>
+    <Link to={characterLink} className={styles.cardLink}>
       <Card sx={{ maxWidth: 312 }}>
         <CardMedia
           component="img"
-          alt={`${species} ${characterName}`}
+          alt={`${species} ${name}`}
           height="168"
-          image={img}
+          width="240"
+          image={image}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {characterName}
+            {name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {species}
           </Typography>
         </CardContent>
       </Card>
-    </article>
     </Link>
   );
 }

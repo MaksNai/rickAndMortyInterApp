@@ -1,5 +1,15 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect, useMemo } from "react";
+import {
+  selectAllLocations,
+  fetchLocations,
+  selectFilters,
+  setFilter,
+  selectFilteredLocations,
+} from "../../store/locationsSlice";
 import styles from "./mainLocations.module.scss";
-import { TEST_DATA_LABEL, TEST_ARRAY } from "./constants";
+import { ITEMS_PER_PAGE } from "./constants";
+import { getUniqueValues } from "../../helpers/helpers";
 import {
   Hero,
   FilterInput,
@@ -7,50 +17,101 @@ import {
   LocationsCards,
   LoadMoreButton,
   FiltersModal,
+  Loading,
 } from "..";
 
 export function MainLocations() {
-  const selectInputs = TEST_DATA_LABEL.map((item) => (
-    <li key={item.label} className={styles.filterSelect}>
-      <SelectField
-        sx={{
-          margin: "0",
-        }}
-        props={{
-          label: item.label,
-          items: item.items,
-        }}
-      />
-    </li>
-  ));
+  const dispatch = useDispatch();
+  const allLocations = useSelector(selectAllLocations);
+  const locations = useSelector(selectFilteredLocations);
+
+  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
+  const locationLoading = useSelector((state) => state.locations.loading);
+
+  useEffect(() => {
+    if (locationLoading === "idle") {
+      dispatch(fetchLocations());
+    }
+  }, [locationLoading, dispatch]);
+
+  const typeOptions = useMemo(
+    () => getUniqueValues(allLocations, "type"),
+    [allLocations]
+  );
+  const dimensionOptions = useMemo(
+    () => getUniqueValues(allLocations, "dimension"),
+    [allLocations]
+  );
+
+  const selectFilterLabels = useMemo(
+    () => [
+      { label: "Type", items: typeOptions, action: setFilter },
+      { label: "Dimension", items: dimensionOptions, action: setFilter },
+    ],
+    [typeOptions, dimensionOptions]
+  );
+
+  const content = useMemo(() => {
+    return locations.length > 0 ? (
+      <LocationsCards locations={locations.slice(0, itemsPerPage)} />
+    ) : (
+      <section className={styles.loading}>
+      <p>Nothing found. Try other filters.</p>
+      <Loading />
+      </section>
+    );
+  }, [locations, itemsPerPage]);
+
+  const handleLoadMoreClick = () => {
+    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE);
+  };
 
   return (
     <main className={styles.main}>
       <div className={styles.hero}>
         <Hero className={styles.heroImage} type="circle" />
       </div>
-
       <ul className={styles.filterList}>
-        <li
-          className={`${styles.filterItem} ${styles.filterField}`}
-          key={Date.now()}
-        >
-          <FilterInput />
+        <li className={`${styles.filterItem} ${styles.filterField}`}>
+          <FilterInput
+            filterName="name"
+            text="Filter by name..."
+            action={selectFilters}
+            type="locationsFilters"
+          />
         </li>
-        {selectInputs}
+        {selectFilterLabels.map((selectItem) => (
+          <li className={styles.filterSelect}>
+            <SelectField
+              props={{
+                label: selectItem.label,
+                items: selectItem.items,
+                filterName: selectItem.label.toLowerCase(),
+                action: selectItem.action,
+              }}
+            />
+          </li>
+        ))}
       </ul>
-
       <div className={styles.advancedFiltersButton}>
-        <FiltersModal modalData={TEST_DATA_LABEL} />
+        <FiltersModal modalData={selectFilterLabels} />
       </div>
 
-      <section>
-        <LocationsCards locations={TEST_ARRAY} />
-      </section>
+      {locationLoading === "loading" ? (
+        <Loading />
+      ) : (
+        <section className={styles.contentCard}>{content}</section>
+      )}
+      <div />
       <div className={styles.loadMoreButtonContainer}>
-        <div className={styles.loadMoreButton}>
-          <LoadMoreButton />
-        </div>
+        {locations.length > itemsPerPage && (
+          <div
+            className={styles.loadMoreButtonContainer}
+            onClick={handleLoadMoreClick}
+          >
+            <LoadMoreButton />
+          </div>
+        )}
       </div>
     </main>
   );

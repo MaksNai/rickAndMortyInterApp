@@ -56,3 +56,13 @@
   @include mixins.advancedFiltersButton(48px);
   max-width: 312px;
 }
+
+.contentCard {
+  text-align: center;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

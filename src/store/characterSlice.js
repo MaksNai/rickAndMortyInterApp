@@ -8,21 +8,22 @@ export const fetchCharacters = createAsyncThunk(
       "https://rickandmortyapi.com/api/character",
       {
         params: queryParams,
-      }
+      },
     );
     return response.data;
-  }
+  },
 );
 const initialState = {
   entities: [],
   loading: "idle",
   error: null,
-  filters: {
+  filters: JSON.parse(localStorage.getItem("characterFilters")) || {
     name: "",
+    species: "",
     status: "",
+    gender: "",
   },
 };
-
 const charactersSlice = createSlice({
   name: "characters",
   initialState,
@@ -30,6 +31,11 @@ const charactersSlice = createSlice({
     setFilter(state, action) {
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
+      localStorage.setItem("characterFilters", JSON.stringify(state.filters));
+    },
+    resetFilters(state) {
+      state.filters = {};
+      localStorage.removeItem("characterFilters");
     },
   },
   extraReducers: (builder) => {
@@ -48,7 +54,7 @@ const charactersSlice = createSlice({
   },
 });
 
-export const { setFilter } = charactersSlice.actions;
+export const { setFilter, resetFilters } = charactersSlice.actions;
 
 export const selectAllCharacters = (state) => state.characters.entities;
 export const selectFilters = (state) => state.characters.filters;
@@ -56,9 +62,11 @@ export const selectFilteredCharacters = (state) => {
   const { entities, filters } = state.characters;
   return entities.filter(
     (character) =>
-      character.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-      character.status.toLowerCase().includes(filters.status.toLowerCase())
+      (!filters.name ||
+        character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+      (!filters.species || character.species === filters.species) &&
+      (!filters.status || character.status === filters.status) &&
+      (!filters.gender || character.gender === filters.gender),
   );
 };
-
 export default charactersSlice.reducer;
