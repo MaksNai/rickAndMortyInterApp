@@ -11,12 +11,13 @@ import {
 import { ITEMS_PER_PAGE } from "./constants";
 import { Hero, FilterInput, LoadMoreButton, EpisodesCards } from "..";
 
+// В разработке 
+
 export function MainEpisodes() {
   const dispatch = useDispatch();
   const characters = useSelector(selectFilteredEpisodes);
   const allCharacters = useSelector(selectAllEpisodes);
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
-
   const episodeLoading = useSelector((state) => state.episode.loading);
 
   useEffect(() => {
