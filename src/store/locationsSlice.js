@@ -8,10 +8,10 @@ export const fetchLocations = createAsyncThunk(
       "https://rickandmortyapi.com/api/location",
       {
         params: queryParams,
-      }
+      },
     );
     return response.data;
-  }
+  },
 );
 const initialState = {
   entities: [],
@@ -57,8 +57,8 @@ export const selectFilteredLocations = (state) => {
   const { entities, filters } = state.locations;
   return entities.filter(
     (location) =>
-    location.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-    location.status.toLowerCase().includes(filters.status.toLowerCase())
+      location.name.toLowerCase().includes(filters.name.toLowerCase()) &&
+      location.status.toLowerCase().includes(filters.status.toLowerCase()),
   );
 };
 

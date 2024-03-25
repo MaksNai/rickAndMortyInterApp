@@ -62,8 +62,7 @@ export function FiltersModal({ modalData }) {
               <li
                 className={`${styles.filterItem} ${styles.filterField}`}
                 key={Date.now()}
-              >
-              </li>
+              ></li>
               {modalData.map((item) => (
                 <li key={item.label} className={styles.filterItem}>
                   <SelectField

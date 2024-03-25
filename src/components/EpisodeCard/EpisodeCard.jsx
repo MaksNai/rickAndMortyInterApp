@@ -30,7 +30,13 @@ export function EpisodeCard({ episodeData }) {
           <Typography sx={{ fontSize: 14 }} color="text.secondary">
             {date}
           </Typography>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" fontWeight="bold" textTransform="uppercase" paddingTop="5px"> 
+          <Typography
+            sx={{ fontSize: 14 }}
+            color="text.secondary"
+            fontWeight="bold"
+            textTransform="uppercase"
+            paddingTop="5px"
+          >
             {episode}
           </Typography>
         </CardContent>

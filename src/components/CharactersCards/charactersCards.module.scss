@@ -2,4 +2,5 @@
 
 .cards {
     @include mixins.mainCardsStyle;
+    text-align: start;
 }

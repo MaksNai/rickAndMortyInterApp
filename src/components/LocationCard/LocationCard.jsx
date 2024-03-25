@@ -20,7 +20,11 @@ export function LocationCard({ location }) {
         className={styles.card}
       >
         <CardContent>
-          <Typography sx={{ fontSize: 20, marginBottom: 0 }} color="black" gutterBottom>
+          <Typography
+            sx={{ fontSize: 20, marginBottom: 0 }}
+            color="black"
+            gutterBottom
+          >
             {name}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary">

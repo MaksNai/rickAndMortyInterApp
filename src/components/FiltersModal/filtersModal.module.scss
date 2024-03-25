@@ -62,3 +62,33 @@
     transform: rotate(45deg);
   }
 }
+
+
+.applyButton {
+  background-color: #F2F9FE;
+  border-color: #0063cc;
+  color: #2196F3;
+  width: 100%;
+  margin-top: 33px;
+  
+  &:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+    box-shadow: none;
+    color: white;
+  }
+
+  &:active {
+    box-shadow: none;
+    background-color: #0062cc;
+    border-color: #005cbf;
+    color: white;
+  }
+
+  &:focus {
+    box-shadow: none;
+    background-color: #0062cc;
+    border-color: #005cbf;
+    color: white;
+  }
+}

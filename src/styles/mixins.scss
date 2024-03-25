@@ -48,9 +48,9 @@
 @mixin inputFieldsStyle {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 28px;
 
   margin: 0;
   padding: 0;
@@ -83,14 +83,17 @@
 
 @mixin mainCardStyle {
   text-decoration: none;
+  display: block;
+  width: 100%; 
+  max-width: 240px; 
+  margin: 0 auto; 
+
   &:hover {
     outline: 1px solid black;
   }
 
   @media (max-width: variables.$mobileScreen) {
-    display: block;
-    width: 100%;
-    max-width: 312px;
+    max-width: 312px; 
   }
 }
 

@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { store } from './store/store';
+import { store } from "./store/store";
 import "./App.scss";
 import { Container } from "@mui/material";
 import {
@@ -14,8 +14,8 @@ import {
   MainCharacters,
   MainLocations,
   MainEpisodes,
+  CharacterDetail
 } from "./components";
-
 
 const App = () => (
   <Provider store={store}>
@@ -35,6 +35,7 @@ const App = () => (
           <Route path="/characters" element={<MainCharacters />} />
           <Route path="/locations" element={<MainLocations />} />
           <Route path="/episodes" element={<MainEpisodes />} />
+          <Route path="/characters/:characterId" element={<CharacterDetail />} />
           <Route path="/" element={<Navigate to="/characters" replace />} />
         </Routes>
         <Footer />

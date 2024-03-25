@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import {
   selectAllLocations,
   fetchLocations,
+  selectFilters,
 } from "../../store/locationsSlice";
 import styles from "./mainLocations.module.scss";
 import { TEST_DATA_LABEL, ITEMS_PER_PAGE } from "./constants";
@@ -13,11 +14,10 @@ import {
   LocationsCards,
   LoadMoreButton,
   FiltersModal,
-  Loading
+  Loading,
 } from "..";
 
 export function MainLocations() {
-
   const dispatch = useDispatch();
   const locations = useSelector(selectAllLocations);
 
@@ -42,8 +42,15 @@ export function MainLocations() {
       break;
     case "succeeded":
       const locationsPage = locations.slice(0, itemsPerPage);
-      content = <LocationsCards locations={locationsPage} />
+      content = <LocationsCards locations={locationsPage} />;
       break;
+
+    default:
+      content = (
+        <div className={styles.loading}>
+          <Loading />
+        </div>
+      );
   }
 
   const handleLoadMoreClick = () => {
@@ -75,7 +82,11 @@ export function MainLocations() {
           className={`${styles.filterItem} ${styles.filterField}`}
           key={Date.now()}
         >
-          <FilterInput />
+          <FilterInput
+            filterName="name"
+            text="Filter by name..."
+            action={selectFilters}
+          />
         </li>
         {selectInputs}
       </ul>
@@ -84,18 +95,16 @@ export function MainLocations() {
         <FiltersModal modalData={TEST_DATA_LABEL} />
       </div>
 
-      <section>
-        {content}
-      </section>
+      <section>{content}</section>
       <div className={styles.loadMoreButtonContainer}>
-      {locations.length > itemsPerPage && (
-        <div
-          className={styles.loadMoreButtonContainer}
-          onClick={handleLoadMoreClick}
-        >
-          <LoadMoreButton />
-        </div>
-      )}
+        {locations.length > itemsPerPage && (
+          <div
+            className={styles.loadMoreButtonContainer}
+            onClick={handleLoadMoreClick}
+          >
+            <LoadMoreButton />
+          </div>
+        )}
       </div>
     </main>
   );

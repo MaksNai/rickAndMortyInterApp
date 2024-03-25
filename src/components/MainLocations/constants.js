@@ -3,4 +3,4 @@ export const TEST_DATA_LABEL = [
   { label: "Dimension", items: ["Real", "Other"] },
 ];
 
-export const ITEMS_PER_PAGE = 12
+export const ITEMS_PER_PAGE = 12;

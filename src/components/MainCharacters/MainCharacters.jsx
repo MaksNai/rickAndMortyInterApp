@@ -1,10 +1,13 @@
-import styles from "./mainCharacters.module.scss";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { TEST_DATA_LABEL, ITEMS_PER_PAGE } from "./constants";
+import styles from "./mainCharacters.module.scss";
+import { ITEMS_PER_PAGE } from "./constants";
 import {
-  selectAllCharacters,
   fetchCharacters,
+  setFilter,
+  selectFilters,
+  selectFilteredCharacters,
+  selectAllCharacters,
 } from "../../store/characterSlice";
 import {
   Hero,
@@ -15,12 +18,17 @@ import {
   FiltersModal,
   Loading,
 } from "..";
+import { getUniqueValues } from "./helpers";
 
 export function MainCharacters() {
   const dispatch = useDispatch();
-  const characters = useSelector(selectAllCharacters);
-
+  const characters = useSelector(selectFilteredCharacters);
+  const allCharacters = useSelector(selectAllCharacters);
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
+
+  const [statusOptions, setStatusOptions] = useState([]);
+  const [speciesOptions, setSpeciesOptions] = useState([]);
+  const [genderOptions, setGenderOptions] = useState([]);
 
   const characterLoading = useSelector((state) => state.characters.loading);
 
@@ -30,24 +38,25 @@ export function MainCharacters() {
     }
   }, [characterLoading, dispatch]);
 
-  let content;
-  switch (characterLoading) {
-    case "loading":
-      content = (
-        <div className={styles.loading}>
-          <Loading />
-        </div>
-      );
-      break;
-    case "succeeded":
-      const charactersPage = characters.slice(0, itemsPerPage);
-      content = <CharactersCards characters={charactersPage} />;
-      break;
-  }
+  useEffect(() => {
+    if (characterLoading === "succeeded") {
+      setStatusOptions(getUniqueValues(allCharacters, "status"));
+      setSpeciesOptions(getUniqueValues(allCharacters, "species"));
+      setGenderOptions(getUniqueValues(allCharacters, "gender"));
+    }
+  }, [characterLoading, characters]);
 
-  const handleLoadMoreClick = () => {
-    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE);
-  };
+  const handleLoadMoreClick = useCallback(() => {
+    setItemsPerPage((prev) => prev + ITEMS_PER_PAGE);
+  }, []);
+
+  const selectFilterLabels = [
+    { label: "Species", items: speciesOptions },
+    { label: "Gender", items: genderOptions },
+    { label: "Status", items: statusOptions },
+  ];
+
+  const content = characters.length > 0 ?  <CharactersCards characters={characters.slice(0, itemsPerPage)} /> : <p>Nothing found. Try other filters.</p>
 
   return (
     <main className={styles.main}>
@@ -55,41 +64,44 @@ export function MainCharacters() {
         <Hero className={styles.heroImage} />
       </div>
       <ul className={styles.filterList}>
-        <li
-          className={`${styles.filterItem} ${styles.filterField}`}
-          key={Date.now()}
-        >
-          <FilterInput />
+        <li className={`${styles.filterItem} ${styles.filterField}`}>
+          <FilterInput
+            filterName="name"
+            text="Filter by name..."
+            action={selectFilters}
+          />
         </li>
-        {TEST_DATA_LABEL.map((item) => (
-          <li
-            key={item.label}
-            className={`${styles.filterItem} ${styles.filterSelect}`}
-          >
+        {selectFilterLabels.map((selectItem) => (
+          <li>
             <SelectField
-              sx={{
-                margin: "0",
-              }}
               props={{
-                label: item.label,
-                items: item.items,
+                label: selectItem.label,
+                items: selectItem.items,
+                filterName: selectItem.label.toLowerCase(),
+                action: setFilter,
               }}
             />
           </li>
         ))}
       </ul>
       <div className={styles.advancedFiltersButton}>
-        <FiltersModal modalData={TEST_DATA_LABEL} />
+        <FiltersModal modalData={selectFilterLabels} />
       </div>
-      <section className={styles.contentCard}>{content}</section>
-      {characters.length > itemsPerPage && (
-        <div
-          className={styles.loadMoreButtonContainer}
-          onClick={handleLoadMoreClick}
-        >
-          <LoadMoreButton />
-        </div>
+      {characterLoading === "loading" ? (
+        <Loading />
+      ) : (
+        <section className={styles.contentCard}>
+         {content}
+        </section>
       )}
+      <div
+        className={styles.loadMoreButtonContainer}
+        onClick={handleLoadMoreClick}
+      >
+        {characters.length > itemsPerPage && (
+          <LoadMoreButton onClick={handleLoadMoreClick} />
+        )}
+      </div>
     </main>
   );
 }
