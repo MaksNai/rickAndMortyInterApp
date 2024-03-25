@@ -13,7 +13,7 @@ export { MainEpisodes } from "./MainEpisodes/MainEpisodes";
 
 export { CharactersCards } from "./CharactersCards/CharactersCards";
 export { CharacterCard } from "./CharacterCard/CharacterCard";
-export { CharacterDetail } from "./CharacterDetail/CharacterDetail";
+export { MainCharacterDetail } from "./MainCharacterDetail/MainCharacterDetail";
 
 export { LocationsCards } from "./LocationsCards/LocationsCards";
 export { LocationCard } from "./LocationCard/LocationCard";

@@ -1,0 +1,101 @@
+@use "../../styles/mixins.scss";
+@use "../../styles/variables.scss";
+
+.main {
+  @include mixins.mainPageStyle;
+  width: 100%;
+}
+
+.top {
+  width: 100%;
+  display: flex;
+  padding-top: 16px;
+  margin-bottom: 42px;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  @include mixins.fontSecond700;
+
+  &:hover,
+  &:focus {
+    color: rgba(0, 0, 0, 0.7);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.charactersInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  flex-grow: 1;
+  padding-right: 84px;
+
+  @media (max-width: variables.$mobileScreen) {
+    padding: 5px;
+  }
+}
+
+.image {
+  width: 100%;
+  max-width: 300px;
+  border: 5px solid #f2f2f7;
+  border-radius: 50%;
+}
+
+.name {
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0;
+  margin-top: 16px;
+}
+
+.information {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 36px;
+}
+
+.informationSection {
+  display: flex;
+  flex-direction: column;
+  max-width: 413px;
+  width: 100%;
+}
+
+.title {
+  font-size: 20px;
+  color: #8e8e93;
+  margin: 0;
+  @include mixins.fontMain500;
+}
+
+.informationItem {
+    border-bottom: 1px solid rgba(33, 33, 33, 0.08);
+    padding-bottom: 12px;
+    padding-bottom: 9px;
+}
+
+.dt {
+  @include mixins.fontSecond700;
+  font-size: 16px;
+  padding-bottom: 2px;
+}
+.dd {
+  margin: 0;
+  font-size: 14px;
+  color: #6e798c;
+}
+
+.error {
+  font-size: 24px;
+}
+
+.linkedItem {
+  border: 1px solid red;
+}
