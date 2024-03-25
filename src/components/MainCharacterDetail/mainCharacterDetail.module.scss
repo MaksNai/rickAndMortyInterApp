@@ -76,9 +76,8 @@
 }
 
 .informationItem {
-    border-bottom: 1px solid rgba(33, 33, 33, 0.08);
-    padding-bottom: 12px;
-    padding-bottom: 9px;
+  border-bottom: 1px solid rgba(33, 33, 33, 0.08);
+  padding: 9px 16px 12px 16px;
 }
 
 .dt {
@@ -97,5 +96,29 @@
 }
 
 .linkedItem {
-  border: 1px solid red;
+  display: block;
+  text-decoration: none;
+  position: relative;
+
+  .dt {
+    color: rgba(8, 31, 50, 1);
+  }
+
+  &::before {
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    left: calc(100% - 25px);
+    top: 50%;
+    transform: rotate(230deg) translateY(50%);
+    box-sizing: border-box;
+    border-left: 2px solid rgba(142, 142, 147, 1);
+    border-bottom: 2px solid rgba(142, 142, 147, 1);
+  }
+
+  &:hover {
+    background-color: rgba(142, 142, 147, 0.219);
+  }
+  transition: all ease-out 0.1s;
 }
