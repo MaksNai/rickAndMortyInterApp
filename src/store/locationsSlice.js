@@ -2,16 +2,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchLocations = createAsyncThunk(
-  "locations/fetchLocations",
-  async (queryParams) => {
+  "locations/fetchCharacters",
+  async (filters, { getState }) => {
+    const {
+      locations: { filters: currentFilters },
+    } = getState();
+    const queryParams = new URLSearchParams({
+      ...currentFilters,
+      ...filters,
+    }).toString();
+
     const response = await axios.get(
-      "https://rickandmortyapi.com/api/location",
-      {
-        params: queryParams,
-      },
+      `https://rickandmortyapi.com/api/location/?${queryParams}`
     );
     return response.data;
-  },
+  }
 );
 
 export const fetchCharactersByIds = createAsyncThunk(
@@ -19,13 +24,14 @@ export const fetchCharactersByIds = createAsyncThunk(
   async (residentUrls) => {
     const ids = residentUrls.map((url) => url.split("/").pop());
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/${ids}`,
+      `https://rickandmortyapi.com/api/character/${ids}`
     );
     return response.data;
-  },
+  }
 );
 
 const initialState = {
+  maxPage: 2,
   entities: [],
   charactersByIds: {},
   loading: "idle",
@@ -58,7 +64,8 @@ const locationsSlice = createSlice({
       })
       .addCase(fetchLocations.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.entities = action.payload.results;
+        state.entities = [...state.entities, ...action.payload.results];
+        state.maxPage = action.payload.info.pages;
       })
       .addCase(fetchLocations.rejected, (state, action) => {
         state.loading = "failed";
@@ -90,7 +97,7 @@ export const selectFilteredLocations = (state) => {
       (!filters.name ||
         location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
       (!filters.type || location.type === filters.type) &&
-      (!filters.dimension || location.dimension === filters.dimension),
+      (!filters.dimension || location.dimension === filters.dimension)
   );
 };
 

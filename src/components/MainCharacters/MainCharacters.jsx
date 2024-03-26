@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
 
 import { getUniqueValues } from "../../helpers/helpers";
-import { ITEMS_PER_PAGE, MAX_PAGE, ITEMS_PER_PAGE_INITIAL} from "./constants";
+import { ITEMS_PER_PAGE_INITIAL} from "./constants";
 import {
   fetchCharacters,
   setCharacterFilter,
@@ -30,13 +30,12 @@ export function MainCharacters() {
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const maxPage = useSelector((state) => state.characters.maxPage)
   const characterLoading = useSelector((state) => state.characters.loading);
 
   useEffect(() => {
     dispatch(fetchCharacters({ page: currentPage }));
   }, [dispatch, currentPage]);
-
-  
 
   const statusOptions = useMemo(
     () => getUniqueValues(allCharacters, "status"),
@@ -51,9 +50,10 @@ export function MainCharacters() {
     [allCharacters],
   );
 
-  const handleLoadMoreClick = () => {
+  const handleLoadMoreClick = (e) => {
+    e.preventDefault()
     setCurrentPage(currentPage + 1);
-    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE);
+    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE_INITIAL);
   };
    
   const selectFilterLabels = useMemo(
@@ -77,6 +77,7 @@ export function MainCharacters() {
       </section>
     );
   }, [characters, itemsPerPage]);
+  
 
   return (
     <main className={styles.main}>
@@ -117,7 +118,7 @@ export function MainCharacters() {
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
       >
-           {currentPage <= MAX_PAGE && <LoadMoreButton />}
+           {currentPage <= maxPage && <LoadMoreButton />}
       </div>
     </main>
   );
