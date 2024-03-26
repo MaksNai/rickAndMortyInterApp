@@ -33,7 +33,7 @@ export const fetchCharactersByIds = createAsyncThunk(
 const initialState = {
   maxPage: 2,
   entities: [],
-  charactersByIds: {},
+  residentsData: [],
   loading: "idle",
   error: null,
   filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
@@ -72,15 +72,7 @@ const locationsSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
-        const residentUrls = action.meta.arg;
-        const residentsData = action.payload;
-        residentUrls.forEach((url, index) => {
-          const id = url.split("/").pop();
-          if (!state.charactersByIds[id]) {
-            state.charactersByIds[id] = [];
-          }
-          state.charactersByIds[id].push(residentsData[index]);
-        });
+        state.residentsData = [...state.residentsData, ...action.payload]
       });
   },
 });

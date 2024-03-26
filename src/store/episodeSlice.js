@@ -19,24 +19,14 @@ export const fetchEpisodes = createAsyncThunk(
 );
 
 
-// export const fetchEpisodesByIds = createAsyncThunk(
-//   "episodes/fetchByIds",
-//   async (episodeIds) => {
-//     const requests = episodeIds.map((id) =>
-//       axios.get(`https://rickandmortyapi.com/api/episode/${id}`),
-//     );
-//     const responses = await Promise.all(requests);
-//     return responses.map((response) => response.data);
-//   },
-// );
-
-export const fetchEpisodeById = createAsyncThunk(
-  "episodes/fetchEpisodeById",
-  async (episodeId) => {
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/episode/${episodeId}`,
+export const fetchEpisodesByIds = createAsyncThunk(
+  "episodes/fetchByIds",
+  async (episodeIds) => {
+    const requests = episodeIds.map((id) =>
+      axios.get(`https://rickandmortyapi.com/api/episode/${id}`),
     );
-    return response.data;
+    const responses = await Promise.all(requests);
+    return responses.map((response) => response.data);
   },
 );
 
@@ -91,14 +81,14 @@ const episodesSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchEpisodeById.pending, (state) => {
+      .addCase(fetchEpisodesByIds.pending, (state) => {
         state.loading = "loading";
       })
-      .addCase(fetchEpisodeById.fulfilled, (state, action) => {
+      .addCase(fetchEpisodesByIds.fulfilled, (state, action) => {
         state.currentEpisode = action.payload;
         state.loading = "succeeded";
       })
-      .addCase(fetchEpisodeById.rejected, (state, action) => {
+      .addCase(fetchEpisodesByIds.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
       })
