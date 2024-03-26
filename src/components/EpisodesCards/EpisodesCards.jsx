@@ -5,10 +5,7 @@ export function EpisodesCards({ episodes }) {
   return (
     <section className={styles.cards}>
       {episodes.map((episode) => (
-        <EpisodeCard
-          episodeData={episode}
-          key={`${episode.episode}${Date.now()}`}
-        />
+        <EpisodeCard episodeData={episode} key={episode.id} />
       ))}
     </section>
   );

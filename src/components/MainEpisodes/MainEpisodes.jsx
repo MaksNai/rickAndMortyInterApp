@@ -3,22 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainEpisodes.module.scss";
 import {
   fetchEpisodes,
-  setFilter,
-  selectFilters,
   selectFilteredEpisodes,
-  selectAllEpisodes,
+  selectEpisodeFilters,
 } from "../../store/episodeSlice";
 import { ITEMS_PER_PAGE } from "./constants";
-import { Hero, FilterInput, LoadMoreButton, EpisodesCards } from "..";
-
-// В разработке 
+import { Hero, FilterInput, LoadMoreButton, EpisodesCards, Loading } from "..";
 
 export function MainEpisodes() {
   const dispatch = useDispatch();
-  const characters = useSelector(selectFilteredEpisodes);
-  const allCharacters = useSelector(selectAllEpisodes);
+  const episodes = useSelector(selectFilteredEpisodes);
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
-  const episodeLoading = useSelector((state) => state.episode.loading);
+  const episodeLoading = useSelector((state) => state.episodes.loading);
 
   useEffect(() => {
     if (episodeLoading === "idle") {
@@ -26,26 +21,46 @@ export function MainEpisodes() {
     }
   }, [episodeLoading, dispatch]);
 
+  const handleLoadMoreClick = useCallback(() => {
+    setItemsPerPage((prev) => prev + ITEMS_PER_PAGE);
+  }, []);
+
+  const content = useMemo(() => {
+    return episodeLoading === "loading" ? (
+      <Loading />
+    ) : episodes.length > 0 ? (
+      <EpisodesCards episodes={episodes.slice(0, itemsPerPage)} />
+    ) : (
+      <p>Nothing found. Try other filters.</p>
+    );
+  }, [episodes, itemsPerPage, episodeLoading]);
+
   return (
     <main className={styles.main}>
       <div className={styles.hero}>
         <Hero className={styles.heroImage} type="rickAndMorty" />
       </div>
       <ul className={styles.filterList}>
-        <li className={styles.filterField} key={Date.now()}>
+        <li className={styles.filterField}>
           <FilterInput
             filterName="name"
             text="Filter by name or episode (ex. S01 or S01E02)"
-            action={selectFilters}
+            action={selectEpisodeFilters}
+            type="episodes"
           />
         </li>
       </ul>
-      <section>
-        {/* <EpisodesCards episodes={testArray} /> */}
-      </section>
-      <div className={styles.loadMoreButton}>
-        <LoadMoreButton />
-      </div>
+      <section className={styles.contentCard}>{content}</section>
+      {episodeLoading !== "loading" && episodes.length > itemsPerPage && (
+        <div
+          className={styles.loadMoreButtonContainer}
+          onClick={handleLoadMoreClick}
+        >
+          {episodes.length > itemsPerPage && (
+            <LoadMoreButton onClick={handleLoadMoreClick} />
+          )}
+        </div>
+      )}
     </main>
   );
 }

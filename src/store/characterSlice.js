@@ -1,21 +1,28 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchCharacters = createAsyncThunk(
   "characters/fetchCharacters",
-  async (queryParams) => {
+  async ({ page = 1, ...queryParams }) => {
     const response = await axios.get(
-      "https://rickandmortyapi.com/api/character",
+      `https://rickandmortyapi.com/api/character/?page=${page}`,
       {
         params: queryParams,
-      },
+      }
     );
     return response.data;
-  },
+  }
 );
+
 const initialState = {
   entities: [],
+  charactersByIds: [],
   loading: "idle",
+  byIdsLoading: "idle",
   error: null,
   filters: JSON.parse(localStorage.getItem("characterFilters")) || {
     name: "",
@@ -28,12 +35,12 @@ const charactersSlice = createSlice({
   name: "characters",
   initialState,
   reducers: {
-    setFilter(state, action) {
+    setCharacterFilter(state, action) {
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
       localStorage.setItem("characterFilters", JSON.stringify(state.filters));
     },
-    resetFilters(state) {
+    resetCharacterFilters(state) {
       state.filters = {};
       localStorage.removeItem("characterFilters");
     },
@@ -54,10 +61,11 @@ const charactersSlice = createSlice({
   },
 });
 
-export const { setFilter, resetFilters } = charactersSlice.actions;
+export const { setCharacterFilter, resetCharacterFilters } =
+  charactersSlice.actions;
 
 export const selectAllCharacters = (state) => state.characters.entities;
-export const selectFilters = (state) => state.characters.filters;
+export const selectCharactersFilters = (state) => state.characters.filters;
 export const selectFilteredCharacters = (state) => {
   const { entities, filters } = state.characters;
   return entities.filter(
@@ -66,7 +74,17 @@ export const selectFilteredCharacters = (state) => {
         character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
       (!filters.species || character.species === filters.species) &&
       (!filters.status || character.status === filters.status) &&
-      (!filters.gender || character.gender === filters.gender),
+      (!filters.gender || character.gender === filters.gender)
   );
 };
+
+export const selectCharactersByIds = createSelector(
+  [selectAllCharacters, (state, characterIds) => characterIds],
+  (characters, characterIds) => {
+    return characters.filter((character) =>
+      characterIds.includes(character.id.toString())
+    );
+  }
+);
+
 export default charactersSlice.reducer;

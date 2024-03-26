@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
 
 import { getUniqueValues } from "../../helpers/helpers";
-import { ITEMS_PER_PAGE } from "./constants";
+import { ITEMS_PER_PAGE, MAX_PAGE, ITEMS_PER_PAGE_INITIAL} from "./constants";
 import {
   fetchCharacters,
-  setFilter,
-  selectFilters,
+  setCharacterFilter,
+  selectCharactersFilters,
   selectFilteredCharacters,
   selectAllCharacters,
 } from "../../store/characterSlice";
@@ -21,51 +21,58 @@ import {
   Loading,
 } from "..";
 
+
+
 export function MainCharacters() {
   const dispatch = useDispatch();
   const characters = useSelector(selectFilteredCharacters);
   const allCharacters = useSelector(selectAllCharacters);
-  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
+  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const characterLoading = useSelector((state) => state.characters.loading);
 
   useEffect(() => {
-    if (characterLoading === "idle") {
-      dispatch(fetchCharacters());
-    }
-  }, [characterLoading, dispatch]);
+    dispatch(fetchCharacters({ page: currentPage }));
+  }, [dispatch, currentPage]);
+
+  
+
   const statusOptions = useMemo(
     () => getUniqueValues(allCharacters, "status"),
-    [allCharacters]
+    [allCharacters],
   );
   const speciesOptions = useMemo(
     () => getUniqueValues(allCharacters, "species"),
-    [allCharacters]
+    [allCharacters],
   );
   const genderOptions = useMemo(
     () => getUniqueValues(allCharacters, "gender"),
-    [allCharacters]
+    [allCharacters],
   );
 
-  const handleLoadMoreClick = useCallback(() => {
-    setItemsPerPage((prev) => prev + ITEMS_PER_PAGE);
-  }, []);
-
+  const handleLoadMoreClick = () => {
+    setCurrentPage(currentPage + 1);
+    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE);
+  };
+   
   const selectFilterLabels = useMemo(
     () => [
-      { label: "Species", items: speciesOptions, action: setFilter },
-      { label: "Gender", items: genderOptions, action: setFilter },
-      { label: "Status", items: statusOptions, action: setFilter },
+      { label: "Species", items: speciesOptions, action: setCharacterFilter },
+      { label: "Gender", items: genderOptions, action: setCharacterFilter },
+      { label: "Status", items: statusOptions, action: setCharacterFilter },
     ],
-    [statusOptions, speciesOptions, genderOptions]
+    [statusOptions, speciesOptions, genderOptions],
   );
 
   const content = useMemo(() => {
     return characters.length > 0 ? (
       <CharactersCards characters={characters.slice(0, itemsPerPage)} />
     ) : (
+      characterLoading === "succeeded" ? <section className={styles.loading}>
+      <p>Nothing found. Try other filters.</p>
+    </section> : 
       <section className={styles.loading}>
-        <p>Nothing found. Try other filters.</p>
         <Loading />
       </section>
     );
@@ -81,7 +88,8 @@ export function MainCharacters() {
           <FilterInput
             filterName="name"
             text="Filter by name..."
-            action={selectFilters}
+            action={selectCharactersFilters}
+            type="characters"
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
@@ -109,9 +117,7 @@ export function MainCharacters() {
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
       >
-        {characters.length > itemsPerPage && (
-          <LoadMoreButton onClick={handleLoadMoreClick} />
-        )}
+           {currentPage <= MAX_PAGE && <LoadMoreButton />}
       </div>
     </main>
   );

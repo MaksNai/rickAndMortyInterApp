@@ -3,8 +3,8 @@ import { useState, useEffect, useMemo } from "react";
 import {
   selectAllLocations,
   fetchLocations,
-  selectFilters,
-  setFilter,
+  selectLocationsFilters,
+  setLocationsFilter,
   selectFilteredLocations,
 } from "../../store/locationsSlice";
 import styles from "./mainLocations.module.scss";
@@ -36,19 +36,23 @@ export function MainLocations() {
 
   const typeOptions = useMemo(
     () => getUniqueValues(allLocations, "type"),
-    [allLocations]
+    [allLocations],
   );
   const dimensionOptions = useMemo(
     () => getUniqueValues(allLocations, "dimension"),
-    [allLocations]
+    [allLocations],
   );
 
   const selectFilterLabels = useMemo(
     () => [
-      { label: "Type", items: typeOptions, action: setFilter },
-      { label: "Dimension", items: dimensionOptions, action: setFilter },
+      { label: "Type", items: typeOptions, action: setLocationsFilter },
+      {
+        label: "Dimension",
+        items: dimensionOptions,
+        action: setLocationsFilter,
+      },
     ],
-    [typeOptions, dimensionOptions]
+    [typeOptions, dimensionOptions],
   );
 
   const content = useMemo(() => {
@@ -56,8 +60,8 @@ export function MainLocations() {
       <LocationsCards locations={locations.slice(0, itemsPerPage)} />
     ) : (
       <section className={styles.loading}>
-      <p>Nothing found. Try other filters.</p>
-      <Loading />
+        <p>Nothing found. Try other filters.</p>
+        <Loading />
       </section>
     );
   }, [locations, itemsPerPage]);
@@ -76,8 +80,8 @@ export function MainLocations() {
           <FilterInput
             filterName="name"
             text="Filter by name..."
-            action={selectFilters}
-            type="locationsFilters"
+            action={selectLocationsFilters}
+            type="locations"
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
