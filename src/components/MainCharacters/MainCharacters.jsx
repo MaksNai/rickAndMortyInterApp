@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
 
@@ -25,6 +25,7 @@ import {
 
 export function MainCharacters() {
   const dispatch = useDispatch();
+  const loadMoreRef = useRef(null);
   const characters = useSelector(selectFilteredCharacters);
   const allCharacters = useSelector(selectAllCharacters);
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
@@ -36,6 +37,12 @@ export function MainCharacters() {
   useEffect(() => {
     dispatch(fetchCharacters({ page: currentPage }));
   }, [dispatch, currentPage]);
+
+  useEffect(() => {
+    if (characterLoading === "succeeded") {
+      loadMoreRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [characters.length, characterLoading]);
 
   const statusOptions = useMemo(
     () => getUniqueValues(allCharacters, "status"),
@@ -50,12 +57,11 @@ export function MainCharacters() {
     [allCharacters],
   );
 
-  const handleLoadMoreClick = (e) => {
-    e.preventDefault()
-    setCurrentPage(currentPage + 1);
-    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE_INITIAL);
-  };
-   
+  const handleLoadMoreClick = useCallback(() => {
+    setCurrentPage((prev) => prev + 1);
+    setItemsPerPage((prev) => prev + ITEMS_PER_PAGE_INITIAL);
+  }, []);
+
   const selectFilterLabels = useMemo(
     () => [
       { label: "Species", items: speciesOptions, action: setCharacterFilter },
@@ -69,14 +75,14 @@ export function MainCharacters() {
     return characters.length > 0 ? (
       <CharactersCards characters={characters.slice(0, itemsPerPage)} />
     ) : (
-      characterLoading === "succeeded" ? <section className={styles.loading}>
+      characterLoading === "succeeded" ? <section className={styles.notFiltersMessage}>
       <p>Nothing found. Try other filters.</p>
     </section> : 
       <section className={styles.loading}>
         <Loading />
       </section>
     );
-  }, [characters, itemsPerPage]);
+  }, [characters, itemsPerPage, characterLoading]);
   
 
   return (
@@ -109,16 +115,14 @@ export function MainCharacters() {
       <div className={styles.advancedFiltersButton}>
         <FiltersModal modalData={selectFilterLabels} />
       </div>
-      {characterLoading === "loading" ? (
-        <Loading />
-      ) : (
-        <section className={styles.contentCard}>{content}</section>
+      <section className={styles.contentCard}>{content}</section>
+      {characterLoading === "loading" && (
+        <div className={styles.loadingIndicator}>
+          <Loading />
+        </div>
       )}
-      <div
-        className={styles.loadMoreButtonContainer}
-        onClick={handleLoadMoreClick}
-      >
-           {currentPage <= maxPage && <LoadMoreButton />}
+ <div ref={loadMoreRef} className={styles.loadMoreButtonContainer} onClick={handleLoadMoreClick}>
+        {currentPage <= maxPage && <LoadMoreButton />}
       </div>
     </main>
   );
