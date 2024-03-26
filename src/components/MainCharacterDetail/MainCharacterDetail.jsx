@@ -134,7 +134,7 @@ export const MainCharacterDetail = () => {
         </section>
         <section className={styles.informationSection}>
           <h3 className={styles.title}>Episodes</h3>
-          <div >{episodesContent}</div>
+          <div className={styles.episodeContent}>{episodesContent}</div>
         </section>
       </section>
     </main>

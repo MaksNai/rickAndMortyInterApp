@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchEpisodeById } from "../../store/episodeSlice"; // Предполагается, что у вас есть такой thunk
+import { selectAllCharacters } from "../../store/characterSlice"
 
 export const MainEpisodeDetail = () => {
   const { episodeId } = useParams();
   const dispatch = useDispatch();
+  const charactersInStore = useSelector(selectAllCharacters)
+  console.log(charactersInStore)
   const episodeDetails = useSelector((state) => state.episodes.entities.find((e) => e.id === episodeId));
 
 
