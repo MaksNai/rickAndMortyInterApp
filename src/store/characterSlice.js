@@ -5,20 +5,21 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 export const fetchCharacters = createAsyncThunk(
   "characters/fetchCharacters",
   async (filters, { getState }) => {
-    const { characters: { filters: currentFilters } } = getState();
+    const {
+      characters: { filters: currentFilters },
+    } = getState();
     const queryParams = new URLSearchParams({
       ...currentFilters,
-      ...filters, 
+      ...filters,
     }).toString();
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/?${queryParams}`
+      `https://rickandmortyapi.com/api/character/?${queryParams}`,
     );
     return response.data;
-  }
+  },
 );
 
 const initialState = {
@@ -56,9 +57,9 @@ const charactersSlice = createSlice({
       })
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.entities = [...state.entities, ...action.payload.results]
-        state.maxPage = action.payload.info.pages
-        console.log(action.payload)
+        state.entities = [...state.entities, ...action.payload.results];
+        state.maxPage = action.payload.info.pages;
+        console.log(action.payload);
       })
       .addCase(fetchCharacters.rejected, (state, action) => {
         state.loading = "failed";

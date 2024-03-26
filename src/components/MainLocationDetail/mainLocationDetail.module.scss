@@ -43,3 +43,11 @@
   font-size: 20px;
   color: #8e8e93;
 }
+
+.residentLink {
+  text-decoration: none;
+}
+
+.residentCards {
+  @include mixins.mainCardsStyle;
+}

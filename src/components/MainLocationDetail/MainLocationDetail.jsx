@@ -18,6 +18,7 @@ export function MainLocationDetail() {
     state.locations.entities.find((loc) => loc.id.toString() === locationId)
   );
   const residents = useSelector((state) => state.locations.residentsData);
+  console.log(residents)
   useEffect(() => {
     if (locationLoading === "succeeded" && location && location.residents) {
       dispatch(fetchCharactersByIds(location.residents));
@@ -69,7 +70,7 @@ export function MainLocationDetail() {
       residents ? (
         <>
           {residents.map((resident) => (
-            <Link to={`/characters/${resident.id}`} key={resident.id}>
+            <Link to={`/characters/${resident.id}`} key={resident.id} className={styles.residentLink}>
               <CharacterCard character={resident} />
             </Link>
           ))}
@@ -91,7 +92,7 @@ export function MainLocationDetail() {
       </div>
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Residents</h3>
-        <div>{residentContent}</div>
+        <section className={styles.residentCards}>{residentContent}</section>
       </section>
     </main>
   );

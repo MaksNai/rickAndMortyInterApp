@@ -5,19 +5,20 @@ import axios from "axios";
 export const fetchEpisodes = createAsyncThunk(
   "episodes/fetchEpisodes",
   async (filters, { getState }) => {
-    const { episodes: { filters: currentFilters } } = getState();
+    const {
+      episodes: { filters: currentFilters },
+    } = getState();
     const queryParams = new URLSearchParams({
       ...currentFilters,
-      ...filters, 
+      ...filters,
     }).toString();
-    
+
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/episode/?${queryParams}`
+      `https://rickandmortyapi.com/api/episode/?${queryParams}`,
     );
     return response.data;
-  }
+  },
 );
-
 
 export const fetchEpisodesByIds = createAsyncThunk(
   "episodes/fetchByIds",
@@ -74,8 +75,8 @@ const episodesSlice = createSlice({
       })
       .addCase(fetchEpisodes.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.entities = [...state.entities, ...action.payload.results]
-        state.maxPage = action.payload.info.pages
+        state.entities = [...state.entities, ...action.payload.results];
+        state.maxPage = action.payload.info.pages;
       })
       .addCase(fetchEpisodes.rejected, (state, action) => {
         state.loading = "failed";
