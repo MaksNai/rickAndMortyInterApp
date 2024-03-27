@@ -75,7 +75,14 @@ const episodesSlice = createSlice({
       })
       .addCase(fetchEpisodes.fulfilled, (state, action) => {
         state.loading = "succeeded";
-        state.entities = [...state.entities, ...action.payload.results];
+        const newEpisodes = new Map(
+          state.entities.map((episode) => [episode.id, episode]),
+        );
+        action.payload.results.forEach((episode) => {
+          newEpisodes.set(episode.id, episode);
+        });
+
+        state.entities = Array.from(newEpisodes.values());
         state.maxPage = action.payload.info.pages;
       })
       .addCase(fetchEpisodes.rejected, (state, action) => {
@@ -118,8 +125,11 @@ export const selectFilteredEpisodes = createSelector(
 
 export const selectEpisodesByIds = createSelector(
   [selectAllEpisodes, (state, episodeIds) => episodeIds],
-  (episodes, episodeIds) =>
-    episodes.filter((episode) => episodeIds.includes(episode.id.toString())),
+  (episodes, episodeIds) => {
+    return episodes.filter((episode) =>
+      episodeIds.includes(String(episode.id)),
+    );
+  },
 );
 
 export default episodesSlice.reducer;

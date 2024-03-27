@@ -1,5 +1,5 @@
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import styles from './upToButton.module.scss'
+import styles from "./upToButton.module.scss";
 
 export const UpToButton = () => {
   return (

@@ -24,26 +24,39 @@ import {
 
 export function MainCharacters() {
   const dispatch = useDispatch();
-  const loadMoreRef = useRef(null);
-  const heroImage = useRef(null);
-  const characters = useSelector(selectFilteredCharacters);
-  const allCharacters = useSelector(selectAllCharacters);
-  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
 
   const maxPage = useSelector((state) => state.characters.maxPage);
   const characterLoading = useSelector((state) => state.characters.loading);
+  const characters = useSelector(selectFilteredCharacters);
+  const allCharacters = useSelector(selectAllCharacters);
+
+  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
+
+  const loadMoreRef = useRef(null);
+  const heroImage = useRef(null);
 
   useEffect(() => {
     dispatch(fetchCharacters({ page: currentPage }));
   }, [dispatch, currentPage]);
 
   useEffect(() => {
-    if (characterLoading === "succeeded") {
+    if (isLoadMoreClicked) {
       loadMoreRef.current?.scrollIntoView({ behavior: "smooth" });
+      setIsLoadMoreClicked(false);
     }
-  }, [characters.length, characterLoading]);
+  }, [characters.length, characterLoading, isLoadMoreClicked]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsUpToButtonVisible(scrollTop > window.innerHeight / 2);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const statusOptions = useMemo(
     () => getUniqueValues(allCharacters, "status"),
@@ -58,20 +71,10 @@ export function MainCharacters() {
     [allCharacters]
   );
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsUpToButtonVisible(scrollTop > window.innerHeight / 2);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const handleLoadMoreClick = useCallback(() => {
     setCurrentPage((prev) => prev + 1);
     setItemsPerPage((prev) => prev + ITEMS_PER_PAGE_INITIAL);
+    setIsLoadMoreClicked(true);
   }, []);
 
   const handleUpButtonClick = useCallback(() => {

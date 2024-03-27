@@ -35,7 +35,7 @@ const initialState = {
   entities: [],
   residentsData: [],
   loading: "idle",
-  residentLoading: "loading",
+  residentLoading: "idle",
   error: null,
   errorResident: null,
   filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
@@ -74,14 +74,25 @@ const locationsSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
-        state.residentsData = [...state.residentsData, ...action.payload];
+        const residentsData = Array.isArray(action.payload)
+          ? action.payload
+          : [action.payload];
+        const newResidents = new Map(
+          state.residentsData.map((resident) => [resident.id, resident]),
+        );
+
+        residentsData.forEach((resident) => {
+          newResidents.set(resident.id, resident);
+        });
+
+        state.residentsData = Array.from(newResidents.values());
       })
       .addCase(fetchCharactersByIds.rejected, (state, action) => {
-        state.loading = "failed";
+        state.residentLoading = "failed";
         state.errorResident = action.error.message;
       })
       .addCase(fetchCharactersByIds.pending, (state) => {
-        state.loading = "loading";
+        state.residentLoading = "loading";
       });
   },
 });

@@ -1,12 +1,11 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
-import { GoBackLink, CharacterCard, Loading } from "../";
+import { useParams } from "react-router-dom";
+import { GoBackLink, CharacterCard } from "../";
 import {
   fetchLocations,
   fetchCharactersByIds,
 } from "../../store/locationsSlice";
-import { selectCharactersByIds } from "../../store/characterSlice";
 import styles from "./mainLocationDetail.module.scss";
 
 export function MainLocationDetail() {
@@ -15,10 +14,10 @@ export function MainLocationDetail() {
 
   const locationLoading = useSelector((state) => state.locations.loading);
   const location = useSelector((state) =>
-    state.locations.entities.find((loc) => loc.id.toString() === locationId)
+    state.locations.entities.find((loc) => loc.id.toString() === locationId),
   );
   const residents = useSelector((state) => state.locations.residentsData);
-  console.log(residents)
+  
   useEffect(() => {
     if (locationLoading === "succeeded" && location && location.residents) {
       dispatch(fetchCharactersByIds(location.residents));
@@ -62,7 +61,7 @@ export function MainLocationDetail() {
       ) : (
         <div className={styles.error}>Location not found</div>
       ),
-    [location, nameLocation, typeDimension, typeLocation]
+    [location, nameLocation, typeDimension, typeLocation],
   );
 
   const residentContent = useMemo(
@@ -70,17 +69,14 @@ export function MainLocationDetail() {
       residents ? (
         <>
           {residents.map((resident) => (
-            <Link to={`/characters/${resident.id}`} key={resident.id} className={styles.residentLink}>
               <CharacterCard character={resident} />
-            </Link>
           ))}
         </>
       ) : (
         <div className={styles.error}>Loading residents...</div>
       ),
-    [residents]
+    [residents],
   );
-
 
   return (
     <main className={styles.main}>

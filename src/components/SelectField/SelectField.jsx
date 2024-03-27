@@ -4,8 +4,9 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import styles from "./selectField.module.scss";
 
 export function SelectField({ props }) {
-  const { label, items, filterName, action } = props;
   const dispatch = useDispatch();
+  const { label, items, filterName, action } = props;
+
   const idSelect = useId();
   const idLabel = useId();
 

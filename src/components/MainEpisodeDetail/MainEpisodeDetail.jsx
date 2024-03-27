@@ -7,10 +7,8 @@ import { GoBackLink } from "..";
 import { fetchEpisodesByIds } from "../../store/episodeSlice";
 
 export const MainEpisodeDetail = () => {
-  const { episodeId } = useParams();
   const dispatch = useDispatch();
-  const charactersInStore = useSelector(selectAllCharacters);
-
+  const { episodeId } = useParams();
   const episodeLoading = useSelector((state) => state.episodes.loading);
 
   const episode = useSelector((state) =>
@@ -18,6 +16,14 @@ export const MainEpisodeDetail = () => {
       (episode) => episode.id.toString() === episodeId
     )
   );
+
+  // const charactersInStore = useSelector(selectAllCharacters);
+
+  useEffect(() => {
+    if (episodeLoading === "idle") {
+      dispatch(fetchEpisodesByIds());
+    }
+  }, [episodeLoading, dispatch]);
 
   const nameEpisode = useMemo(() => {
     if (episodeLoading === "succeeded" && episode) return episode.name;
@@ -30,13 +36,6 @@ export const MainEpisodeDetail = () => {
   const airDate = useMemo(() => {
     if (episodeLoading === "succeeded" && episode) return episode.air_date;
   }, [episode, episodeLoading]);
-
-  console.log(episode);
-  useEffect(() => {
-    if (episodeLoading === "idle") {
-      dispatch(fetchEpisodesByIds());
-    }
-  }, [episodeLoading, dispatch]);
 
   const mainEpisodeInfo = useMemo(
     () =>
@@ -77,5 +76,5 @@ export const MainEpisodeDetail = () => {
     ))}</div> */}
       </section>
     </main>
-  )
+  );
 };

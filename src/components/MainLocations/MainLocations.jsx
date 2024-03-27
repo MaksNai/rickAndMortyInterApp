@@ -23,25 +23,30 @@ import {
 
 export function MainLocations() {
   const dispatch = useDispatch();
+
   const allLocations = useSelector(selectAllLocations);
   const locations = useSelector(selectFilteredLocations);
-  const loadMoreRef = useRef(null);
-  const heroImage = useRef(null);
   const locationLoading = useSelector((state) => state.locations.loading);
   const maxPage = useSelector((state) => state.locations.maxPage);
+
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
   const [currentPage, setCurrentPage] = useState(1);
   const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
+
+  const loadMoreRef = useRef(null);
+  const heroImage = useRef(null);
 
   useEffect(() => {
     dispatch(fetchLocations({ page: currentPage }));
   }, [dispatch, currentPage]);
 
   useEffect(() => {
-    if (locationLoading === "succeeded") {
+    if (isLoadMoreClicked) {
       loadMoreRef.current?.scrollIntoView({ behavior: "smooth" });
+      setIsLoadMoreClicked(false);
     }
-  }, [locations.length, locationLoading]);
+  }, [locations.length, locationLoading, isLoadMoreClicked]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,6 +94,7 @@ export function MainLocations() {
   const handleLoadMoreClick = useCallback(() => {
     setCurrentPage(currentPage + 1);
     setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE_INITIAL);
+    setIsLoadMoreClicked(true);
   });
 
   const handleUpButtonClick = useCallback(() => {

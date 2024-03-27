@@ -22,37 +22,36 @@ export function MainEpisodes() {
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
   const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const loadMoreRef = useRef(null);
-  const heroImage = useRef(null);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
 
   const episodes = useSelector(selectFilteredEpisodes);
   const episodeLoading = useSelector((state) => state.episodes.loading);
   const maxPage = useSelector((state) => state.episodes.maxPage);
 
+  const loadMoreRef = useRef(null);
+  const heroImage = useRef(null);
+
   useEffect(() => {
-    if (episodeLoading === "idle") {
-      dispatch(fetchEpisodes());
-    }
-  }, [episodeLoading, dispatch]);
+    dispatch(fetchEpisodes({ page: currentPage }));
+  }, [dispatch, currentPage]);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       setIsUpToButtonVisible(scrollTop > window.innerHeight / 2);
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    if (episodeLoading === "succeeded") {
+    if (isLoadMoreClicked) {
       loadMoreRef.current?.scrollIntoView({ behavior: "smooth" });
+      setIsLoadMoreClicked(false);
     }
-  }, [episodes.length, episodeLoading]);
+  }, [episodes.length, episodeLoading, isLoadMoreClicked]);
 
+  
   const handleUpButtonClick = useCallback(() => {
     heroImage.current?.scrollIntoView({ behavior: "smooth" });
     setIsUpToButtonVisible(false);
@@ -61,6 +60,7 @@ export function MainEpisodes() {
   const handleLoadMoreClick = useCallback(() => {
     setCurrentPage((prev) => prev + 1);
     setItemsPerPage((prev) => prev + ITEMS_PER_PAGE_INITIAL);
+    setIsLoadMoreClicked(true);
   }, []);
 
   const content = useMemo(() => {
