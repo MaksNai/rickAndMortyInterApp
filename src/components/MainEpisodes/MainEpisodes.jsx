@@ -63,7 +63,7 @@ export function MainEpisodes() {
   }, []);
 
   const content = useMemo(() => {
-    if (episodeLoading === "loading") {
+    if (episodeLoading) {
       return <Loading />;
     }
     if (episodes.length > 0) {
@@ -88,7 +88,7 @@ export function MainEpisodes() {
         </li>
       </ul>
       <section className={styles.contentCard}>{content}</section>
-      {episodeLoading === "loading" && (
+      {episodeLoading && (
         <div className={styles.loadingIndicator}>
           <Loading />
         </div>

@@ -133,7 +133,7 @@ export function MainLocations() {
         <FiltersModal modalData={selectFilterLabels} />
       </div>
       <section className={styles.contentCard}>{content}</section>
-      {locationLoading === "loading" && (
+      {locationLoading && (
         <div className={styles.loadingIndicator}>
           <Loading />
         </div>

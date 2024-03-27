@@ -36,7 +36,7 @@ export const fetchEpisodesByIds = createAsyncThunk(
 const initialState = {
   maxPage: 1,
   entities: [],
-  loading: "idle",
+  loading: null,
   episodesByIds: [],
   characters: [],
   error: null,
@@ -62,10 +62,10 @@ const episodesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchEpisodes.pending, (state) => {
-        state.loading = "loading";
+        state.loading = true;
       })
       .addCase(fetchEpisodes.fulfilled, (state, action) => {
-        state.loading = "succeeded";
+        state.loading = false;
         const newEpisodes = new Map(
           state.entities.map((episode) => [episode.id, episode])
         );
@@ -77,11 +77,11 @@ const episodesSlice = createSlice({
         state.maxPage = action.payload.info.pages;
       })
       .addCase(fetchEpisodes.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
       .addCase(fetchEpisodesByIds.pending, (state) => {
-        state.loading = "loading";
+        state.loading = true;
       })
       .addCase(fetchEpisodesByIds.fulfilled, (state, action) => {
         const episodesData = Array.isArray(action.payload)
@@ -96,10 +96,10 @@ const episodesSlice = createSlice({
         });
 
         state.episodesByIds = Array.from(newEpisodes.values());
-        state.loading = "succeeded";
+        state.loading = false;
       })
       .addCase(fetchEpisodesByIds.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loading = false;
         state.error = action.error.message;
       });
   },

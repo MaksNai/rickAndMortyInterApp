@@ -21,13 +21,13 @@ export const MainEpisodeDetail = () => {
   );
 
   useEffect(() => {
-    if (episodeLoading === "idle" || !episode) {
+    if (episodeLoading || !episode) {
       dispatch(fetchEpisodesByIds(episodeId));
     }
   }, [episodeLoading, dispatch, episode, episodeId]);
 
   useEffect(() => {
-    if (episodeLoading === "succeeded" && episode && episode.characters) {
+    if (!episodeLoading && episode && episode.characters) {
       dispatch(fetchCharactersByIds(episode.characters));
     }
   }, [dispatch, episodeLoading, episode]);
@@ -37,15 +37,15 @@ export const MainEpisodeDetail = () => {
   }, []);
 
   const nameEpisode = useMemo(() => {
-    if (episodeLoading === "succeeded" && episode) return episode.name;
+    if (!episodeLoading && episode) return episode.name;
   }, [episode, episodeLoading]);
 
   const episodeNumber = useMemo(() => {
-    if (episodeLoading === "succeeded" && episode) return episode.episode;
+    if (!episodeLoading && episode) return episode.episode;
   }, [episode, episodeLoading]);
 
   const airDate = useMemo(() => {
-    if (episodeLoading === "succeeded" && episode) return episode.air_date;
+    if (!episodeLoading && episode) return episode.air_date;
   }, [episode, episodeLoading]);
 
   const mainEpisodeInfo = useMemo(

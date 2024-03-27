@@ -67,15 +67,15 @@ const locationsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchLocations.pending, (state) => {
-        state.loading = "loading";
+        state.loading = true;
       })
       .addCase(fetchLocations.fulfilled, (state, action) => {
-        state.loading = "succeeded";
+        state.loading = false;
         state.entities = [...state.entities, ...action.payload.results];
         state.maxPage = action.payload.info.pages;
       })
       .addCase(fetchLocations.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
       .addCase(fetchLocationsByIds.fulfilled, (state, action) => {

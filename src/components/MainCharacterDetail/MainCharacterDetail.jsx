@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import styles from "./mainCharacterDetail.module.scss";
 import { fetchCharactersByIds } from "../../store/characterSlice";
-import { fetchEpisodes } from "../../store/episodeSlice";
+import { fetchEpisodesByIds } from "../../store/episodeSlice";
 import { GoBackLink, Loading } from "../";
 import { INFORMATION_FIELDS } from "./constants";
 import { extractNumbersFromEnd } from "./helpers";
@@ -11,19 +11,23 @@ import { extractNumbersFromEnd } from "./helpers";
 export const MainCharacterDetail = () => {
   const dispatch = useDispatch();
   const { characterId } = useParams();
-  const top = useRef(null)
+  const top = useRef(null);
 
   const characterLoading = useSelector((state) => state.characters.loading);
   const episodeLoading = useSelector((state) => state.episodes.loading);
   const character = useSelector((state) =>
-    state.characters.charactersByIds.find((char) => char.id.toString() === characterId)
+    state.characters.charactersByIds.find(
+      (char) => char.id.toString() === characterId
+    )
   );
-  const episodes = useSelector((state) => state.episodes.entities);
+  const episodes = useSelector((state) => state.episodes.episodesByIds);
 
   useEffect(() => {
-    dispatch(fetchEpisodes());
-  }, [dispatch]);
-  
+    if (character) {
+      dispatch(fetchEpisodesByIds(character.episode));
+    }
+  }, [dispatch, character]);
+
   useEffect(() => {
     dispatch(fetchCharactersByIds(characterId));
   }, [dispatch, characterId]);
@@ -88,11 +92,7 @@ export const MainCharacterDetail = () => {
     if (!character || characterLoading) {
       return (
         <div className={styles.error}>
-          {characterLoading? (
-            <Loading />
-          ) : (
-            <p>Character not found</p>
-          )}
+          {characterLoading ? <Loading /> : <p>Character not found</p>}
         </div>
       );
     }
@@ -105,20 +105,18 @@ export const MainCharacterDetail = () => {
   }, [character, imageSrc, nameCharacter, characterLoading]);
 
   const episodesContent = useMemo(() => {
-    if (episodeLoading === "succeeded") {
-      return episodes.map(
-        ({ id, episode, name, air_date }) => (
-          <Link
-            to={`/episodes/${id}`}
-            key={id}
-            className={`${styles.episodeDetails} ${styles.linkedItem}`}
-          >
-            <span className={styles.episodeEpisode}>{episode}</span>
-            <span className={styles.episodeNames}>{name}</span> 
-            <span className={styles.episodeDate}>{air_date}</span>
-          </Link>
-        )
-      );
+    if (!episodeLoading) {
+      return episodes.map(({ id, episode, name, air_date }) => (
+        <Link
+          to={`/episodes/${id}`}
+          key={id}
+          className={`${styles.episodeDetails} ${styles.linkedItem}`}
+        >
+          <span className={styles.episodeEpisode}>{episode}</span>
+          <span className={styles.episodeNames}>{name}</span>
+          <span className={styles.episodeDate}>{air_date}</span>
+        </Link>
+      ));
     }
     return <p>Loading episodes...</p>;
   }, [episodes, episodeLoading]);
