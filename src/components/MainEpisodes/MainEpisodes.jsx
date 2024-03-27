@@ -51,7 +51,6 @@ export function MainEpisodes() {
     }
   }, [episodes.length, episodeLoading, isLoadMoreClicked]);
 
-  
   const handleUpButtonClick = useCallback(() => {
     heroImage.current?.scrollIntoView({ behavior: "smooth" });
     setIsUpToButtonVisible(false);
@@ -64,13 +63,13 @@ export function MainEpisodes() {
   }, []);
 
   const content = useMemo(() => {
-    return episodeLoading === "loading" ? (
-      <Loading />
-    ) : episodes.length > 0 ? (
-      <EpisodesCards episodes={episodes.slice(0, itemsPerPage)} />
-    ) : (
-      <p>Nothing found. Try other filters.</p>
-    );
+    if (episodeLoading === "loading") {
+      return <Loading />;
+    }
+    if (episodes.length > 0) {
+      return <EpisodesCards episodes={episodes.slice(0, itemsPerPage)} />;
+    }
+    return <p>Nothing found. Try other filters.</p>;
   }, [episodes, itemsPerPage, episodeLoading]);
 
   return (
