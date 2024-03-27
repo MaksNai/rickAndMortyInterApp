@@ -40,7 +40,8 @@ const initialState = {
   maxPage: 2,
   entities: [],
   locationsByIds: [],
-  loading: "idle",
+  loadingById: true,
+  loading: true,
   error: null,
   filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
     name: "",
@@ -90,10 +91,10 @@ const locationsSlice = createSlice({
         });
 
         state.locationsByIds = Array.from(newLocations.values());
-        state.loading = "succeeded";
+        state.loadingById = false;
       })
       .addCase(fetchLocationsByIds.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loadingById = false
         state.error = action.error.message;
       });
   },

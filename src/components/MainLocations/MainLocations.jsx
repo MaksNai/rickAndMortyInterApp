@@ -95,7 +95,7 @@ export function MainLocations() {
     setCurrentPage(currentPage + 1);
     setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE_INITIAL);
     setIsLoadMoreClicked(true);
-  });
+  }, [currentPage, itemsPerPage]);
 
   const handleUpButtonClick = useCallback(() => {
     heroImage.current?.scrollIntoView({ behavior: "smooth" });
@@ -108,7 +108,7 @@ export function MainLocations() {
         <Hero className={styles.heroImage} type="circle" />
       </div>
       <ul className={styles.filterList}>
-        <li className={`${styles.filterItem} ${styles.filterField}`}>
+        <li key={"Filter"} className={`${styles.filterItem} ${styles.filterField}`}>
           <FilterInput
             filterName="name"
             text="Filter by name..."
@@ -117,7 +117,7 @@ export function MainLocations() {
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
-          <li className={styles.filterSelect}>
+          <li className={styles.filterSelect} key={selectItem.label}>
             <SelectField
               props={{
                 label: selectItem.label,

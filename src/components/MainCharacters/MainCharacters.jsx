@@ -93,7 +93,7 @@ export function MainCharacters() {
   const content = useMemo(() => {
     return characters.length > 0 ? (
       <CharactersCards characters={characters.slice(0, itemsPerPage)} />
-    ) : characterLoading === "succeeded" ? (
+    ) : !characterLoading ? (
       <section className={styles.notFiltersMessage}>
         <p>Nothing found. Try other filters.</p>
       </section>
@@ -135,7 +135,7 @@ export function MainCharacters() {
         <FiltersModal modalData={selectFilterLabels} />
       </div>
       <section className={styles.contentCard}>{content}</section>
-      {characterLoading === "loading" && (
+      {characterLoading && (
         <div className={styles.loadingIndicator}>
           <Loading />
         </div>

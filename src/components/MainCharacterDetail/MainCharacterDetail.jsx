@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import styles from "./mainCharacterDetail.module.scss";
 import { fetchCharactersByIds } from "../../store/characterSlice";
@@ -11,6 +11,7 @@ import { extractNumbersFromEnd } from "./helpers";
 export const MainCharacterDetail = () => {
   const dispatch = useDispatch();
   const { characterId } = useParams();
+  const top = useRef(null)
 
   const characterLoading = useSelector((state) => state.characters.loading);
   const episodeLoading = useSelector((state) => state.episodes.loading);
@@ -27,15 +28,19 @@ export const MainCharacterDetail = () => {
     dispatch(fetchCharactersByIds(characterId));
   }, [dispatch, characterId]);
 
+  useEffect(() => {
+    top.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   const imageSrc = useMemo(() => {
-    if (characterLoading === "succeeded" && character) return character.image;
+    if (!characterLoading && character) return character.image;
   }, [characterLoading, character]);
   const nameCharacter = useMemo(() => {
-    if (characterLoading === "succeeded" && character) return character.name;
+    if (!characterLoading && character) return character.name;
   }, [characterLoading, character]);
 
   const informationContent = useMemo(() => {
-    if (characterLoading === "succeeded" && character) {
+    if (!characterLoading && character) {
       return INFORMATION_FIELDS.map((item) => {
         const field = character[item];
         if (field) {
@@ -80,10 +85,10 @@ export const MainCharacterDetail = () => {
   }, [character, characterLoading]);
 
   const mainCharacterInfo = useMemo(() => {
-    if (!character || characterLoading !== "succeeded") {
+    if (!character || characterLoading) {
       return (
         <div className={styles.error}>
-          {characterLoading === "loading" ? (
+          {characterLoading? (
             <Loading />
           ) : (
             <p>Character not found</p>
@@ -120,7 +125,7 @@ export const MainCharacterDetail = () => {
 
   return (
     <main className={styles.main}>
-      <div className={styles.top}>
+      <div className={styles.top} ref={top}>
         <nav className={styles.nav}>
           <GoBackLink url="/characters" />
         </nav>

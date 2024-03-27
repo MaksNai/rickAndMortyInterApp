@@ -10,38 +10,43 @@ export function MainLocationDetail() {
   const dispatch = useDispatch();
   const { locationId } = useParams();
 
-  const locationLoading = useSelector((state) => state.locations.loading);
+  const locationLoading = useSelector((state) => state.locations.loadingById);
 
   const location = useSelector((state) =>
     state.locations.locationsByIds.find(
       (location) => location.id.toString() === locationId
     )
   );
+
   const residents = useSelector((state) => state.characters.charactersByIds);
 
   useEffect(() => {
-    if (locationLoading === "idle") {
+    if (locationLoading) {
       dispatch(fetchLocationsByIds(locationId));
     }
   }, [locationLoading, dispatch, locationId]);
 
   useEffect(() => {
-    if (locationLoading === "succeeded" && location && location.residents) {
+    if (
+      !locationLoading &&
+      location &&
+      location.residents &&
+      location.residents.length > 0
+    ) {
       dispatch(fetchCharactersByIds(location.residents));
     }
   }, [dispatch, locationLoading, location]);
 
-
   const nameLocation = useMemo(() => {
-    if (locationLoading === "succeeded" && location) return location.name;
+    if (!locationLoading && location) return location.name;
   }, [location, locationLoading]);
 
   const typeLocation = useMemo(() => {
-    if (locationLoading === "succeeded" && location) return location.type;
+    if (!locationLoading && location) return location.type;
   }, [location, locationLoading]);
 
   const typeDimension = useMemo(() => {
-    if (locationLoading === "succeeded" && location) return location.dimension;
+    if (!locationLoading && location) return location.dimension;
   }, [location, locationLoading]);
 
   const mainLocationInfo = useMemo(
@@ -61,24 +66,32 @@ export function MainLocationDetail() {
           </dl>
         </>
       ) : (
-        <div className={styles.error}>< Loading /></div>
+        <div className={styles.error}>
+          <Loading />
+        </div>
       ),
     [location, nameLocation, typeDimension, typeLocation]
   );
 
-  const residentContent = useMemo(
-    () =>
-      residents && residents.length > 0 ? (
-        <>
-          {residents.map((resident) => (
-            <CharacterCard character={resident} />
-          ))}
-        </>
-      ) : (
-        <div className={styles.error}>Loading residents...</div>
-      ),
-    [residents]
-  );
+  const residentContent = useMemo(() => {
+    if (!residents) {
+      return (
+        <div className={styles.error}>
+          <Loading />
+        </div>
+      );
+    }
+    if (residents.length === 0) {
+      return <div className={styles.error}>There are no residents</div>;
+    }
+    return (
+      <>
+        {residents.map((resident) => (
+          <CharacterCard character={resident} key={resident.id} />
+        ))}
+      </>
+    );
+  }, [residents]);
 
   return (
     <main className={styles.main}>

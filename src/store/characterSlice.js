@@ -38,8 +38,7 @@ const initialState = {
   maxPage: 1,
   entities: [],
   charactersByIds: [],
-  loading: "idle",
-  byIdsLoading: "idle",
+  loading: null,
   error: null,
   filters: JSON.parse(localStorage.getItem("characterFilters")) || {
     name: "",
@@ -65,10 +64,10 @@ const charactersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchCharacters.pending, (state) => {
-        state.loading = "loading";
+        state.loading = true
       })
       .addCase(fetchCharacters.fulfilled, (state, action) => {
-        state.loading = "succeeded";
+        state.loading = false;
         const newCharacters = new Map(
           state.entities.map((char) => [char.id, char])
         );
@@ -81,7 +80,7 @@ const charactersSlice = createSlice({
         state.maxPage = action.payload.info.pages;
       })
       .addCase(fetchCharacters.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loading = false;
         state.error = action.error.message;
       })
       .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
@@ -97,14 +96,14 @@ const charactersSlice = createSlice({
         });
 
         state.charactersByIds = Array.from(newCharacters.values());
-        state.loading = "succeeded";
+        state.loading = false;
       })
       .addCase(fetchCharactersByIds.rejected, (state, action) => {
-        state.loading = "failed";
+        state.loading = false;
         state.errorResident = action.error.message;
       })
       .addCase(fetchCharactersByIds.pending, (state) => {
-        state.loading = "loading";
+        state.loading = false;
       });
   },
 });
