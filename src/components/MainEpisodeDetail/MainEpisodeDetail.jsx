@@ -1,38 +1,40 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styles from "./mainEpisodeDetail.module.scss";
 import { fetchCharactersByIds } from "../../store/characterSlice";
 import { GoBackLink, CharacterCard, Loading } from "..";
-import { fetchEpisodeById } from "../../store/episodeSlice";
+import { fetchEpisodesByIds } from "../../store/episodeSlice";
 
 export const MainEpisodeDetail = () => {
   const dispatch = useDispatch();
   const { episodeId } = useParams();
-  const episodeLoading = useSelector((state) => state.episodes.loading);
+  const top = useRef(null);
 
-  const episodeInStore = useSelector((state) =>
-    state.episodes.entities.find(
+  const episodeLoading = useSelector((state) => state.episodes.loading);
+  const casts = useSelector((state) => state.characters.charactersByIds);
+
+  const episode = useSelector((state) =>
+    state.episodes.episodesByIds.find(
       (episode) => episode.id.toString() === episodeId
     )
   );
 
-  const casts = useSelector((state) => state.characters.charactersByIds);
-
-  const currentEpisode = useSelector((state) => state.episodes.currentEpisode);
-  const episode = episodeInStore ? episodeInStore : currentEpisode;
-
   useEffect(() => {
-    if (episodeLoading === "idle" && !episodeInStore) {
-      dispatch(fetchEpisodeById(episodeId));
+    if (episodeLoading === "idle" || !episode) {
+      dispatch(fetchEpisodesByIds(episodeId));
     }
-  }, [episodeLoading, dispatch, episodeInStore]);
+  }, [episodeLoading, dispatch, episode, episodeId]);
 
   useEffect(() => {
     if (episodeLoading === "succeeded" && episode && episode.characters) {
       dispatch(fetchCharactersByIds(episode.characters));
     }
   }, [dispatch, episodeLoading, episode]);
+
+  useEffect(() => {
+    top.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   const nameEpisode = useMemo(() => {
     if (episodeLoading === "succeeded" && episode) return episode.name;
@@ -77,14 +79,16 @@ export const MainEpisodeDetail = () => {
           ))}
         </>
       ) : (
-        <div className={styles.loading}>< Loading /></div>
+        <div className={styles.loading}>
+          <Loading />
+        </div>
       ),
     [casts]
   );
 
   return (
     <main className={styles.main}>
-      <div className={styles.top}>
+      <div className={styles.top} ref={top}>
         <nav className={styles.nav}>
           <GoBackLink url="/episodes" />
         </nav>

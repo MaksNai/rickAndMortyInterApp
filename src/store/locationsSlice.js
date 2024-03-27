@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchLocations = createAsyncThunk(
@@ -13,20 +17,31 @@ export const fetchLocations = createAsyncThunk(
     }).toString();
 
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/location/?${queryParams}`,
+      `https://rickandmortyapi.com/api/location/?${queryParams}`
     );
     return response.data;
-  },
+  }
+);
+
+export const fetchLocationsByIds = createAsyncThunk(
+  "locations/fetchLocationsByIds",
+  async (locationIds) => {
+    const ids = Array.isArray(locationIds)
+      ? locationIds.map((url) => url.split("/").pop())
+      : locationIds;
+    const response = await axios.get(
+      `https://rickandmortyapi.com/api/location/${ids}`
+    );
+    return response.data;
+  }
 );
 
 const initialState = {
   maxPage: 2,
   entities: [],
-  residentsData: [],
+  locationsByIds: [],
   loading: "idle",
-  residentLoading: "idle",
   error: null,
-  errorResident: null,
   filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
     name: "",
     type: "",
@@ -62,6 +77,25 @@ const locationsSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
+      .addCase(fetchLocationsByIds.fulfilled, (state, action) => {
+        const locationsData = Array.isArray(action.payload)
+          ? action.payload
+          : [action.payload];
+        const newLocations = new Map(
+          state.locationsByIds.map((location) => [location.id, location])
+        );
+
+        locationsData.forEach((location) => {
+          newLocations.set(location.id, location);
+        });
+
+        state.locationsByIds = Array.from(newLocations.values());
+        state.loading = "succeeded";
+      })
+      .addCase(fetchLocationsByIds.rejected, (state, action) => {
+        state.loading = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 
@@ -70,15 +104,19 @@ export const { setLocationsFilter, resetLocationsFilters } =
 
 export const selectAllLocations = (state) => state.locations.entities;
 export const selectLocationsFilters = (state) => state.locations.filters;
-export const selectFilteredLocations = (state) => {
-  const { entities, filters } = state.locations;
-  return entities.filter(
-    (location) =>
-      (!filters.name ||
-        location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-      (!filters.type || location.type === filters.type) &&
-      (!filters.dimension || location.dimension === filters.dimension),
-  );
-};
+
+export const selectFilteredLocations = createSelector(
+  [(state) => state.locations],
+  (locations) => {
+    const { entities, filters } = locations;
+    return entities.filter(
+      (location) =>
+        (!filters.name ||
+          location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+        (!filters.type || location.type === filters.type) &&
+        (!filters.dimension || location.dimension === filters.dimension)
+    );
+  }
+);
 
 export default locationsSlice.reducer;

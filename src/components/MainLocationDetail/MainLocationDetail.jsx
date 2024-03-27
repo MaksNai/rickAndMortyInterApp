@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { GoBackLink, CharacterCard } from "../";
-import { fetchLocations } from "../../store/locationsSlice";
+import { GoBackLink, CharacterCard, Loading } from "../";
+import { fetchLocationsByIds } from "../../store/locationsSlice";
 import { fetchCharactersByIds } from "../../store/characterSlice";
 import styles from "./mainLocationDetail.module.scss";
 
@@ -11,10 +11,19 @@ export function MainLocationDetail() {
   const { locationId } = useParams();
 
   const locationLoading = useSelector((state) => state.locations.loading);
+
   const location = useSelector((state) =>
-    state.locations.entities.find((loc) => loc.id.toString() === locationId)
+    state.locations.locationsByIds.find(
+      (location) => location.id.toString() === locationId
+    )
   );
   const residents = useSelector((state) => state.characters.charactersByIds);
+
+  useEffect(() => {
+    if (locationLoading === "idle") {
+      dispatch(fetchLocationsByIds(locationId));
+    }
+  }, [locationLoading, dispatch, locationId]);
 
   useEffect(() => {
     if (locationLoading === "succeeded" && location && location.residents) {
@@ -22,11 +31,6 @@ export function MainLocationDetail() {
     }
   }, [dispatch, locationLoading, location]);
 
-  useEffect(() => {
-    if (locationLoading === "idle") {
-      dispatch(fetchLocations());
-    }
-  }, [locationLoading, dispatch]);
 
   const nameLocation = useMemo(() => {
     if (locationLoading === "succeeded" && location) return location.name;
@@ -57,7 +61,7 @@ export function MainLocationDetail() {
           </dl>
         </>
       ) : (
-        <div className={styles.error}>Location not found</div>
+        <div className={styles.error}>< Loading /></div>
       ),
     [location, nameLocation, typeDimension, typeLocation]
   );

@@ -116,17 +116,20 @@ export const selectMaxPage = (state) => state.maxPage;
 
 export const selectAllCharacters = (state) => state.characters.entities;
 export const selectCharactersFilters = (state) => state.characters.filters;
-export const selectFilteredCharacters = (state) => {
-  const { entities, filters } = state.characters;
-  return entities.filter(
-    (character) =>
-      (!filters.name ||
-        character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-      (!filters.species || character.species === filters.species) &&
-      (!filters.status || character.status === filters.status) &&
-      (!filters.gender || character.gender === filters.gender)
-  );
-};
+export const selectFilteredCharacters = createSelector(
+  [state => state.characters],
+  (characters) => {
+    const { entities, filters } = characters;
+    return entities.filter(
+      (character) =>
+        (!filters.name ||
+          character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+        (!filters.species || character.species === filters.species) &&
+        (!filters.status || character.status === filters.status) &&
+        (!filters.gender || character.gender === filters.gender)
+    );
+  }
+);
 
 export const selectCharactersByIds = createSelector(
   [selectAllCharacters, (state, characterIds) => characterIds],
