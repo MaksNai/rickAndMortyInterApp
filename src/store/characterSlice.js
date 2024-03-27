@@ -22,20 +22,11 @@ export const fetchCharacters = createAsyncThunk(
   }
 );
 
-export const fetchCharacterById = createAsyncThunk(
-  "characters/fetchCharacterById",
-  async (characterId) => {
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/${characterId}`
-    );
-    return response.data;
-  }
-);
 
 export const fetchCharactersByIds = createAsyncThunk(
-  "locations/fetchCharactersByIds",
+  "characters/fetchCharactersByIds",
   async (residentUrls) => {
-    const ids = residentUrls.map((url) => url.split("/").pop());
+    const ids = Array.isArray(residentUrls) ? residentUrls.map((url) => url.split("/").pop()) : residentUrls;
     const response = await axios.get(
       `https://rickandmortyapi.com/api/character/${ids}`
     );
@@ -47,7 +38,6 @@ const initialState = {
   maxPage: 1,
   entities: [],
   charactersByIds: [],
-  currentCharacter: {},
   loading: "idle",
   byIdsLoading: "idle",
   error: null,
@@ -94,17 +84,6 @@ const charactersSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchCharacterById.fulfilled, (state, action) => {
-        state.currentCharacter = action.payload;
-        state.loading = "succeeded";
-      })
-      .addCase(fetchCharacterById.pending, (state) => {
-        state.loading = "loading";
-      })
-      .addCase(fetchCharacterById.rejected, (state, action) => {
-        state.loading = "failed";
-        state.error = action.error.message;
-      })
       .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
         const charactersData = Array.isArray(action.payload)
           ? action.payload
@@ -118,13 +97,14 @@ const charactersSlice = createSlice({
         });
 
         state.charactersByIds = Array.from(newCharacters.values());
+        state.loading = "succeeded";
       })
       .addCase(fetchCharactersByIds.rejected, (state, action) => {
-        state.residentLoading = "failed";
+        state.loading = "failed";
         state.errorResident = action.error.message;
       })
       .addCase(fetchCharactersByIds.pending, (state) => {
-        state.residentLoading = "loading";
+        state.loading = "loading";
       });
   },
 });

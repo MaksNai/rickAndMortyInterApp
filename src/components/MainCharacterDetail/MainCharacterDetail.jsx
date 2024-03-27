@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import styles from "./mainCharacterDetail.module.scss";
-import { fetchCharacters, fetchCharacterById } from "../../store/characterSlice";
+import { fetchCharactersByIds } from "../../store/characterSlice";
 import { fetchEpisodes } from "../../store/episodeSlice";
 import { GoBackLink, Loading } from "../";
 import { INFORMATION_FIELDS } from "./constants";
@@ -14,7 +14,9 @@ export const MainCharacterDetail = () => {
 
   const characterLoading = useSelector((state) => state.characters.loading);
   const episodeLoading = useSelector((state) => state.episodes.loading);
-  const character = useSelector((state) => state.characters.currentCharacter)
+  const character = useSelector((state) =>
+    state.characters.charactersByIds.find((char) => char.id.toString() === characterId)
+  );
   const episodes = useSelector((state) => state.episodes.entities);
 
   useEffect(() => {
@@ -22,15 +24,15 @@ export const MainCharacterDetail = () => {
   }, [dispatch]);
   
   useEffect(() => {
-    dispatch(fetchCharacterById(characterId));
+    dispatch(fetchCharactersByIds(characterId));
   }, [dispatch, characterId]);
 
   const imageSrc = useMemo(() => {
     if (characterLoading === "succeeded" && character) return character.image;
-  }, [character, characterLoading]);
+  }, [characterLoading, character]);
   const nameCharacter = useMemo(() => {
     if (characterLoading === "succeeded" && character) return character.name;
-  }, [character, characterLoading]);
+  }, [characterLoading, character]);
 
   const informationContent = useMemo(() => {
     if (characterLoading === "succeeded" && character) {

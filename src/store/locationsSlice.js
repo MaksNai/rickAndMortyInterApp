@@ -19,17 +19,6 @@ export const fetchLocations = createAsyncThunk(
   },
 );
 
-export const fetchCharactersByIds = createAsyncThunk(
-  "locations/fetchCharactersByIds",
-  async (residentUrls) => {
-    const ids = residentUrls.map((url) => url.split("/").pop());
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/${ids}`,
-    );
-    return response.data;
-  },
-);
-
 const initialState = {
   maxPage: 2,
   entities: [],

@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
-
 import { getUniqueValues } from "../../helpers/helpers";
 import { ITEMS_PER_PAGE_INITIAL } from "./constants";
 import {
@@ -120,7 +119,7 @@ export function MainCharacters() {
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
-          <li className={styles.filterSelect}>
+          <li className={styles.filterSelect} key={selectItem.label}>
             <SelectField
               props={{
                 label: selectItem.label,
