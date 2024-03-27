@@ -38,8 +38,7 @@ export const MainCharacterDetail = () => {
         const field = character[item];
         if (field) {
           const content = typeof field === "object" ? field.name : field;
-          const key =
-            typeof field === "object" && field.url ? field.name : item;
+          const key = field?.name || item;
           const isLink = typeof field === "object" && field.url;
 
           if (isLink)
