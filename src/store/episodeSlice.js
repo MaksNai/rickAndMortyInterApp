@@ -97,6 +97,7 @@ const episodesSlice = createSlice({
 
         state.episodesByIds = Array.from(newEpisodes.values());
         state.loading = false;
+        state.error = null;
       })
       .addCase(fetchEpisodesByIds.rejected, (state, action) => {
         state.loading = false;

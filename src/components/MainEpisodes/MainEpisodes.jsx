@@ -23,7 +23,9 @@ export function MainEpisodes() {
   const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
+  const [isNeedMore, setIsNeedMore] = useState(true);
 
+  const error = useSelector((state) => state.episodes.error)
   const episodes = useSelector(selectFilteredEpisodes);
   const episodeLoading = useSelector((state) => state.episodes.loading);
   const maxPage = useSelector((state) => state.episodes.maxPage);
@@ -32,8 +34,11 @@ export function MainEpisodes() {
   const heroImage = useRef(null);
 
   useEffect(() => {
-    dispatch(fetchEpisodes({ page: currentPage }));
-  }, [dispatch, currentPage]);
+    if(isNeedMore) {
+      dispatch(fetchEpisodes({ page: currentPage }));
+      setIsNeedMore(false);
+    }
+  }, [dispatch, currentPage, isNeedMore]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,9 +62,14 @@ export function MainEpisodes() {
   }, []);
 
   const handleLoadMoreClick = useCallback(() => {
+    if (error) return
     setCurrentPage((prev) => prev + 1);
     setItemsPerPage((prev) => prev + ITEMS_PER_PAGE_INITIAL);
     setIsLoadMoreClicked(true);
+  }, [error]);
+
+  const handleFilterChange = useCallback(() => {
+    setIsNeedMore(true)
   }, []);
 
   const content = useMemo(() => {
@@ -77,7 +87,7 @@ export function MainEpisodes() {
       <div className={styles.hero} ref={heroImage}>
         <Hero className={styles.heroImage} type="rickAndMorty" />
       </div>
-      <ul className={styles.filterList}>
+      <ul className={styles.filterList} onChange={handleFilterChange}>
         <li className={styles.filterField}>
           <FilterInput
             filterName="name"

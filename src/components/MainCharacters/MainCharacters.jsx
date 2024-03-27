@@ -29,17 +29,36 @@ export function MainCharacters() {
   const characters = useSelector(selectFilteredCharacters);
   const allCharacters = useSelector(selectAllCharacters);
 
+  const error = useSelector((state) => state.characters.error);
+
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
   const [currentPage, setCurrentPage] = useState(1);
   const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
   const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
+  const [isNeedMore, setIsNeedMore] = useState(true);
 
   const loadMoreRef = useRef(null);
   const heroImage = useRef(null);
 
+  const statusOptions = useMemo(
+    () => getUniqueValues(allCharacters, "status"),
+    [allCharacters]
+  );
+  const speciesOptions = useMemo(
+    () => getUniqueValues(allCharacters, "species"),
+    [allCharacters]
+  );
+  const genderOptions = useMemo(
+    () => getUniqueValues(allCharacters, "gender"),
+    [allCharacters]
+  );
+
   useEffect(() => {
-    dispatch(fetchCharacters({ page: currentPage }));
-  }, [dispatch, currentPage]);
+    if (isNeedMore) {
+      dispatch(fetchCharacters({ page: currentPage }));
+      setIsNeedMore(false);
+    }
+  }, [dispatch, currentPage, isNeedMore]);
 
   useEffect(() => {
     if (isLoadMoreClicked) {
@@ -57,28 +76,20 @@ export function MainCharacters() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const statusOptions = useMemo(
-    () => getUniqueValues(allCharacters, "status"),
-    [allCharacters]
-  );
-  const speciesOptions = useMemo(
-    () => getUniqueValues(allCharacters, "species"),
-    [allCharacters]
-  );
-  const genderOptions = useMemo(
-    () => getUniqueValues(allCharacters, "gender"),
-    [allCharacters]
-  );
-
   const handleLoadMoreClick = useCallback(() => {
+    if (error) return;
     setCurrentPage((prev) => prev + 1);
     setItemsPerPage((prev) => prev + ITEMS_PER_PAGE_INITIAL);
     setIsLoadMoreClicked(true);
-  }, []);
+  }, [error]);
 
   const handleUpButtonClick = useCallback(() => {
     heroImage.current?.scrollIntoView({ behavior: "smooth" });
     setIsUpToButtonVisible(false);
+  }, []);
+
+  const handleFiltersChange = useCallback(() => {
+    setIsNeedMore(true);
   }, []);
 
   const selectFilterLabels = useMemo(
@@ -91,25 +102,24 @@ export function MainCharacters() {
   );
 
   const content = useMemo(() => {
-    return characters.length > 0 ? (
-      <CharactersCards characters={characters.slice(0, itemsPerPage)} />
-    ) : !characterLoading ? (
-      <section className={styles.notFiltersMessage}>
-        <p>Nothing found. Try other filters.</p>
-      </section>
-    ) : (
-      <section className={styles.loading}>
-        <Loading />
-      </section>
-    );
-  }, [characters, itemsPerPage, characterLoading]);
+    if (!characters || characters.length === 0) {
+      return (
+        <section className={styles.notFiltersMessage}>
+          <p>Nothing found. Try other filters.</p>
+        </section>
+      );
+    }
+    if (characters.length < itemsPerPage && currentPage !== maxPage)
+      setIsNeedMore(true);
+    return <CharactersCards characters={characters.slice(0, itemsPerPage)} />;
+  }, [characters, itemsPerPage, currentPage, maxPage]);
 
   return (
     <main className={styles.main}>
       <div className={styles.hero} ref={heroImage}>
         <Hero className={styles.heroImage} />
       </div>
-      <ul className={styles.filterList}>
+      <ul className={styles.filterList} onChange={handleFiltersChange}>
         <li className={`${styles.filterItem} ${styles.filterField}`}>
           <FilterInput
             filterName="name"
@@ -119,7 +129,11 @@ export function MainCharacters() {
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
-          <li className={styles.filterSelect} key={selectItem.label}>
+          <li
+            className={styles.filterSelect}
+            key={selectItem.label}
+            onClick={handleFiltersChange}
+          >
             <SelectField
               props={{
                 label: selectItem.label,

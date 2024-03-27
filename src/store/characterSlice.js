@@ -15,6 +15,7 @@ export const fetchCharacters = createAsyncThunk(
       ...currentFilters,
       ...filters,
     }).toString();
+    console.log(localStorage)
     const response = await axios.get(
       `https://rickandmortyapi.com/api/character/?${queryParams}`
     );
@@ -78,6 +79,7 @@ const charactersSlice = createSlice({
 
         state.entities = Array.from(newCharacters.values());
         state.maxPage = action.payload.info.pages;
+        state.error = null;
       })
       .addCase(fetchCharacters.rejected, (state, action) => {
         state.loading = false;
@@ -97,6 +99,7 @@ const charactersSlice = createSlice({
 
         state.charactersByIds = Array.from(newCharacters.values());
         state.loading = false;
+
       })
       .addCase(fetchCharactersByIds.rejected, (state, action) => {
         state.loading = false;

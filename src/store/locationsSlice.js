@@ -43,6 +43,7 @@ const initialState = {
   loadingById: true,
   loading: true,
   error: null,
+  errorStatus: null,
   filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
     name: "",
     type: "",
@@ -77,6 +78,8 @@ const locationsSlice = createSlice({
       .addCase(fetchLocations.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.error = action.error.message;
+        state.errorStatus = action.error.code;
       })
       .addCase(fetchLocationsByIds.fulfilled, (state, action) => {
         const locationsData = Array.isArray(action.payload)
@@ -92,6 +95,8 @@ const locationsSlice = createSlice({
 
         state.locationsByIds = Array.from(newLocations.values());
         state.loadingById = false;
+        state.error = null;
+        state.errorStatus = null;
       })
       .addCase(fetchLocationsByIds.rejected, (state, action) => {
         state.loadingById = false
