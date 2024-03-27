@@ -73,27 +73,6 @@ const locationsSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
-        const residentsData = Array.isArray(action.payload)
-          ? action.payload
-          : [action.payload];
-        const newResidents = new Map(
-          state.residentsData.map((resident) => [resident.id, resident]),
-        );
-
-        residentsData.forEach((resident) => {
-          newResidents.set(resident.id, resident);
-        });
-
-        state.residentsData = Array.from(newResidents.values());
-      })
-      .addCase(fetchCharactersByIds.rejected, (state, action) => {
-        state.residentLoading = "failed";
-        state.errorResident = action.error.message;
-      })
-      .addCase(fetchCharactersByIds.pending, (state) => {
-        state.residentLoading = "loading";
-      });
   },
 });
 

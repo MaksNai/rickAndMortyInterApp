@@ -16,20 +16,31 @@ export const fetchCharacters = createAsyncThunk(
       ...filters,
     }).toString();
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/?${queryParams}`,
+      `https://rickandmortyapi.com/api/character/?${queryParams}`
     );
     return response.data;
-  },
+  }
 );
 
 export const fetchCharacterById = createAsyncThunk(
   "characters/fetchCharacterById",
   async (characterId) => {
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/${characterId}`,
+      `https://rickandmortyapi.com/api/character/${characterId}`
     );
     return response.data;
-  },
+  }
+);
+
+export const fetchCharactersByIds = createAsyncThunk(
+  "locations/fetchCharactersByIds",
+  async (residentUrls) => {
+    const ids = residentUrls.map((url) => url.split("/").pop());
+    const response = await axios.get(
+      `https://rickandmortyapi.com/api/character/${ids}`
+    );
+    return response.data;
+  }
 );
 
 const initialState = {
@@ -69,7 +80,7 @@ const charactersSlice = createSlice({
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = "succeeded";
         const newCharacters = new Map(
-          state.entities.map((char) => [char.id, char]),
+          state.entities.map((char) => [char.id, char])
         );
 
         action.payload.results.forEach((char) => {
@@ -93,6 +104,27 @@ const charactersSlice = createSlice({
       .addCase(fetchCharacterById.rejected, (state, action) => {
         state.loading = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
+        const charactersData = Array.isArray(action.payload)
+          ? action.payload
+          : [action.payload];
+        const newCharacters = new Map(
+          state.charactersByIds.map((character) => [character.id, character])
+        );
+
+        charactersData.forEach((character) => {
+          newCharacters.set(character.id, character);
+        });
+
+        state.charactersByIds = Array.from(newCharacters.values());
+      })
+      .addCase(fetchCharactersByIds.rejected, (state, action) => {
+        state.residentLoading = "failed";
+        state.errorResident = action.error.message;
+      })
+      .addCase(fetchCharactersByIds.pending, (state) => {
+        state.residentLoading = "loading";
       });
   },
 });
@@ -112,7 +144,7 @@ export const selectFilteredCharacters = (state) => {
         character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
       (!filters.species || character.species === filters.species) &&
       (!filters.status || character.status === filters.status) &&
-      (!filters.gender || character.gender === filters.gender),
+      (!filters.gender || character.gender === filters.gender)
   );
 };
 
@@ -120,9 +152,9 @@ export const selectCharactersByIds = createSelector(
   [selectAllCharacters, (state, characterIds) => characterIds],
   (characters, characterIds) => {
     return characters.filter((character) =>
-      characterIds.includes(character.id.toString()),
+      characterIds.includes(character.id.toString())
     );
-  },
+  }
 );
 
 export default charactersSlice.reducer;

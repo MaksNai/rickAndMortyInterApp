@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import styles from "./mainCharacterDetail.module.scss";
 import { fetchCharacters, fetchCharacterById } from "../../store/characterSlice";
 import { fetchEpisodes } from "../../store/episodeSlice";
-import { GoBackLink } from "../";
+import { GoBackLink, Loading } from "../";
 import { INFORMATION_FIELDS } from "./constants";
 import { extractNumbersFromEnd } from "./helpers";
 
@@ -77,18 +77,25 @@ export const MainCharacterDetail = () => {
     return [];
   }, [character, characterLoading]);
 
-  const mainCharacterInfo = useMemo(
-    () =>
-      character && characterLoading === "succeeded" ? (
-        <>
-          <img src={imageSrc} className={styles.image} alt={nameCharacter} />
-          <h1 className={styles.name}>{nameCharacter}</h1>
-        </>
-      ) : (
-        <div className={styles.error}>Character not found</div>
-      ),
-    [character, imageSrc, nameCharacter, characterLoading]
-  );
+  const mainCharacterInfo = useMemo(() => {
+    if (!character || characterLoading !== "succeeded") {
+      return (
+        <div className={styles.error}>
+          {characterLoading === "loading" ? (
+            <Loading />
+          ) : (
+            <p>Character not found</p>
+          )}
+        </div>
+      );
+    }
+    return (
+      <>
+        <img src={imageSrc} className={styles.image} alt={nameCharacter} />
+        <h1 className={styles.name}>{nameCharacter}</h1>
+      </>
+    );
+  }, [character, imageSrc, nameCharacter, characterLoading]);
 
   const episodesContent = useMemo(() => {
     if (episodeLoading === "succeeded") {

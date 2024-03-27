@@ -2,28 +2,37 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styles from "./mainEpisodeDetail.module.scss";
-import { selectAllCharacters } from "../../store/characterSlice";
-import { GoBackLink } from "..";
-import { fetchEpisodesByIds } from "../../store/episodeSlice";
+import { fetchCharactersByIds } from "../../store/characterSlice";
+import { GoBackLink, CharacterCard, Loading } from "..";
+import { fetchEpisodeById } from "../../store/episodeSlice";
 
 export const MainEpisodeDetail = () => {
   const dispatch = useDispatch();
   const { episodeId } = useParams();
   const episodeLoading = useSelector((state) => state.episodes.loading);
 
-  const episode = useSelector((state) =>
+  const episodeInStore = useSelector((state) =>
     state.episodes.entities.find(
       (episode) => episode.id.toString() === episodeId
     )
   );
 
-  // const charactersInStore = useSelector(selectAllCharacters);
+  const casts = useSelector((state) => state.characters.charactersByIds);
+
+  const currentEpisode = useSelector((state) => state.episodes.currentEpisode);
+  const episode = episodeInStore ? episodeInStore : currentEpisode;
 
   useEffect(() => {
-    if (episodeLoading === "idle") {
-      dispatch(fetchEpisodesByIds());
+    if (episodeLoading === "idle" && !episodeInStore) {
+      dispatch(fetchEpisodeById(episodeId));
     }
-  }, [episodeLoading, dispatch]);
+  }, [episodeLoading, dispatch, episodeInStore]);
+
+  useEffect(() => {
+    if (episodeLoading === "succeeded" && episode && episode.characters) {
+      dispatch(fetchCharactersByIds(episode.characters));
+    }
+  }, [dispatch, episodeLoading, episode]);
 
   const nameEpisode = useMemo(() => {
     if (episodeLoading === "succeeded" && episode) return episode.name;
@@ -43,11 +52,11 @@ export const MainEpisodeDetail = () => {
         <>
           <h1 className={styles.name}>{nameEpisode}</h1>
           <dl className={styles.dl}>
-            <div className={styles.locationInfoItem}>
+            <div className={styles.episodeInfoItem}>
               <dt className={styles.dt}>Episode</dt>
               <dd className={styles.dd}>{episodeNumber}</dd>
             </div>
-            <div className={styles.locationInfoItem}>
+            <div className={styles.episodeInfoItem}>
               <dt className={styles.dt}>Date</dt>
               <dd className={styles.dd}>{airDate}</dd>
             </div>
@@ -57,6 +66,20 @@ export const MainEpisodeDetail = () => {
         <div className={styles.error}>Episode not found</div>
       ),
     [episode, nameEpisode, episodeNumber, airDate]
+  );
+
+  const castContent = useMemo(
+    () =>
+      casts && casts.length > 0 ? (
+        <>
+          {casts.map((cast) => (
+            <CharacterCard character={cast} />
+          ))}
+        </>
+      ) : (
+        <div className={styles.loading}>< Loading /></div>
+      ),
+    [casts]
   );
 
   return (
@@ -69,11 +92,7 @@ export const MainEpisodeDetail = () => {
       </div>
       <section className={styles.section}>
         <h3 className={styles.sectionTitle}>Cast</h3>
-        {/* <div> {residents.map(resident => (
-      <Link to={`/characters/${resident.id}`} key={resident.id}>
-        <CharacterCard character={resident} />
-      </Link>
-    ))}</div> */}
+        <section className={styles.castCards}>{castContent}</section>
       </section>
     </main>
   );

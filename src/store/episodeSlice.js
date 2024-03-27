@@ -31,21 +31,22 @@ export const fetchEpisodesByIds = createAsyncThunk(
   },
 );
 
-export const fetchCharactersByEpisodeId = createAsyncThunk(
-  "episodes/fetchCharactersByEpisodeId",
-  async (episodeIds) => {
-    const requests = episodeIds.map((id) =>
-      axios.get(`https://rickandmortyapi.com/api/character/${id}`),
+export const fetchEpisodeById = createAsyncThunk(
+  "episodes/fetchEpisodeById",
+  async (episodeId) => {
+    const response = await axios.get(
+      `https://rickandmortyapi.com/api/episode/${episodeId}`
     );
-    const responses = await Promise.all(requests);
-    return responses.map((response) => response.data);
-  },
+    return response.data;
+  }
 );
+
 
 const initialState = {
   maxPage: 1,
   entities: [],
   loading: "idle",
+  episodesByIDs: [],
   currentEpisode: null,
   characters: [],
   error: null,
@@ -100,8 +101,9 @@ const episodesSlice = createSlice({
         state.loading = "failed";
         state.error = action.error.message;
       })
-      .addCase(fetchCharactersByEpisodeId.fulfilled, (state, action) => {
-        state.characters = action.payload;
+      .addCase(fetchEpisodeById.fulfilled, (state, action) => {
+        state.currentEpisode = action.payload;
+        state.loading = "succeeded";
       });
   },
 });
