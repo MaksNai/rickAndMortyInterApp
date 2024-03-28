@@ -20,10 +20,9 @@ import {
   Loading,
   UpToButton,
 } from "..";
-import { AppDispatch } from "../../store/store";
 import { useAppDispatch } from "../../store/hooks";
 
-export const MainCharacters: FC = () => {
+export function MainCharacters() {
   const dispatch = useAppDispatch();
 
   const maxPage = useSelector((state: AppState) => state.characters.maxPage);

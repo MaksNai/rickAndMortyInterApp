@@ -131,6 +131,14 @@ export interface FetchEpisodePayload {
   };
 }
 
+export interface EpisodesCardProps {
+  episodes: Episode[];
+}
+export interface EpisodeCardProps {
+  episodeData: Episode;
+}
+
+
 
 // Rest
 export interface AppState {
