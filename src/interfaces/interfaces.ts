@@ -26,3 +26,50 @@ export interface CharacterCardProps {
 export interface CharactersCardProps {
   characters: Character[];
 }
+
+interface CharacterState {
+  maxPage: number;
+  entities: Character[]; 
+  charactersByIds: Character[];
+  loading: boolean | null;
+  error: string | null;
+  hasMore: boolean;
+  filters: {
+    name: string;
+    species: string;
+    status: string;
+    gender: string;
+  };
+}
+
+interface LocationState {
+  maxPage: number;
+  entities: Character[]; 
+  locationsByIds: Character[];
+  loading: boolean | null;
+  error: string | null;
+  hasMore: boolean;
+  filters: {
+    name: string;
+    type: string;
+    dimension: string;
+  };
+}
+
+interface EpisodeState {
+  maxPage: number;
+  entities: Character[]; 
+  episodesByIds: Character[];
+  loading: boolean | null;
+  error: string | null;
+  hasMore: boolean;
+  filters: {
+    name: string;
+  };
+}
+
+interface AppState {
+  characters: CharacterState;
+  locations: LocationState;
+  episodes: EpisodeState;
+}

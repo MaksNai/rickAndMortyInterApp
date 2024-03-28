@@ -40,7 +40,6 @@ const initialState = {
   maxPage: 2,
   entities: [],
   locationsByIds: [],
-  loadingById: true,
   loading: true,
   error: null,
   hasMore: true,
