@@ -40,7 +40,7 @@ const initialState = {
   episodesByIds: [],
   error: null,
   hasMore: true,
-  filters: JSON.parse(localStorage.getItem("episodeFilters")) || {
+  filters: JSON.parse(localStorage.getItem("episodesFilters")) || {
     name: "",
   },
 };
@@ -52,11 +52,11 @@ const episodesSlice = createSlice({
     setEpisodeFilter(state, action) {
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
-      localStorage.setItem("episodeFilters", JSON.stringify(state.filters));
+      localStorage.setItem("episodesFilters", JSON.stringify(state.filters));
     },
     resetEpisodeFilters(state) {
       state.filters = {};
-      localStorage.removeItem("episodeFilters");
+      localStorage.removeItem("episodesFilters");
     },
   },
   extraReducers: (builder) => {

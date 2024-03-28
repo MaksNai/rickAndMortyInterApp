@@ -4,7 +4,6 @@ import {
   selectAllLocations,
   fetchLocations,
   selectLocationsFilters,
-  setLocationsFilter,
   selectFilteredLocations,
 } from "../../store/locationsSlice";
 import styles from "./mainLocations.module.scss";
@@ -92,11 +91,10 @@ export function MainLocations() {
 
   const selectFilterLabels = useMemo(
     () => [
-      { label: "Type", items: typeOptions, action: setLocationsFilter },
+      { label: "Type", items: typeOptions, },
       {
         label: "Dimension",
         items: dimensionOptions,
-        action: setLocationsFilter,
       },
     ],
     [typeOptions, dimensionOptions],
@@ -145,7 +143,6 @@ export function MainLocations() {
                 label: selectItem.label,
                 items: selectItem.items,
                 filterName: selectItem.label.toLowerCase(),
-                action: selectItem.action,
                 type: TYPE,
               }}
             />

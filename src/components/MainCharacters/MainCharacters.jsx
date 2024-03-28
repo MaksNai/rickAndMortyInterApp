@@ -1,11 +1,10 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
-import { getUniqueValues } from "../../helpers/helpers";
+import { getUniqueValues, sortByIdAsc } from "../../helpers/helpers";
 import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import {
   fetchCharacters,
-  setCharacterFilter,
   selectCharactersFilters,
   selectFilteredCharacters,
   selectAllCharacters,
@@ -42,6 +41,10 @@ export function MainCharacters() {
   const loadMoreRef = useRef(null);
   const heroImage = useRef(null);
 
+  const orderedCharacters = useMemo(() => {
+    return sortByIdAsc(characters)
+  }, [characters])
+
   useEffect(() => {
     if (isNeedMore && !error) {
       dispatch(fetchCharacters({ page: currentPage }));
@@ -54,7 +57,7 @@ export function MainCharacters() {
       loadMoreRef.current?.scrollIntoView({ behavior: "smooth" });
       setIsLoadMoreClicked(false);
     }
-  }, [characters.length, characterLoading, isLoadMoreClicked]);
+  }, [orderedCharacters.length, characterLoading, isLoadMoreClicked]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -98,26 +101,26 @@ export function MainCharacters() {
 
   const selectFilterLabels = useMemo(
     () => [
-      { label: "Species", items: speciesOptions, action: setCharacterFilter },
-      { label: "Gender", items: genderOptions, action: setCharacterFilter },
-      { label: "Status", items: statusOptions, action: setCharacterFilter },
+      { label: "Species", items: speciesOptions },
+      { label: "Gender", items: genderOptions},
+      { label: "Status", items: statusOptions},
     ],
     [statusOptions, speciesOptions, genderOptions],
   );
 
   // Content variables
   const content = useMemo(() => {
-    if (!characters || characters.length === 0) {
+    if (!orderedCharacters || orderedCharacters.length === 0) {
       return (
         <section className={styles.notFiltersMessage}>
           <p>Nothing found. Try other filters.</p>
         </section>
       );
     }
-    if (characters.length < itemsPerPage && currentPage !== maxPage)
+    if (orderedCharacters.length < itemsPerPage && currentPage !== maxPage)
       setIsNeedMore(true);
-    return <CharactersCards characters={characters.slice(0, itemsPerPage)} />;
-  }, [characters, itemsPerPage, currentPage, maxPage]);
+    return <CharactersCards characters={orderedCharacters.slice(0, itemsPerPage)} />;
+  }, [orderedCharacters, itemsPerPage, currentPage, maxPage]);
 
   return (
     <main className={styles.main}>
@@ -148,7 +151,6 @@ export function MainCharacters() {
                 label: selectItem.label,
                 items: selectItem.items,
                 filterName: selectItem.label.toLowerCase(),
-                action: selectItem.action,
                 type: TYPE,
               }}
             />

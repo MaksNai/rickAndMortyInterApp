@@ -1,29 +1,22 @@
-import { useId, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useId } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import styles from "./selectField.module.scss";
+import { useFilters } from "../../hooks/useFilters";
 
 export function SelectField({ props }) {
-  const dispatch = useDispatch();
-  const { label, items, filterName, action } = props;
+  const { label, items, filterName, type } = props;
 
   const idSelect = useId();
   const idLabel = useId();
 
-  const filters = JSON.parse(localStorage.getItem("characterFilters")) || {};
-  const [item, setItem] = useState(filters[filterName] || "");
+  const { updateFilter, getCurrentFilters } = useFilters(type);
 
-  const handleChange = (event) => {
-    setItem(event.target.value);
+  const currentValue = getCurrentFilters(type)[filterName] || "";
+
+  const handleChange = ({ target }) => {
+    const { value } = target;
+    updateFilter(filterName, value);
   };
-
-  useEffect(() => {
-    const currentFilters =
-      JSON.parse(localStorage.getItem("characterFilters")) || {};
-    currentFilters[filterName] = item;
-    localStorage.setItem("characterFilters", JSON.stringify(currentFilters));
-    dispatch(action({ filterName, value: item }));
-  }, [item, filterName, dispatch, action]);
 
   return (
     <FormControl
@@ -53,7 +46,7 @@ export function SelectField({ props }) {
       <Select
         labelId={idLabel}
         id={idSelect}
-        value={item}
+        value={currentValue}
         onChange={handleChange}
         label={label}
       >

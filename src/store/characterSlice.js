@@ -43,7 +43,7 @@ const initialState = {
   loading: null,
   error: null,
   hasMore: true,
-  filters: JSON.parse(localStorage.getItem("characterFilters")) || {
+  filters: JSON.parse(localStorage.getItem("charactersFilters")) || {
     name: "",
     species: "",
     status: "",
@@ -57,12 +57,12 @@ const charactersSlice = createSlice({
     setCharacterFilter(state, action) {
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
-      localStorage.setItem("characterFilters", JSON.stringify(state.filters));
+      localStorage.setItem("charactersFilters", JSON.stringify(state.filters));
       state.hasMore = true;
     },
     resetCharacterFilters(state) {
       state.filters = {};
-      localStorage.removeItem("characterFilters");
+      localStorage.removeItem("charactersFilters");
     },
   },
   extraReducers: (builder) => {
