@@ -14,10 +14,10 @@ export const fetchEpisodes = createAsyncThunk(
     }).toString();
 
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/episode/?${queryParams}`
+      `https://rickandmortyapi.com/api/episode/?${queryParams}`,
     );
     return response.data;
-  }
+  },
 );
 
 export const fetchEpisodesByIds = createAsyncThunk(
@@ -27,10 +27,10 @@ export const fetchEpisodesByIds = createAsyncThunk(
       ? episodeIds.map((url) => url.split("/").pop())
       : episodeIds;
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/episode/${ids}`
+      `https://rickandmortyapi.com/api/episode/${ids}`,
     );
     return response.data;
-  }
+  },
 );
 
 const initialState = {
@@ -38,8 +38,8 @@ const initialState = {
   entities: [],
   loading: null,
   episodesByIds: [],
-  characters: [],
   error: null,
+  hasMore: true,
   filters: JSON.parse(localStorage.getItem("episodeFilters")) || {
     name: "",
   },
@@ -67,7 +67,7 @@ const episodesSlice = createSlice({
       .addCase(fetchEpisodes.fulfilled, (state, action) => {
         state.loading = false;
         const newEpisodes = new Map(
-          state.entities.map((episode) => [episode.id, episode])
+          state.entities.map((episode) => [episode.id, episode]),
         );
         action.payload.results.forEach((episode) => {
           newEpisodes.set(episode.id, episode);
@@ -75,6 +75,8 @@ const episodesSlice = createSlice({
 
         state.entities = Array.from(newEpisodes.values());
         state.maxPage = action.payload.info.pages;
+        state.error = null;
+        state.hasMore = !!action.payload.info.next;
       })
       .addCase(fetchEpisodes.rejected, (state, action) => {
         state.loading = false;
@@ -87,15 +89,8 @@ const episodesSlice = createSlice({
         const episodesData = Array.isArray(action.payload)
           ? action.payload
           : [action.payload];
-        const newEpisodes = new Map(
-          state.episodesByIds.map((episode) => [episode.id, episode])
-        );
 
-        episodesData.forEach((episode) => {
-          newEpisodes.set(episode.id, episode);
-        });
-
-        state.episodesByIds = Array.from(newEpisodes.values());
+        state.episodesByIds = episodesData;
         state.loading = false;
         state.error = null;
       })
@@ -120,16 +115,16 @@ export const selectFilteredEpisodes = createSelector(
         episode.episode.toLowerCase().includes(filterString)
       );
     });
-  }
+  },
 );
 
 export const selectEpisodesByIds = createSelector(
   [selectAllEpisodes, (state, episodeIds) => episodeIds],
   (episodes, episodeIds) => {
     return episodes.filter((episode) =>
-      episodeIds.includes(String(episode.id))
+      episodeIds.includes(String(episode.id)),
     );
-  }
+  },
 );
 
 export default episodesSlice.reducer;

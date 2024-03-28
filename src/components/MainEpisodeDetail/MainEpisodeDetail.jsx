@@ -16,8 +16,8 @@ export const MainEpisodeDetail = () => {
 
   const episode = useSelector((state) =>
     state.episodes.episodesByIds.find(
-      (episode) => episode.id.toString() === episodeId
-    )
+      (episode) => episode.id.toString() === episodeId,
+    ),
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const MainEpisodeDetail = () => {
       ) : (
         <div className={styles.error}>Episode not found</div>
       ),
-    [episode, nameEpisode, episodeNumber, airDate]
+    [episode, nameEpisode, episodeNumber, airDate],
   );
 
   const castContent = useMemo(
@@ -83,7 +83,7 @@ export const MainEpisodeDetail = () => {
           <Loading />
         </div>
       ),
-    [casts]
+    [casts],
   );
 
   return (

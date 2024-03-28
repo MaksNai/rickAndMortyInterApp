@@ -14,21 +14,17 @@ export function MainLocationDetail() {
 
   const location = useSelector((state) =>
     state.locations.locationsByIds.find(
-      (location) => location.id.toString() === locationId
-    )
+      (location) => location.id.toString() === locationId,
+    ),
   );
-
   const residents = useSelector((state) => state.characters.charactersByIds);
 
   useEffect(() => {
-    if (locationLoading) {
       dispatch(fetchLocationsByIds(locationId));
-    }
-  }, [locationLoading, dispatch, locationId]);
+  }, [dispatch, locationId]);
 
   useEffect(() => {
     if (
-      !locationLoading &&
       location &&
       location.residents &&
       location.residents.length > 0
@@ -70,7 +66,7 @@ export function MainLocationDetail() {
           <Loading />
         </div>
       ),
-    [location, nameLocation, typeDimension, typeLocation]
+    [location, nameLocation, typeDimension, typeLocation],
   );
 
   const residentContent = useMemo(() => {

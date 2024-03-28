@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
 import { getUniqueValues } from "../../helpers/helpers";
-import { ITEMS_PER_PAGE_INITIAL } from "./constants";
+import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import {
   fetchCharacters,
   setCharacterFilter,
@@ -30,35 +30,24 @@ export function MainCharacters() {
   const allCharacters = useSelector(selectAllCharacters);
 
   const error = useSelector((state) => state.characters.error);
+  const hasMore = useSelector((state) => state.characters.hasMore);
 
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isNeedMore, setIsNeedMore] = useState(true);
+
   const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
   const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
-  const [isNeedMore, setIsNeedMore] = useState(true);
 
   const loadMoreRef = useRef(null);
   const heroImage = useRef(null);
 
-  const statusOptions = useMemo(
-    () => getUniqueValues(allCharacters, "status"),
-    [allCharacters]
-  );
-  const speciesOptions = useMemo(
-    () => getUniqueValues(allCharacters, "species"),
-    [allCharacters]
-  );
-  const genderOptions = useMemo(
-    () => getUniqueValues(allCharacters, "gender"),
-    [allCharacters]
-  );
-
   useEffect(() => {
-    if (isNeedMore) {
+    if (isNeedMore && !error) {
       dispatch(fetchCharacters({ page: currentPage }));
       setIsNeedMore(false);
     }
-  }, [dispatch, currentPage, isNeedMore]);
+  }, [dispatch, currentPage, isNeedMore, hasMore, error]);
 
   useEffect(() => {
     if (isLoadMoreClicked) {
@@ -76,6 +65,7 @@ export function MainCharacters() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handlers
   const handleLoadMoreClick = useCallback(() => {
     if (error) return;
     setCurrentPage((prev) => prev + 1);
@@ -92,15 +82,30 @@ export function MainCharacters() {
     setIsNeedMore(true);
   }, []);
 
+  // Selector fields
+  const statusOptions = useMemo(
+    () => getUniqueValues(allCharacters, "status"),
+    [allCharacters],
+  );
+  const speciesOptions = useMemo(
+    () => getUniqueValues(allCharacters, "species"),
+    [allCharacters],
+  );
+  const genderOptions = useMemo(
+    () => getUniqueValues(allCharacters, "gender"),
+    [allCharacters],
+  );
+
   const selectFilterLabels = useMemo(
     () => [
       { label: "Species", items: speciesOptions, action: setCharacterFilter },
       { label: "Gender", items: genderOptions, action: setCharacterFilter },
       { label: "Status", items: statusOptions, action: setCharacterFilter },
     ],
-    [statusOptions, speciesOptions, genderOptions]
+    [statusOptions, speciesOptions, genderOptions],
   );
 
+  // Content variables
   const content = useMemo(() => {
     if (!characters || characters.length === 0) {
       return (
@@ -119,13 +124,17 @@ export function MainCharacters() {
       <div className={styles.hero} ref={heroImage}>
         <Hero className={styles.heroImage} />
       </div>
-      <ul className={styles.filterList} onChange={handleFiltersChange}>
+      <ul
+        className={styles.filterList}
+        onChange={handleFiltersChange}
+        onClick={handleFiltersChange}
+      >
         <li className={`${styles.filterItem} ${styles.filterField}`}>
           <FilterInput
             filterName="name"
             text="Filter by name..."
             action={selectCharactersFilters}
-            type="characters"
+            type={TYPE}
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
@@ -140,6 +149,7 @@ export function MainCharacters() {
                 items: selectItem.items,
                 filterName: selectItem.label.toLowerCase(),
                 action: selectItem.action,
+                type: TYPE,
               }}
             />
           </li>
@@ -159,7 +169,10 @@ export function MainCharacters() {
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
       >
-        {currentPage <= maxPage && <LoadMoreButton />}
+        {currentPage <= maxPage && hasMore && <LoadMoreButton />}
+        {(!hasMore || error) && characters.length !== 0 && (
+          <p>No more characters</p>
+        )}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (
         <div className={styles.upToButton} onClick={handleUpButtonClick}>

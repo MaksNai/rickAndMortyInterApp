@@ -7,6 +7,7 @@ import axios from "axios";
 
 export const fetchCharacters = createAsyncThunk(
   "characters/fetchCharacters",
+
   async (filters, { getState }) => {
     const {
       characters: { filters: currentFilters },
@@ -15,24 +16,24 @@ export const fetchCharacters = createAsyncThunk(
       ...currentFilters,
       ...filters,
     }).toString();
-    console.log(localStorage)
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/?${queryParams}`
+      `https://rickandmortyapi.com/api/character/?${queryParams}`,
     );
     return response.data;
-  }
+  },
 );
-
 
 export const fetchCharactersByIds = createAsyncThunk(
   "characters/fetchCharactersByIds",
   async (residentUrls) => {
-    const ids = Array.isArray(residentUrls) ? residentUrls.map((url) => url.split("/").pop()) : residentUrls;
+    const ids = Array.isArray(residentUrls)
+      ? residentUrls.map((url) => url.split("/").pop())
+      : residentUrls;
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/${ids}`
+      `https://rickandmortyapi.com/api/character/${ids}`,
     );
     return response.data;
-  }
+  },
 );
 
 const initialState = {
@@ -41,6 +42,7 @@ const initialState = {
   charactersByIds: [],
   loading: null,
   error: null,
+  hasMore: true,
   filters: JSON.parse(localStorage.getItem("characterFilters")) || {
     name: "",
     species: "",
@@ -56,6 +58,7 @@ const charactersSlice = createSlice({
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
       localStorage.setItem("characterFilters", JSON.stringify(state.filters));
+      state.hasMore = true;
     },
     resetCharacterFilters(state) {
       state.filters = {};
@@ -65,12 +68,12 @@ const charactersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchCharacters.pending, (state) => {
-        state.loading = true
+        state.loading = true;
       })
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = false;
         const newCharacters = new Map(
-          state.entities.map((char) => [char.id, char])
+          state.entities.map((char) => [char.id, char]),
         );
 
         action.payload.results.forEach((char) => {
@@ -80,6 +83,7 @@ const charactersSlice = createSlice({
         state.entities = Array.from(newCharacters.values());
         state.maxPage = action.payload.info.pages;
         state.error = null;
+        state.hasMore = !!action.payload.info.next;
       })
       .addCase(fetchCharacters.rejected, (state, action) => {
         state.loading = false;
@@ -89,17 +93,9 @@ const charactersSlice = createSlice({
         const charactersData = Array.isArray(action.payload)
           ? action.payload
           : [action.payload];
-        const newCharacters = new Map(
-          state.charactersByIds.map((character) => [character.id, character])
-        );
 
-        charactersData.forEach((character) => {
-          newCharacters.set(character.id, character);
-        });
-
-        state.charactersByIds = Array.from(newCharacters.values());
+        state.charactersByIds = charactersData;
         state.loading = false;
-
       })
       .addCase(fetchCharactersByIds.rejected, (state, action) => {
         state.loading = false;
@@ -119,7 +115,7 @@ export const selectMaxPage = (state) => state.maxPage;
 export const selectAllCharacters = (state) => state.characters.entities;
 export const selectCharactersFilters = (state) => state.characters.filters;
 export const selectFilteredCharacters = createSelector(
-  [state => state.characters],
+  [(state) => state.characters],
   (characters) => {
     const { entities, filters } = characters;
     return entities.filter(
@@ -128,18 +124,18 @@ export const selectFilteredCharacters = createSelector(
           character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
         (!filters.species || character.species === filters.species) &&
         (!filters.status || character.status === filters.status) &&
-        (!filters.gender || character.gender === filters.gender)
+        (!filters.gender || character.gender === filters.gender),
     );
-  }
+  },
 );
 
 export const selectCharactersByIds = createSelector(
   [selectAllCharacters, (state, characterIds) => characterIds],
   (characters, characterIds) => {
     return characters.filter((character) =>
-      characterIds.includes(character.id.toString())
+      characterIds.includes(character.id.toString()),
     );
-  }
+  },
 );
 
 export default charactersSlice.reducer;

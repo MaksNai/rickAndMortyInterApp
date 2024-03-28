@@ -8,7 +8,7 @@ import {
   selectFilteredLocations,
 } from "../../store/locationsSlice";
 import styles from "./mainLocations.module.scss";
-import { ITEMS_PER_PAGE_INITIAL } from "./constants";
+import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import { getUniqueValues } from "../../helpers/helpers";
 import {
   Hero,
@@ -29,6 +29,7 @@ export function MainLocations() {
   const locationLoading = useSelector((state) => state.locations.loading);
   const maxPage = useSelector((state) => state.locations.maxPage);
   const error = useSelector((state) => state.locations.error);
+  const hasMore = useSelector((state) => state.locations.hasMore);
 
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,11 +41,11 @@ export function MainLocations() {
   const heroImage = useRef(null);
 
   useEffect(() => {
-    if (isNeedMore) {
+    if (isNeedMore && !error) {
       dispatch(fetchLocations({ page: currentPage }));
       setIsNeedMore(false);
     }
-  }, [dispatch, currentPage, isNeedMore]);
+  }, [dispatch, currentPage, isNeedMore, hasMore, error]);
 
   useEffect(() => {
     if (isLoadMoreClicked) {
@@ -58,19 +59,35 @@ export function MainLocations() {
       const scrollTop = window.scrollY;
       setIsUpToButtonVisible(scrollTop > window.innerHeight / 2);
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handlers
+  const handleLoadMoreClick = useCallback(() => {
+    if (error) return;
+    setCurrentPage((prev) => prev + 1);
+    setItemsPerPage((prev) => prev + ITEMS_PER_PAGE_INITIAL);
+    setIsLoadMoreClicked(true);
+  }, [error]);
+
+  const handleUpButtonClick = useCallback(() => {
+    heroImage.current?.scrollIntoView({ behavior: "smooth" });
+    setIsUpToButtonVisible(false);
+  }, []);
+
+  const handleFiltersChange = useCallback(() => {
+    setIsNeedMore(true);
+  }, []);
+
+  // Select fields
   const typeOptions = useMemo(
     () => getUniqueValues(allLocations, "type"),
-    [allLocations]
+    [allLocations],
   );
   const dimensionOptions = useMemo(
     () => getUniqueValues(allLocations, "dimension"),
-    [allLocations]
+    [allLocations],
   );
 
   const selectFilterLabels = useMemo(
@@ -82,58 +99,54 @@ export function MainLocations() {
         action: setLocationsFilter,
       },
     ],
-    [typeOptions, dimensionOptions]
+    [typeOptions, dimensionOptions],
   );
 
+  // Content
   const content = useMemo(() => {
-    return locations.length > 0 ? (
-      <LocationsCards locations={locations.slice(0, itemsPerPage)} />
-    ) : (
-      <section className={styles.loading}>
-        <p>Nothing found. Try other filters.</p>
-        <Loading />
-      </section>
-    );
-  }, [locations, itemsPerPage]);
+    if (!locations || locations.length === 0) {
+      return (
+        <section className={styles.notFiltersMessage}>
+          <p>Nothing found. Try other filters.</p>
+        </section>
+      );
+    }
+    if (locations.length < itemsPerPage && currentPage !== maxPage)
+      setIsNeedMore(true);
 
-  const handleLoadMoreClick = useCallback(() => {
-    if(error) return
-    setCurrentPage(currentPage + 1);
-    setItemsPerPage(itemsPerPage + ITEMS_PER_PAGE_INITIAL);
-    setIsLoadMoreClicked(true);
-  }, [currentPage, itemsPerPage, error]);
-
-  const handleUpButtonClick = useCallback(() => {
-    heroImage.current?.scrollIntoView({ behavior: "smooth" });
-    setIsUpToButtonVisible(false);
-  }, []);
-
-  const handleFiltersChange = useCallback(() => {
-    setIsNeedMore(true)
-  }, []);
+    return <LocationsCards locations={locations.slice(0, itemsPerPage)} />;
+  }, [locations, itemsPerPage, currentPage, maxPage]);
 
   return (
     <main className={styles.main}>
       <div className={styles.hero} ref={heroImage}>
         <Hero className={styles.heroImage} type="circle" />
       </div>
-      <ul className={styles.filterList} onChange={handleFiltersChange}>
-        <li key={"Filter"} className={`${styles.filterItem} ${styles.filterField}`}>
+      <ul
+        className={styles.filterList}
+        onChange={handleFiltersChange}
+        onClick={handleFiltersChange}
+      >
+        <li
+          key={"Filter"}
+          className={`${styles.filterItem} ${styles.filterField}`}
+        >
           <FilterInput
             filterName="name"
             text="Filter by name..."
             action={selectLocationsFilters}
-            type="locations"
+            type={TYPE}
           />
         </li>
         {selectFilterLabels.map((selectItem) => (
-          <li className={styles.filterSelect} key={selectItem.label} onClick={handleFiltersChange}>
+          <li className={styles.filterSelect} key={selectItem.label}>
             <SelectField
               props={{
                 label: selectItem.label,
                 items: selectItem.items,
                 filterName: selectItem.label.toLowerCase(),
                 action: selectItem.action,
+                type: TYPE,
               }}
             />
           </li>
@@ -149,11 +162,14 @@ export function MainLocations() {
         </div>
       )}
       <div
+        ref={loadMoreRef}
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
-        ref={loadMoreRef}
       >
-        {currentPage <= maxPage && <LoadMoreButton />}
+        {currentPage <= maxPage && hasMore && <LoadMoreButton />}
+        {(!hasMore || error) && locations.length !== 0 && (
+          <p>No more characters</p>
+        )}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (
         <div className={styles.upToButton} onClick={handleUpButtonClick}>

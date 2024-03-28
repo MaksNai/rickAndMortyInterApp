@@ -17,8 +17,8 @@ export const MainCharacterDetail = () => {
   const episodeLoading = useSelector((state) => state.episodes.loading);
   const character = useSelector((state) =>
     state.characters.charactersByIds.find(
-      (char) => char.id.toString() === characterId
-    )
+      (char) => char.id.toString() === characterId,
+    ),
   );
   const episodes = useSelector((state) => state.episodes.episodesByIds);
 

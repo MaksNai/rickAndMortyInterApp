@@ -17,10 +17,10 @@ export const fetchLocations = createAsyncThunk(
     }).toString();
 
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/location/?${queryParams}`
+      `https://rickandmortyapi.com/api/location/?${queryParams}`,
     );
     return response.data;
-  }
+  },
 );
 
 export const fetchLocationsByIds = createAsyncThunk(
@@ -30,10 +30,10 @@ export const fetchLocationsByIds = createAsyncThunk(
       ? locationIds.map((url) => url.split("/").pop())
       : locationIds;
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/location/${ids}`
+      `https://rickandmortyapi.com/api/location/${ids}`,
     );
     return response.data;
-  }
+  },
 );
 
 const initialState = {
@@ -43,7 +43,7 @@ const initialState = {
   loadingById: true,
   loading: true,
   error: null,
-  errorStatus: null,
+  hasMore: true,
   filters: JSON.parse(localStorage.getItem("locationsFilters")) || {
     name: "",
     type: "",
@@ -59,6 +59,7 @@ const locationsSlice = createSlice({
       const { filterName, value } = action.payload;
       state.filters[filterName] = value;
       localStorage.setItem("locationsFilters", JSON.stringify(state.filters));
+      state.hasMore = true;
     },
     resetLocationsFilters(state) {
       state.filters = {};
@@ -72,8 +73,22 @@ const locationsSlice = createSlice({
       })
       .addCase(fetchLocations.fulfilled, (state, action) => {
         state.loading = false;
+        const newLocations = new Map(
+          state.entities.map((loc) => [loc.id, loc]),
+        );
+
+        action.payload.results.forEach((loc) => {
+          newLocations.set(loc.id, loc);
+        });
+
+        state.entities = Array.from(newLocations.values());
+        state.maxPage = action.payload.info.pages;
+        state.error = null;
+
+        state.loading = false;
         state.entities = [...state.entities, ...action.payload.results];
         state.maxPage = action.payload.info.pages;
+        state.hasMore = !!action.payload.info.next;
       })
       .addCase(fetchLocations.rejected, (state, action) => {
         state.loading = false;
@@ -85,21 +100,14 @@ const locationsSlice = createSlice({
         const locationsData = Array.isArray(action.payload)
           ? action.payload
           : [action.payload];
-        const newLocations = new Map(
-          state.locationsByIds.map((location) => [location.id, location])
-        );
-
-        locationsData.forEach((location) => {
-          newLocations.set(location.id, location);
-        });
-
-        state.locationsByIds = Array.from(newLocations.values());
+  
+        state.locationsByIds = locationsData;
         state.loadingById = false;
         state.error = null;
         state.errorStatus = null;
       })
       .addCase(fetchLocationsByIds.rejected, (state, action) => {
-        state.loadingById = false
+        state.loadingById = false;
         state.error = action.error.message;
       });
   },
@@ -120,9 +128,9 @@ export const selectFilteredLocations = createSelector(
         (!filters.name ||
           location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
         (!filters.type || location.type === filters.type) &&
-        (!filters.dimension || location.dimension === filters.dimension)
+        (!filters.dimension || location.dimension === filters.dimension),
     );
-  }
+  },
 );
 
 export default locationsSlice.reducer;
