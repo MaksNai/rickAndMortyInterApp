@@ -86,3 +86,11 @@ export interface FetchCharactersPayload {
     next: string | null;
   };
 }
+
+export interface FetchCharactersArgs {
+  page?: number;
+}
+
+export interface RootState {
+  characters: CharacterState;
+}

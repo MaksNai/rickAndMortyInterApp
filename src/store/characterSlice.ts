@@ -2,42 +2,45 @@ import {
   createSlice,
   createAsyncThunk,
   createSelector,
-  PayloadAction
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import { AppState, CharacterState, FetchCharactersPayload } from "../interfaces/interfaces";
+import {
+  AppState,
+  CharacterState,
+  FetchCharactersPayload,
+  Character,
+  FetchCharactersArgs,
+  RootState,
+} from "../interfaces/interfaces";
 
-// export const fetchCharacters = createAsyncThunk(
-//   "characters/fetchCharacters",
+export const fetchCharacters = createAsyncThunk<
+  FetchCharactersPayload,
+  FetchCharactersArgs,
+  { state: RootState }
+>("characters/fetchCharacters", async (args, { getState }) => {
+  const {
+    characters: { filters },
+  } = getState();
 
-//   async (filters, { getState }) => {
-//     const {
-//       characters: { filters: currentFilters },
-//     } = getState();
-//     const queryParams = new URLSearchParams({
-//       ...currentFilters,
-//       ...filters,
-//     }).toString();
-//     const response = await axios.get(
-//       `https://rickandmortyapi.com/api/character/?${queryParams}`,
-//     );
-//     return response.data;
-//   },
-// );
+  const queryParams = new URLSearchParams();
 
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) {
+      queryParams.set(key, value);
+    }
+  });
 
-export const fetchCharacters = createAsyncThunk<FetchCharactersPayload, { page: number }, { state: CharacterState }>(
-  'characters/fetchCharacters',
-  async (args, { getState }) => {
-    const state = getState();
-    const { filters } = state;
-
-    const response = await fetch(`https://rickandmortyapi.com/api/character/?page=${args.page}`);
-    const data: FetchCharactersPayload = await response.json();
-    return data;
+  if (args.page !== undefined) {
+    queryParams.set("page", args.page.toString());
   }
-);
+
+  const response = await axios.get(
+    `https://rickandmortyapi.com/api/character/?${queryParams}`
+  );
+  return response.data as FetchCharactersPayload;
+});
 
 export const fetchCharactersByIds = createAsyncThunk(
   "characters/fetchCharactersByIds",
@@ -46,10 +49,10 @@ export const fetchCharactersByIds = createAsyncThunk(
       ? residentUrls.map((url) => url.split("/").pop())
       : residentUrls;
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/${ids}`,
+      `https://rickandmortyapi.com/api/character/${ids}`
     );
     return response.data;
-  },
+  }
 );
 
 const initialState: CharacterState = {
@@ -66,18 +69,33 @@ const initialState: CharacterState = {
     gender: "",
   },
 };
+
+type FilterName = "name" | "species" | "status" | "gender";
+type FilterValue = string;
+
+interface FilterAction {
+  filterName: FilterName;
+  value: FilterValue;
+}
+
 const charactersSlice = createSlice({
   name: "characters",
   initialState,
   reducers: {
-    setCharacterFilter(state, action) {
+    setCharacterFilter(state, action: PayloadAction<FilterAction>) {
       const { filterName, value } = action.payload;
-      state.filters[filterName] = value;
+      if (typeof filterName === "string") state.filters[filterName] = value;
+
       localStorage.setItem("charactersFilters", JSON.stringify(state.filters));
       state.hasMore = true;
     },
     resetCharacterFilters(state) {
-      state.filters = {};
+      state.filters = {
+        name: "",
+        species: "",
+        status: "",
+        gender: "",
+      };
       localStorage.removeItem("charactersFilters");
     },
   },
@@ -89,7 +107,7 @@ const charactersSlice = createSlice({
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = false;
         const newCharacters = new Map(
-          state.entities.map((char) => [char.id, char]),
+          state.entities.map((char) => [char.id, char])
         );
 
         action.payload.results.forEach((char) => {
@@ -115,7 +133,7 @@ const charactersSlice = createSlice({
       })
       .addCase(fetchCharactersByIds.rejected, (state, action) => {
         state.loading = false;
-        state.errorResident = action.error.message;
+        state.error = action.error.message;
       })
       .addCase(fetchCharactersByIds.pending, (state) => {
         state.loading = false;
@@ -126,32 +144,34 @@ const charactersSlice = createSlice({
 export const { setCharacterFilter, resetCharacterFilters } =
   charactersSlice.actions;
 
-export const selectMaxPage = (state) => state.maxPage;
+export const selectMaxPage = (state: CharacterState) => state.maxPage;
 
-export const selectAllCharacters = (state) => state.characters.entities;
-export const selectCharactersFilters = (state) => state.characters.filters;
+export const selectAllCharacters = (state: AppState) =>
+  state.characters.entities;
+export const selectCharactersFilters = (state: AppState) =>
+  state.characters.filters;
 export const selectFilteredCharacters = createSelector(
   [(state) => state.characters],
   (characters) => {
     const { entities, filters } = characters;
     return entities.filter(
-      (character) =>
+      (character: Character) =>
         (!filters.name ||
           character.name.toLowerCase().includes(filters.name.toLowerCase())) &&
         (!filters.species || character.species === filters.species) &&
         (!filters.status || character.status === filters.status) &&
-        (!filters.gender || character.gender === filters.gender),
+        (!filters.gender || character.gender === filters.gender)
     );
-  },
+  }
 );
 
 export const selectCharactersByIds = createSelector(
   [selectAllCharacters, (state, characterIds) => characterIds],
   (characters, characterIds) => {
     return characters.filter((character) =>
-      characterIds.includes(character.id.toString()),
+      characterIds.includes(character.id.toString())
     );
-  },
+  }
 );
 
 export default charactersSlice.reducer;

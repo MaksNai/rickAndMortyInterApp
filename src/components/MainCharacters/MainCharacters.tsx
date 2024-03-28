@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback, useRef, FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
-import { AppState, SelectFilterLabel } from "../../interfaces/interfaces";
+import { AppState, SelectFilterLabel, FetchCharactersPayload } from "../../interfaces/interfaces";
 import { getUniqueValues, sortByIdAsc } from "../../helpers/helpers";
 import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import {
@@ -21,9 +21,10 @@ import {
   UpToButton,
 } from "..";
 import { AppDispatch } from "../../store/store";
+import { useAppDispatch } from "../../store/hooks";
 
 export const MainCharacters: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const maxPage = useSelector((state: AppState) => state.characters.maxPage);
   const characterLoading = useSelector((state: AppState) => state.characters.loading);
@@ -47,7 +48,9 @@ export const MainCharacters: FC = () => {
 
   useEffect(() => {
     if (isNeedMore && !error) {
-      dispatch(fetchCharacters({ page: currentPage }));
+      dispatch(fetchCharacters({
+        page: currentPage,
+      }));
       setIsNeedMore(false);
     }
   }, [dispatch, currentPage, isNeedMore, hasMore, error]);
