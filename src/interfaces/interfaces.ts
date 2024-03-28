@@ -1,3 +1,4 @@
+// Characters
 export interface Character {
   id: number;
   name: string;
@@ -42,12 +43,37 @@ export interface CharacterState {
   };
 }
 
-interface LocationState {
+export interface CharacterRootState {
+  characters: CharacterState;
+}
+
+export interface FetchCharactersPayload {
+  results: Character[];
+  info: {
+    pages: number;
+    next: string | null;
+  };
+}
+
+// Locations
+export interface Location {
+  id: number;
+  name: string;
+  status: string;
+  type: string;
+  dimension: string;
+  residents: [];
+  episode: string[];
+  url: string;
+  created: string;
+}
+
+export interface LocationState {
   maxPage: number;
-  entities: Character[]; 
-  locationsByIds: Character[];
+  entities: Location[]; 
+  locationsByIds: Location[];
   loading: boolean | null;
-  error: string | null;
+  error: string | null | undefined;
   hasMore: boolean;
   filters: {
     name: string;
@@ -56,18 +82,57 @@ interface LocationState {
   };
 }
 
-interface EpisodeState {
+export interface LocationRootState {
+  locations: LocationState;
+}
+
+export interface FetchLocationPayload {
+  results: Location[];
+  info: {
+    pages: number;
+    next: string | null;
+  };
+}
+
+// Episodes
+export interface Episode {
+  id: number;
+  name: string;
+  air_date: string;
+  episode: string;
+  dimension: string;
+  characters: [];
+  url: string;
+  created: string;
+}
+
+
+export interface EpisodeState {
   maxPage: number;
-  entities: Character[]; 
-  episodesByIds: Character[];
+  entities: Episode[]; 
+  episodesByIds: Episode[];
   loading: boolean | null;
-  error: string | null;
+  error: string | null | undefined;
   hasMore: boolean;
   filters: {
     name: string;
   };
 }
 
+export interface EpisodeRootState {
+  episodes: EpisodeState;
+}
+
+export interface FetchEpisodePayload {
+  results: Episode[];
+  info: {
+    pages: number;
+    next: string | null;
+  };
+}
+
+
+// Rest
 export interface AppState {
   characters: CharacterState;
   locations: LocationState;
@@ -79,18 +144,8 @@ export interface SelectFilterLabel {
   items: string[];
 }
 
-export interface FetchCharactersPayload {
-  results: Character[];
-  info: {
-    pages: number;
-    next: string | null;
-  };
-}
-
-export interface FetchCharactersArgs {
+export interface FetchArgs {
   page?: number;
 }
 
-export interface RootState {
-  characters: CharacterState;
-}
+export type FilterValue = string;

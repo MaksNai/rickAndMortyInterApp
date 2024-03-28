@@ -11,14 +11,15 @@ import {
   CharacterState,
   FetchCharactersPayload,
   Character,
-  FetchCharactersArgs,
-  RootState,
+  FetchArgs,
+  CharacterRootState,
+  FilterValue
 } from "../interfaces/interfaces";
 
 export const fetchCharacters = createAsyncThunk<
   FetchCharactersPayload,
-  FetchCharactersArgs,
-  { state: RootState }
+  FetchArgs,
+  { state: CharacterRootState }
 >("characters/fetchCharacters", async (args, { getState }) => {
   const {
     characters: { filters },
@@ -71,7 +72,6 @@ const initialState: CharacterState = {
 };
 
 type FilterName = "name" | "species" | "status" | "gender";
-type FilterValue = string;
 
 interface FilterAction {
   filterName: FilterName;
