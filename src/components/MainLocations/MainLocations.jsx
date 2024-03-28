@@ -164,7 +164,7 @@ export function MainLocations() {
         onClick={handleLoadMoreClick}
       >
         {currentPage <= maxPage && hasMore && <LoadMoreButton />}
-        {(!hasMore || error) && locations.length !== 0 && (
+        {!hasMore && locations.length !== 0 && (
           <p>No more locations</p>
         )}
       </div>

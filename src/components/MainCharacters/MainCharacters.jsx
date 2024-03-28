@@ -172,7 +172,7 @@ export function MainCharacters() {
         onClick={handleLoadMoreClick}
       >
         {currentPage <= maxPage && hasMore && <LoadMoreButton />}
-        {(!hasMore || error) && characters.length !== 0 && (
+        {!hasMore && characters.length !== 0 && (
           <p>No more characters</p>
         )}
       </div>
