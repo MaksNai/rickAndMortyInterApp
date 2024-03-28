@@ -27,12 +27,12 @@ export interface CharactersCardProps {
   characters: Character[];
 }
 
-interface CharacterState {
+export interface CharacterState {
   maxPage: number;
   entities: Character[]; 
   charactersByIds: Character[];
   loading: boolean | null;
-  error: string | null;
+  error: string | null | undefined;
   hasMore: boolean;
   filters: {
     name: string;
@@ -68,8 +68,21 @@ interface EpisodeState {
   };
 }
 
-interface AppState {
+export interface AppState {
   characters: CharacterState;
   locations: LocationState;
   episodes: EpisodeState;
+}
+
+export interface SelectFilterLabel {
+  label: string;
+  items: string[];
+}
+
+export interface FetchCharactersPayload {
+  results: Character[];
+  info: {
+    pages: number;
+    next: string | null;
+  };
 }

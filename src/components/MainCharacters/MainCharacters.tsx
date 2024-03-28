@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef, FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
+import { AppState, SelectFilterLabel } from "../../interfaces/interfaces";
 import { getUniqueValues, sortByIdAsc } from "../../helpers/helpers";
 import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import {
@@ -19,31 +20,30 @@ import {
   Loading,
   UpToButton,
 } from "..";
+import { AppDispatch } from "../../store/store";
 
-export function MainCharacters() {
-  const dispatch = useDispatch();
+export const MainCharacters: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
-  const maxPage = useSelector((state) => state.characters.maxPage);
-  const characterLoading = useSelector((state) => state.characters.loading);
+  const maxPage = useSelector((state: AppState) => state.characters.maxPage);
+  const characterLoading = useSelector((state: AppState) => state.characters.loading);
   const characters = useSelector(selectFilteredCharacters);
   const allCharacters = useSelector(selectAllCharacters);
 
-  const error = useSelector((state) => state.characters.error);
-  const hasMore = useSelector((state) => state.characters.hasMore);
+  const error = useSelector((state: AppState) => state.characters.error);
+  const hasMore = useSelector((state: AppState) => state.characters.hasMore);
 
-  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isNeedMore, setIsNeedMore] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(ITEMS_PER_PAGE_INITIAL);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isNeedMore, setIsNeedMore] = useState<boolean>(true);
 
-  const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
-  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
+  const [isUpToButtonVisible, setIsUpToButtonVisible] = useState<boolean>(true);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState<boolean>(false);
 
-  const loadMoreRef = useRef(null);
-  const heroImage = useRef(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const heroImage = useRef<HTMLDivElement | null>(null);
 
-  const orderedCharacters = useMemo(() => {
-    return sortByIdAsc(characters)
-  }, [characters])
+  const orderedCharacters = useMemo(() => sortByIdAsc(characters), [characters]);
 
   useEffect(() => {
     if (isNeedMore && !error) {
@@ -53,8 +53,8 @@ export function MainCharacters() {
   }, [dispatch, currentPage, isNeedMore, hasMore, error]);
 
   useEffect(() => {
-    if (isLoadMoreClicked) {
-      loadMoreRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (isLoadMoreClicked && loadMoreRef.current) {
+      loadMoreRef.current.scrollIntoView({ behavior: "smooth" });
       setIsLoadMoreClicked(false);
     }
   }, [orderedCharacters.length, characterLoading, isLoadMoreClicked]);
@@ -86,20 +86,11 @@ export function MainCharacters() {
   }, []);
 
   // Selector fields
-  const statusOptions = useMemo(
-    () => getUniqueValues(allCharacters, "status"),
-    [allCharacters],
-  );
-  const speciesOptions = useMemo(
-    () => getUniqueValues(allCharacters, "species"),
-    [allCharacters],
-  );
-  const genderOptions = useMemo(
-    () => getUniqueValues(allCharacters, "gender"),
-    [allCharacters],
-  );
+  const statusOptions = useMemo(() => getUniqueValues(allCharacters, "status"), [allCharacters]);
+  const speciesOptions = useMemo(() => getUniqueValues(allCharacters, "species"), [allCharacters]);
+  const genderOptions = useMemo(() => getUniqueValues(allCharacters, "gender"), [allCharacters]);
 
-  const selectFilterLabels = useMemo(
+  const selectFilterLabels: SelectFilterLabel[] = useMemo(
     () => [
       { label: "Species", items: speciesOptions },
       { label: "Gender", items: genderOptions},
@@ -125,7 +116,7 @@ export function MainCharacters() {
   return (
     <main className={styles.main}>
       <div className={styles.hero} ref={heroImage}>
-        <Hero className={styles.heroImage} />
+        <Hero />
       </div>
       <ul
         className={styles.filterList}

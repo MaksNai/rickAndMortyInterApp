@@ -2,25 +2,41 @@ import {
   createSlice,
   createAsyncThunk,
   createSelector,
+  PayloadAction
 } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchCharacters = createAsyncThunk(
-  "characters/fetchCharacters",
+import { AppState, CharacterState, FetchCharactersPayload } from "../interfaces/interfaces";
 
-  async (filters, { getState }) => {
-    const {
-      characters: { filters: currentFilters },
-    } = getState();
-    const queryParams = new URLSearchParams({
-      ...currentFilters,
-      ...filters,
-    }).toString();
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/character/?${queryParams}`,
-    );
-    return response.data;
-  },
+// export const fetchCharacters = createAsyncThunk(
+//   "characters/fetchCharacters",
+
+//   async (filters, { getState }) => {
+//     const {
+//       characters: { filters: currentFilters },
+//     } = getState();
+//     const queryParams = new URLSearchParams({
+//       ...currentFilters,
+//       ...filters,
+//     }).toString();
+//     const response = await axios.get(
+//       `https://rickandmortyapi.com/api/character/?${queryParams}`,
+//     );
+//     return response.data;
+//   },
+// );
+
+
+export const fetchCharacters = createAsyncThunk<FetchCharactersPayload, { page: number }, { state: CharacterState }>(
+  'characters/fetchCharacters',
+  async (args, { getState }) => {
+    const state = getState();
+    const { filters } = state;
+
+    const response = await fetch(`https://rickandmortyapi.com/api/character/?page=${args.page}`);
+    const data: FetchCharactersPayload = await response.json();
+    return data;
+  }
 );
 
 export const fetchCharactersByIds = createAsyncThunk(
@@ -36,14 +52,14 @@ export const fetchCharactersByIds = createAsyncThunk(
   },
 );
 
-const initialState = {
+const initialState: CharacterState = {
   maxPage: 1,
   entities: [],
   charactersByIds: [],
   loading: null,
   error: null,
   hasMore: true,
-  filters: JSON.parse(localStorage.getItem("charactersFilters")) || {
+  filters: JSON.parse(localStorage.getItem("charactersFilters") || "") || {
     name: "",
     species: "",
     status: "",
