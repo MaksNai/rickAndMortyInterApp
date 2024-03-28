@@ -117,7 +117,7 @@ export function MainEpisodes() {
       >
         {currentPage <= maxPage && hasMore && <LoadMoreButton />}
         {(!hasMore || error) && episodes.length !== 0 && (
-          <p>No more characters</p>
+          <p>No more episodes</p>
         )}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (

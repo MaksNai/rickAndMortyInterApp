@@ -168,7 +168,7 @@ export function MainLocations() {
       >
         {currentPage <= maxPage && hasMore && <LoadMoreButton />}
         {(!hasMore || error) && locations.length !== 0 && (
-          <p>No more characters</p>
+          <p>No more locations</p>
         )}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (
