@@ -16,8 +16,14 @@ Episode Discovery: Explore the episodes that make up the Rick and Morty universe
 Figma - https://www.figma.com/file/Tyxafu1CPDlTeLS3fpKiDT/Rick-and-Morty-(web-responsive)-(Community)?type=design&node-id=0-1&mode=design&t=uQLKXXhPMEj1o6J5-0
 Used API - https://rickandmortyapi.com/documentation/#rest
 
+Clone:
 ```
 git clone https://github.com/MaksNai/rickAndMortyInterApp.git
-npm i 
+
+```
+npm i
+
+Start
+```
 npm run start
 ```
