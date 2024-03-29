@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import styles from "./mainCharacterDetail.module.scss";
@@ -7,7 +6,7 @@ import { fetchEpisodesByIds } from "../../store/episodeSlice";
 import { GoBackLink, Loading } from "..";
 import { INFORMATION_FIELDS } from "./constants";
 import { extractNumbersFromEnd } from "./helpers";
-import { Character, Episode } from "../../interfaces/interfaces";
+import { AppState, Character, Episode } from "../../interfaces/interfaces";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 
 type CharacterField = (typeof INFORMATION_FIELDS)[number];
@@ -35,26 +34,30 @@ export const MainCharacterDetail = () => {
   const { characterId } = useParams<{ characterId: string }>();
   const top = useRef<HTMLDivElement>(null);
 
-  const characterLoading = useAppSelector((state) => state.characters.loading);
-  const episodeLoading = useAppSelector((state) => state.episodes.loading);
-  const character = useAppSelector((state) =>
+  const characterLoading = useAppSelector(
+    (state: AppState) => state.characters.loading
+  );
+  const episodeLoading = useAppSelector(
+    (state: AppState) => state.episodes.loading
+  );
+  const character = useAppSelector((state: AppState) =>
     state.characters.charactersByIds.find(
       (char) => char.id.toString() === characterId
     )
   );
   const episodes: Episode[] = useAppSelector(
-    (state) => state.episodes.episodesByIds
+    (state: AppState) => state.episodes.episodesByIds
   );
 
   useEffect(() => {
     if (character) {
-      void dispatch(fetchEpisodesByIds(character.episode));
+      dispatch(fetchEpisodesByIds(character.episode));
     }
   }, [dispatch, character]);
 
   useEffect(() => {
-    if (characterId) {
-      void dispatch(fetchCharactersByIds([characterId]));
+    if (typeof characterId !== "undefined") {
+      dispatch(fetchCharactersByIds([characterId]));
     }
   }, [dispatch, characterId]);
 
@@ -68,7 +71,7 @@ export const MainCharacterDetail = () => {
   const informationContent = useMemo(() => {
     if (!characterLoading && character) {
       return INFORMATION_FIELDS.map((field) => {
-        const fieldValue = getFieldValue(character, field as CharacterField);
+        const fieldValue = getFieldValue(character, field );
         if (fieldValue) {
           const content =
             typeof fieldValue === "object" ? fieldValue.name : fieldValue;

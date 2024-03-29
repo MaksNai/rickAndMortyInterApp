@@ -40,26 +40,25 @@ export const fetchEpisodes = createAsyncThunk<
   return response.data as FetchEpisodePayload;
 });
 
+
+type EpisodeUrls = string | string[];
+
 export const fetchEpisodesByIds = createAsyncThunk<
-  Episode[],
-  string | string[], 
-  { state: EpisodeRootState } 
->(
-  "episodes/fetchEpisodesByIds",
-  async (episodeIds, { rejectWithValue }) => {
-    try {
-      const ids = Array.isArray(episodeIds)
-        ? episodeIds.join(',')
-        : episodeIds;
-      const response = await axios.get(
-        `https://rickandmortyapi.com/api/episode/${ids}`
-      );
-      return Array.isArray(response.data) ? response.data : [response.data];
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  FetchEpisodePayload,
+  EpisodeUrls
+>("episodes/fetchEpisodesByIds", async (residentUrls) => {
+  let ids: string;
+
+  if (Array.isArray(residentUrls)) {
+    ids = residentUrls.map((url) => url.split("/").pop() ?? "").join(",");
+  } else {
+    ids = residentUrls;
   }
-);
+  const response = await axios.get(
+    `https://rickandmortyapi.com/api/episode/${ids}`,
+  );
+  return response.data as FetchEpisodePayload;
+});
 
 
 const initialState: EpisodeState = {
@@ -126,7 +125,7 @@ const episodesSlice = createSlice({
       .addCase(fetchEpisodesByIds.fulfilled, (state, action) => {
         const episodesData = Array.isArray(action.payload)
           ? action.payload
-          : [action.payload];
+          : action.payload.results;
 
         state.episodesByIds = episodesData;
         state.loading = false;

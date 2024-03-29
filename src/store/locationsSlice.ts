@@ -47,18 +47,24 @@ export const fetchLocations = createAsyncThunk<
   return response.data as FetchLocationPayload;
 });
 
-export const fetchLocationsByIds = createAsyncThunk(
-  "locations/fetchLocationsByIds",
-  async (locationIds) => {
-    const ids = Array.isArray(locationIds)
-      ? locationIds.map((url) => url.split("/").pop())
-      : locationIds;
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/location/${ids}`
-    );
-    return response.data;
+type LocationUrls = string | string[];
+
+export const fetchLocationsByIds = createAsyncThunk<
+  FetchLocationPayload,
+  LocationUrls
+>("locations/fetchLocationsByIds", async (locationIds) => {
+  let ids: string;
+
+  if (Array.isArray(locationIds)) {
+    ids = locationIds.map((url) => url.split("/").pop() ?? "").join(",");
+  } else {
+    ids = locationIds;
   }
-);
+  const response = await axios.get(
+    `https://rickandmortyapi.com/api/location/${ids}`,
+  );
+  return response.data as FetchLocationPayload;
+});
 
 const initialState: LocationState = {
   maxPage: 2,
@@ -132,7 +138,7 @@ const locationsSlice = createSlice({
       .addCase(fetchLocationsByIds.fulfilled, (state, action) => {
         const locationsData = Array.isArray(action.payload)
           ? action.payload
-          : [action.payload];
+          : action.payload.results;
 
         state.locationsByIds = locationsData;
         state.error = null;

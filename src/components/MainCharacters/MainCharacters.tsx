@@ -1,5 +1,4 @@
-import { useEffect, useState, useMemo, useCallback, useRef, FC } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import styles from "./mainCharacters.module.scss";
 import {
   AppState,
@@ -22,20 +21,20 @@ import {
   Loading,
   UpToButton,
 } from "..";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 export function MainCharacters() {
   const dispatch = useAppDispatch();
 
-  const maxPage = useSelector((state: AppState) => state.characters.maxPage);
-  const characterLoading = useSelector(
+  const maxPage = useAppSelector((state: AppState) => state.characters.maxPage);
+  const characterLoading = useAppSelector(
     (state: AppState) => state.characters.loading,
   );
-  const characters = useSelector(selectFilteredCharacters);
-  const allCharacters = useSelector(selectAllCharacters);
+  const characters = useAppSelector(selectFilteredCharacters);
+  const allCharacters = useAppSelector(selectAllCharacters);
 
-  const error = useSelector((state: AppState) => state.characters.error);
-  const hasMore = useSelector((state: AppState) => state.characters.hasMore);
+  const error = useAppSelector((state: AppState) => state.characters.error);
+  const hasMore = useAppSelector((state: AppState) => state.characters.hasMore);
 
   const [itemsPerPage, setItemsPerPage] = useState<number>(
     ITEMS_PER_PAGE_INITIAL,

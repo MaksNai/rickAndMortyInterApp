@@ -1,22 +1,21 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import styles from "./mainEpisodeDetail.module.scss";
 import { fetchCharactersByIds } from "../../store/characterSlice";
 import { GoBackLink, CharacterCard, Loading } from "..";
 import { fetchEpisodesByIds } from "../../store/episodeSlice";
 import { AppState } from "../../interfaces/interfaces";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 export const MainEpisodeDetail = () => {
   const dispatch = useAppDispatch();
   const { episodeId } = useParams<{ episodeId: string }>();
   const top = useRef<HTMLDivElement>(null);
 
-  const episodeLoading = useSelector((state: AppState) => state.episodes.loading);
-  const casts = useSelector((state: AppState) => state.characters.charactersByIds);
+  const episodeLoading = useAppSelector((state: AppState) => state.episodes.loading);
+  const casts = useAppSelector((state: AppState) => state.characters.charactersByIds);
 
-  const episode = useSelector((state: AppState) =>
+  const episode = useAppSelector((state: AppState) =>
     state.episodes.episodesByIds.find(
       (episode) => episode.id.toString() === episodeId,
     ),
