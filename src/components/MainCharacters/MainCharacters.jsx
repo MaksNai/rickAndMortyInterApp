@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo, useCallback, useRef, FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./mainCharacters.module.scss";
-import { AppState, SelectFilterLabel } from "../../interfaces/interfaces";
 import { getUniqueValues, sortByIdAsc } from "../../helpers/helpers";
 import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import {
@@ -20,28 +19,28 @@ import {
   Loading,
   UpToButton,
 } from "..";
-import { AppDispatch } from "../../store/store";
 
-export const MainCharacters: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
 
-  const maxPage = useSelector((state: AppState) => state.characters.maxPage);
-  const characterLoading = useSelector((state: AppState) => state.characters.loading);
+export function MainCharacters() {
+  const dispatch = useDispatch();
+
+  const maxPage = useSelector((state) => state.characters.maxPage);
+  const characterLoading = useSelector((state) => state.characters.loading);
   const characters = useSelector(selectFilteredCharacters);
   const allCharacters = useSelector(selectAllCharacters);
 
-  const error = useSelector((state: AppState) => state.characters.error);
-  const hasMore = useSelector((state: AppState) => state.characters.hasMore);
+  const error = useSelector((state) => state.characters.error);
+  const hasMore = useSelector((state) => state.characters.hasMore);
 
-  const [itemsPerPage, setItemsPerPage] = useState<number>(ITEMS_PER_PAGE_INITIAL);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isNeedMore, setIsNeedMore] = useState<boolean>(true);
+  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE_INITIAL);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isNeedMore, setIsNeedMore] = useState(true);
 
-  const [isUpToButtonVisible, setIsUpToButtonVisible] = useState<boolean>(true);
-  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState<boolean>(false);
+  const [isUpToButtonVisible, setIsUpToButtonVisible] = useState(true);
+  const [isLoadMoreClicked, setIsLoadMoreClicked] = useState(false);
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const heroImage = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useRef(null);
+  const heroImage = useRef(null);
 
   const orderedCharacters = useMemo(() => sortByIdAsc(characters), [characters]);
 
@@ -90,7 +89,7 @@ export const MainCharacters: FC = () => {
   const speciesOptions = useMemo(() => getUniqueValues(allCharacters, "species"), [allCharacters]);
   const genderOptions = useMemo(() => getUniqueValues(allCharacters, "gender"), [allCharacters]);
 
-  const selectFilterLabels: SelectFilterLabel[] = useMemo(
+  const selectFilterLabels = useMemo(
     () => [
       { label: "Species", items: speciesOptions },
       { label: "Gender", items: genderOptions},
@@ -138,12 +137,10 @@ export const MainCharacters: FC = () => {
             onClick={handleFiltersChange}
           >
             <SelectField
-              props={{
-                label: selectItem.label,
-                items: selectItem.items,
-                filterName: selectItem.label.toLowerCase(),
-                type: TYPE,
-              }}
+             label={selectItem.label}
+             items={selectItem.items}
+             filterName={selectItem.label.toLowerCase()}
+             type={TYPE}
             />
           </li>
         ))}

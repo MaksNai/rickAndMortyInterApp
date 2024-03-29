@@ -3,9 +3,7 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import styles from "./selectField.module.scss";
 import { useFilters } from "../../hooks/useFilters";
 
-export function SelectField({ props }) {
-  const { label, items, filterName, type } = props;
-
+export function SelectField({ label, items, filterName, type }) {
   const idSelect = useId();
   const idLabel = useId();
 
