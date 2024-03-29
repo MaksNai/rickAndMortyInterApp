@@ -5,23 +5,25 @@ import styles from "./mainEpisodeDetail.module.scss";
 import { fetchCharactersByIds } from "../../store/characterSlice";
 import { GoBackLink, CharacterCard, Loading } from "..";
 import { fetchEpisodesByIds } from "../../store/episodeSlice";
+import { AppState } from "../../interfaces/interfaces";
+import { useAppDispatch } from "../../store/hooks";
 
 export const MainEpisodeDetail = () => {
-  const dispatch = useDispatch();
-  const { episodeId } = useParams();
-  const top = useRef(null);
+  const dispatch = useAppDispatch();
+  const { episodeId } = useParams<{ episodeId: string }>();
+  const top = useRef<HTMLDivElement>(null);
 
-  const episodeLoading = useSelector((state) => state.episodes.loading);
-  const casts = useSelector((state) => state.characters.charactersByIds);
+  const episodeLoading = useSelector((state: AppState) => state.episodes.loading);
+  const casts = useSelector((state: AppState) => state.characters.charactersByIds);
 
-  const episode = useSelector((state) =>
+  const episode = useSelector((state: AppState) =>
     state.episodes.episodesByIds.find(
       (episode) => episode.id.toString() === episodeId,
     ),
   );
 
   useEffect(() => {
-    if (episodeLoading || !episode) {
+    if ((episodeLoading || !episode) && episodeId) {
       dispatch(fetchEpisodesByIds(episodeId));
     }
   }, [episodeLoading, dispatch, episode, episodeId]);
@@ -38,14 +40,17 @@ export const MainEpisodeDetail = () => {
 
   const nameEpisode = useMemo(() => {
     if (!episodeLoading && episode) return episode.name;
+    return ""
   }, [episode, episodeLoading]);
 
   const episodeNumber = useMemo(() => {
     if (!episodeLoading && episode) return episode.episode;
+    return ""
   }, [episode, episodeLoading]);
 
   const airDate = useMemo(() => {
     if (!episodeLoading && episode) return episode.air_date;
+    return ""
   }, [episode, episodeLoading]);
 
   const mainEpisodeInfo = useMemo(

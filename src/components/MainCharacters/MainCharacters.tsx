@@ -140,7 +140,7 @@ export function MainCharacters() {
   return (
     <main className={styles.main}>
       <div className={styles.hero} ref={heroImage}>
-        <Hero />
+        <Hero type={"names"} />
       </div>
       <ul
         className={styles.filterList}
