@@ -146,7 +146,7 @@ export function MainCharacters() {
         ))}
       </ul>
       <div className={styles.advancedFiltersButton}>
-        <FiltersModal modalData={selectFilterLabels} />
+        <FiltersModal modalData={selectFilterLabels} type={TYPE}/>
       </div>
       <section className={styles.contentCard}>{content}</section>
       {characterLoading && (

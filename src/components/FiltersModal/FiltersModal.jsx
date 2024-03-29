@@ -30,7 +30,7 @@ const ApplyButtonStyle = styled(Button)({
   },
 });
 
-export function FiltersModal({ modalData }) {
+export function FiltersModal({ modalData, type }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -74,6 +74,7 @@ export function FiltersModal({ modalData }) {
                       label: item.label,
                       items: item.items,
                       filterName: item.label.toLowerCase(),
+                      type
                     }}
                   />
                 </li>
