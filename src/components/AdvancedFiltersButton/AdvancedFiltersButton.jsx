@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import React from "react";
 
 export const AdvancedFiltersButton = () => {
   return (
