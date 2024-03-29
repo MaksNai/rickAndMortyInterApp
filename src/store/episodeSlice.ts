@@ -8,7 +8,7 @@ import {
   FetchEpisodePayload,
   EpisodeRootState,
   EpisodeState,
-  FilterValue
+  FilterValue,
 } from "../interfaces/interfaces";
 
 export const fetchEpisodes = createAsyncThunk<
@@ -33,7 +33,7 @@ export const fetchEpisodes = createAsyncThunk<
   }
 
   const response = await axios.get(
-    `https://rickandmortyapi.com/api/episode/?${queryParams}`
+    `https://rickandmortyapi.com/api/episode/?${queryParams}`,
   );
   return response.data as FetchEpisodePayload;
 });
@@ -76,7 +76,7 @@ const episodesSlice = createSlice({
   reducers: {
     setEpisodeFilter(state, action: PayloadAction<FilterAction>) {
       const { filterName, value } = action.payload;
-      if (typeof filterName === "string")  state.filters[filterName] = value;
+      if (typeof filterName === "string") state.filters[filterName] = value;
       localStorage.setItem("episodesFilters", JSON.stringify(state.filters));
     },
     resetEpisodeFilters(state) {

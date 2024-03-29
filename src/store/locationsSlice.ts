@@ -15,7 +15,6 @@ import {
   FilterValue,
 } from "../interfaces/interfaces";
 
-
 export const fetchLocations = createAsyncThunk<
   FetchLocationPayload,
   FetchArgs,
@@ -38,7 +37,7 @@ export const fetchLocations = createAsyncThunk<
   }
 
   const response = await axios.get(
-    `https://rickandmortyapi.com/api/location/?${queryParams}`
+    `https://rickandmortyapi.com/api/location/?${queryParams}`,
   );
   return response.data as FetchLocationPayload;
 });
@@ -50,10 +49,10 @@ export const fetchLocationsByIds = createAsyncThunk(
       ? locationIds.map((url) => url.split("/").pop())
       : locationIds;
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/location/${ids}`
+      `https://rickandmortyapi.com/api/location/${ids}`,
     );
     return response.data;
-  }
+  },
 );
 
 const initialState: LocationState = {
@@ -104,7 +103,7 @@ const locationsSlice = createSlice({
       .addCase(fetchLocations.fulfilled, (state, action) => {
         state.loading = false;
         const newLocations = new Map(
-          state.entities.map((loc) => [loc.id, loc])
+          state.entities.map((loc) => [loc.id, loc]),
         );
 
         action.payload.results.forEach((loc) => {
@@ -143,20 +142,21 @@ export const { setLocationsFilter, resetLocationsFilters } =
   locationsSlice.actions;
 
 export const selectAllLocations = (state: AppState) => state.locations.entities;
-export const selectLocationsFilters = (state: AppState) => state.locations.filters;
+export const selectLocationsFilters = (state: AppState) =>
+  state.locations.filters;
 
 export const selectFilteredLocations = createSelector(
   [(state) => state.locations],
   (locations) => {
     const { entities, filters } = locations;
     return entities.filter(
-      (location: { name: string; type: string; dimension: string; }) =>
+      (location: { name: string; type: string; dimension: string }) =>
         (!filters.name ||
           location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
         (!filters.type || location.type === filters.type) &&
-        (!filters.dimension || location.dimension === filters.dimension)
+        (!filters.dimension || location.dimension === filters.dimension),
     );
-  }
+  },
 );
 
 export default locationsSlice.reducer;

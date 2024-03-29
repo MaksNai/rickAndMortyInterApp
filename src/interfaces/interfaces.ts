@@ -30,7 +30,7 @@ export interface CharactersCardProps {
 
 export interface CharacterState {
   maxPage: number;
-  entities: Character[]; 
+  entities: Character[];
   charactersByIds: Character[];
   loading: boolean | null;
   error: string | null | undefined;
@@ -70,7 +70,7 @@ export interface Location {
 
 export interface LocationState {
   maxPage: number;
-  entities: Location[]; 
+  entities: Location[];
   locationsByIds: Location[];
   loading: boolean | null;
   error: string | null | undefined;
@@ -106,10 +106,9 @@ export interface Episode {
   created: string;
 }
 
-
 export interface EpisodeState {
   maxPage: number;
-  entities: Episode[]; 
+  entities: Episode[];
   episodesByIds: Episode[];
   loading: boolean | null;
   error: string | null | undefined;
@@ -137,8 +136,6 @@ export interface EpisodesCardProps {
 export interface EpisodeCardProps {
   episodeData: Episode;
 }
-
-
 
 // Rest
 export interface AppState {

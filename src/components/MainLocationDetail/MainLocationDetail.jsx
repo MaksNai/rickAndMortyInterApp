@@ -20,15 +20,11 @@ export function MainLocationDetail() {
   const residents = useSelector((state) => state.characters.charactersByIds);
 
   useEffect(() => {
-      dispatch(fetchLocationsByIds(locationId));
+    dispatch(fetchLocationsByIds(locationId));
   }, [dispatch, locationId]);
 
   useEffect(() => {
-    if (
-      location &&
-      location.residents &&
-      location.residents.length > 0
-    ) {
+    if (location && location.residents && location.residents.length > 0) {
       dispatch(fetchCharactersByIds(location.residents));
     }
   }, [dispatch, locationLoading, location]);

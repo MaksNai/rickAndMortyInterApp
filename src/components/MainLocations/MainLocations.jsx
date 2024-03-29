@@ -91,7 +91,7 @@ export function MainLocations() {
 
   const selectFilterLabels = useMemo(
     () => [
-      { label: "Type", items: typeOptions, },
+      { label: "Type", items: typeOptions },
       {
         label: "Dimension",
         items: dimensionOptions,
@@ -164,9 +164,7 @@ export function MainLocations() {
         onClick={handleLoadMoreClick}
       >
         {currentPage <= maxPage && hasMore && <LoadMoreButton />}
-        {!hasMore && locations.length !== 0 && (
-          <p>No more locations</p>
-        )}
+        {!hasMore && locations.length !== 0 && <p>No more locations</p>}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (
         <div className={styles.upToButton} onClick={handleUpButtonClick}>
