@@ -139,12 +139,10 @@ export function MainLocations() {
         {selectFilterLabels.map((selectItem) => (
           <li className={styles.filterSelect} key={selectItem.label}>
             <SelectField
-              props={{
-                label: selectItem.label,
-                items: selectItem.items,
-                filterName: selectItem.label.toLowerCase(),
-                type: TYPE,
-              }}
+              label={selectItem.label}
+              items={selectItem.items}
+              filterName={selectItem.label.toLowerCase()}
+              type={TYPE}
             />
           </li>
         ))}

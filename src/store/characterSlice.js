@@ -57,6 +57,7 @@ const charactersSlice = createSlice({
   reducers: {
     setCharacterFilter(state, action) {
       const { filterName, value } = action.payload;
+      console.log(action.payload)
       state.filters[filterName] = value;
       localStorage.setItem("charactersFilters", JSON.stringify(state.filters));
       state.hasMore = true;

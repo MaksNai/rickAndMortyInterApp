@@ -52,8 +52,9 @@ export function SelectField({ label, items, filterName, type }) {
           <em>None</em>
         </MenuItem>
         {items.map((menuItem) => (
-          <MenuItem value={menuItem} key={menuItem}>
-            {menuItem}
+          
+          <MenuItem value={menuItem || currentValue} key={menuItem || currentValue}>
+            {menuItem || currentValue}
           </MenuItem>
         ))}
       </Select>
