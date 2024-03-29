@@ -16,6 +16,8 @@ import {
   FilterValue,
 } from "../interfaces/interfaces";
 
+import { parseJSON } from './helpers'
+
 export const fetchCharacters = createAsyncThunk<
   FetchCharactersPayload,
   FetchArgs,
@@ -64,13 +66,6 @@ export const fetchCharactersByIds = createAsyncThunk<
   return response.data as FetchCharactersPayload;
 });
 
-function parseJSON<T>(value: string | null, defaultValue: T): T {
-  try {
-    return value ? (JSON.parse(value) as T) : defaultValue;
-  } catch {
-    return defaultValue;
-  }
-}
 
 const initialState: CharacterState = {
   maxPage: 1,

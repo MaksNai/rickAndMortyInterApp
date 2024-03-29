@@ -1,6 +1,6 @@
 import styles from "./header.module.scss";
 import { Link } from "react-router-dom";
-import { Logo, Nav } from "../";
+import { Logo, Nav } from "..";
 import { LINKS } from "./constants";
 
 export const Header = () => (

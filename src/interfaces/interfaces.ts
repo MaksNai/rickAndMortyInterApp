@@ -86,6 +86,14 @@ export interface LocationRootState {
   locations: LocationState;
 }
 
+export interface LocationCardProps {
+  location: Location;
+}
+
+export interface LocationsCardProps {
+  locations: Location[];
+}
+
 export interface FetchLocationPayload {
   results: Location[];
   info: {

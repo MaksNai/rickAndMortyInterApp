@@ -13,7 +13,10 @@ import {
   LocationRootState,
   LocationState,
   FilterValue,
+  Location,
 } from "../interfaces/interfaces";
+
+import { parseJSON } from "./helpers";
 
 export const fetchLocations = createAsyncThunk<
   FetchLocationPayload,
@@ -35,9 +38,11 @@ export const fetchLocations = createAsyncThunk<
   if (args.page !== undefined) {
     queryParams.set("page", args.page.toString());
   }
-
   const response = await axios.get(
-    `https://rickandmortyapi.com/api/location/?${queryParams}`,
+    `https://rickandmortyapi.com/api/location/`,
+    {
+      params: Object.fromEntries(queryParams),
+    }
   );
   return response.data as FetchLocationPayload;
 });
@@ -49,10 +54,10 @@ export const fetchLocationsByIds = createAsyncThunk(
       ? locationIds.map((url) => url.split("/").pop())
       : locationIds;
     const response = await axios.get(
-      `https://rickandmortyapi.com/api/location/${ids}`,
+      `https://rickandmortyapi.com/api/location/${ids}`
     );
     return response.data;
-  },
+  }
 );
 
 const initialState: LocationState = {
@@ -62,11 +67,11 @@ const initialState: LocationState = {
   loading: true,
   error: null,
   hasMore: true,
-  filters: JSON.parse(localStorage.getItem("locationsFilters") || "") || {
+  filters: parseJSON(localStorage.getItem("locationsFilters"), {
     name: "",
     type: "",
     dimension: "",
-  },
+  }),
 };
 
 type FilterName = "name" | "type" | "dimension";
@@ -103,7 +108,7 @@ const locationsSlice = createSlice({
       .addCase(fetchLocations.fulfilled, (state, action) => {
         state.loading = false;
         const newLocations = new Map(
-          state.entities.map((loc) => [loc.id, loc]),
+          state.entities.map((loc) => [loc.id, loc])
         );
 
         action.payload.results.forEach((loc) => {
@@ -141,22 +146,27 @@ const locationsSlice = createSlice({
 export const { setLocationsFilter, resetLocationsFilters } =
   locationsSlice.actions;
 
-export const selectAllLocations = (state: AppState) => state.locations.entities;
-export const selectLocationsFilters = (state: AppState) =>
-  state.locations.filters;
+export const selectAllLocations = (state: AppState): Location[] =>
+  state.locations.entities;
 
-export const selectFilteredLocations = createSelector(
-  [(state) => state.locations],
-  (locations) => {
-    const { entities, filters } = locations;
-    return entities.filter(
-      (location: { name: string; type: string; dimension: string }) =>
-        (!filters.name ||
-          location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
-        (!filters.type || location.type === filters.type) &&
-        (!filters.dimension || location.dimension === filters.dimension),
-    );
-  },
+export const selectLocationsFilters = (
+  state: AppState
+): LocationState["filters"] => state.locations.filters;
+
+export const selectFilteredLocations = createSelector<
+  [
+    (state: AppState) => Location[],
+    (state: AppState) => LocationState["filters"]
+  ],
+  Location[]
+>([selectAllLocations, selectLocationsFilters], (locations, filters) =>
+  locations.filter(
+    (location) =>
+      (!filters.name ||
+        location.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+      (!filters.type || location.type === filters.type) &&
+      (!filters.dimension || location.dimension === filters.dimension)
+  )
 );
 
 export default locationsSlice.reducer;

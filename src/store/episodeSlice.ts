@@ -9,7 +9,10 @@ import {
   EpisodeRootState,
   EpisodeState,
   FilterValue,
+  Episode,
 } from "../interfaces/interfaces";
+
+import { parseJSON } from './helpers'
 
 export const fetchEpisodes = createAsyncThunk<
   FetchEpisodePayload,
@@ -31,36 +34,44 @@ export const fetchEpisodes = createAsyncThunk<
   if (args.page !== undefined) {
     queryParams.set("page", args.page.toString());
   }
-
-  const response = await axios.get(
-    `https://rickandmortyapi.com/api/episode/?${queryParams}`,
-  );
+  const response = await axios.get(`https://rickandmortyapi.com/api/episode/`, {
+    params: Object.fromEntries(queryParams),
+  });
   return response.data as FetchEpisodePayload;
 });
 
-export const fetchEpisodesByIds = createAsyncThunk(
+export const fetchEpisodesByIds = createAsyncThunk<
+  Episode[],
+  string | string[], 
+  { state: EpisodeRootState } 
+>(
   "episodes/fetchEpisodesByIds",
-  async (episodeIds) => {
-    const ids = Array.isArray(episodeIds)
-      ? episodeIds.map((url) => url.split("/").pop())
-      : episodeIds;
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/episode/${ids}`,
-    );
-    return response.data;
-  },
+  async (episodeIds, { rejectWithValue }) => {
+    try {
+      const ids = Array.isArray(episodeIds)
+        ? episodeIds.join(',')
+        : episodeIds;
+      const response = await axios.get(
+        `https://rickandmortyapi.com/api/episode/${ids}`
+      );
+      return Array.isArray(response.data) ? response.data : [response.data];
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
 );
+
 
 const initialState: EpisodeState = {
   maxPage: 1,
   entities: [],
-  loading: null,
   episodesByIds: [],
+  loading: null,
   error: null,
   hasMore: true,
-  filters: JSON.parse(localStorage.getItem("episodesFilters") || "") || {
+  filters: parseJSON(localStorage.getItem("episodesFilters"), {
     name: "",
-  },
+  }),
 };
 
 type FilterName = "name";
@@ -94,7 +105,7 @@ const episodesSlice = createSlice({
       .addCase(fetchEpisodes.fulfilled, (state, action) => {
         state.loading = false;
         const newEpisodes = new Map(
-          state.entities.map((episode) => [episode.id, episode]),
+          state.entities.map((episode) => [episode.id, episode])
         );
         action.payload.results.forEach((episode) => {
           newEpisodes.set(episode.id, episode);
@@ -132,26 +143,25 @@ export const { setEpisodeFilter, resetEpisodeFilters } = episodesSlice.actions;
 
 export const selectAllEpisodes = (state: AppState) => state.episodes.entities;
 export const selectEpisodeFilters = (state: AppState) => state.episodes.filters;
-export const selectFilteredEpisodes = createSelector(
-  [selectAllEpisodes, selectEpisodeFilters],
-  (entities, filters) => {
-    return entities.filter((episode) => {
-      const filterString = filters.name.toLowerCase();
-      return (
-        episode.name.toLowerCase().includes(filterString) ||
-        episode.episode.toLowerCase().includes(filterString)
-      );
-    });
-  },
+export const selectFilteredEpisodes = createSelector<
+  [typeof selectAllEpisodes, typeof selectEpisodeFilters],
+  Episode[]
+>([selectAllEpisodes, selectEpisodeFilters], (episodes, filters) =>
+  episodes.filter((episode) =>
+    episode.name.toLowerCase().includes(filters.name.toLowerCase())
+  )
 );
 
-export const selectEpisodesByIds = createSelector(
-  [selectAllEpisodes, (state, episodeIds) => episodeIds],
-  (episodes, episodeIds) => {
-    return episodes.filter((episode) =>
-      episodeIds.includes(String(episode.id)),
-    );
-  },
+export const selectEpisodesByIds = createSelector<
+  [
+    typeof selectAllEpisodes,
+    (state: AppState, episodeIds: string[]) => string[]
+  ],
+  Episode[]
+>(
+  [selectAllEpisodes, (state: AppState, episodeIds: string[]) => episodeIds],
+  (episodes, episodeIds) =>
+    episodes.filter((episode) => episodeIds.includes(episode.id.toString()))
 );
 
 export default episodesSlice.reducer;
