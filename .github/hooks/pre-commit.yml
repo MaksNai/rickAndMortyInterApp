@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# ESLint
+npm eslint --fix .
+
+# Prettier
+npm prettier --write .
+
+# Exit with an error if any of the commands fail
+if [ $? -ne 0 ]; then
+  exit 1
+fi
