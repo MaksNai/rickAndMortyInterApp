@@ -7,7 +7,7 @@ import { Footer, Header, RoutesComponent } from "./components";
 
 export const App = () => (
   <Provider store={store}>
-                           <Router>
+    <Router>
       <Container
         className="container"
         maxWidth={false}
@@ -18,8 +18,8 @@ export const App = () => (
           minHeight: "100vh",
         }}
       >
-                   <Header />
-                                <RoutesComponent />
+        <Header />
+        <RoutesComponent />
         <Footer />
       </Container>
     </Router>

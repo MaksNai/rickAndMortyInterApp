@@ -1,4 +1,4 @@
-name: CI/CD with Linting and Formatting
+name: Linting and Formatting
 on: [push]
 jobs:
   lint-and-format:
@@ -13,4 +13,4 @@ jobs:
         run: npm run lint
 
       - name: Run Prettier
-        run: npx prettier . --write
+        run: npm run prettier
