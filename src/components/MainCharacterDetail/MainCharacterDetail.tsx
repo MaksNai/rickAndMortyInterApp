@@ -153,7 +153,7 @@ export const MainCharacterDetail = () => {
     <main className={styles.main}>
       <div className={styles.top} ref={top}>
         <nav className={styles.nav}>
-          <GoBackLink url="/characters" />
+          <GoBackLink url="/characters/" />
         </nav>
         <div className={styles.charactersInfo}>{mainCharacterInfo}</div>
       </div>

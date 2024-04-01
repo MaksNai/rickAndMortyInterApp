@@ -13,38 +13,38 @@ import {
 export const RoutesComponent: FC = () => (
   <Routes>
     <Route
-      path="/characters"
+      path="/rickAndMortyInterApp/characters"
       element={<MainCharacters />}
       errorElement={<ErrorPage />}
     />
     <Route
-      path="/locations"
+      path="/rickAndMortyInterApp/locations"
       element={<MainLocations />}
       errorElement={<ErrorPage />}
     />
     <Route
-      path="/episodes"
+      path="/rickAndMortyInterApp/episodes"
       element={<MainEpisodes />}
       errorElement={<ErrorPage />}
     />
     <Route
-      path="/characters/:characterId"
+      path="/rickAndMortyInterApp/characters/:characterId"
       element={<MainCharacterDetail />}
       errorElement={<ErrorPage />}
     />
     <Route
-      path="/locations/:locationId"
+      path="/rickAndMortyInterApp/locations/:locationId"
       element={<MainLocationDetail />}
       errorElement={<ErrorPage />}
     />
     <Route
-      path="/episodes/:episodeId"
+      path="/rickAndMortyInterApp/episodes/:episodeId"
       element={<MainEpisodeDetail />}
       errorElement={<ErrorPage />}
     />
     <Route
-      path="/"
-      element={<Navigate to="/characters" replace />}
+      path="/rickAndMortyInterApp/"
+      element={<Navigate to="/rickAndMortyInterApp/characters" replace />}
       errorElement={<ErrorPage />}
     />
   </Routes>
