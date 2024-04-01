@@ -120,7 +120,7 @@ export function MainCharacters() {
     if (orderedCharacters.length < itemsPerPage && currentPage !== maxPage) setIsNeedMore(true)
     return <CharactersCards characters={orderedCharacters.slice(0, itemsPerPage)} />
   }, [orderedCharacters, itemsPerPage, currentPage, maxPage, characterLoading])
-  
+
   return (
     <main className={styles.main}>
       <div className={styles.hero} ref={heroImage}>
