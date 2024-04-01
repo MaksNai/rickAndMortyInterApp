@@ -44,7 +44,7 @@ export const RoutesComponent: FC = () => (
     />
     <Route
       path="/"
-      element={<Navigate to="/rickAndMortyInterApp/characters" replace />}
+      element={<Navigate to="/characters" replace />}
       errorElement={<ErrorPage />}
     />
   </Routes>
