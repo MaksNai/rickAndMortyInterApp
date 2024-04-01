@@ -15,5 +15,7 @@ module.exports = {
     },
     project: "tsconfig.eslint.json",
   },
+
+  ignorePatterns: ['node_modules/', 'build/'],
   rules: {},
 };
