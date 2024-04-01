@@ -104,6 +104,13 @@ export function MainCharacters() {
   // Content variables
   const content = useMemo(() => {
     if (!orderedCharacters || orderedCharacters.length === 0) {
+      if(characterLoading) {
+        return (
+<div className={styles.loadingIndicator}>
+          <Loading />
+        </div>
+        )
+      }
       return (
         <section className={styles.notFiltersMessage}>
           <p>Nothing found. Try other filters.</p>
