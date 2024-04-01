@@ -1,54 +1,51 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import { Box, Button, Modal, Typography } from "@mui/material";
-import styles from "./filtersModal.module.scss";
-import { AdvancedFiltersButton, SelectField } from "..";
+import * as React from 'react'
+import { styled } from '@mui/material/styles'
+import { Box, Button, Modal, Typography } from '@mui/material'
+import styles from './filtersModal.module.scss'
+import { AdvancedFiltersButton, SelectField } from '..'
 
 interface ModalDataType {
-  label: string;
-  items: string[];
+  label: string
+  items: string[]
 }
 
 interface FiltersModalProps {
-  modalData: ModalDataType[];
-  type: FilterName;
+  modalData: ModalDataType[]
+  type: FilterName
 }
 
-type FilterName = "characters" | "episodes" | "locations";
+type FilterName = 'characters' | 'episodes' | 'locations'
 
 const ApplyButtonStyle = styled(Button)({
-  backgroundColor: "#F2F9FE",
-  borderColor: "#0063cc",
-  color: "#2196F3",
-  width: "100%",
-  marginTop: "33px",
-  "&:hover": {
-    backgroundColor: "#0069d9",
-    borderColor: "#0062cc",
-    boxShadow: "none",
-    color: "white",
+  backgroundColor: '#F2F9FE',
+  borderColor: '#0063cc',
+  color: '#2196F3',
+  width: '100%',
+  marginTop: '33px',
+  '&:hover': {
+    backgroundColor: '#0069d9',
+    borderColor: '#0062cc',
+    boxShadow: 'none',
+    color: 'white',
   },
-  "&:active": {
-    boxShadow: "none",
-    backgroundColor: "#0062cc",
-    borderColor: "#005cbf",
-    color: "white",
+  '&:active': {
+    boxShadow: 'none',
+    backgroundColor: '#0062cc',
+    borderColor: '#005cbf',
+    color: 'white',
   },
-  "&:focus": {
-    boxShadow: "none",
-    backgroundColor: "#0062cc",
-    borderColor: "#005cbf",
-    color: "white",
+  '&:focus': {
+    boxShadow: 'none',
+    backgroundColor: '#0062cc',
+    borderColor: '#005cbf',
+    color: 'white',
   },
-});
+})
 
-export function FiltersModal(
-  { modalData }: FiltersModalProps,
-  type: FilterName,
-) {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export function FiltersModal({ modalData, type }: FiltersModalProps) {
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   return (
     <div>
@@ -62,7 +59,7 @@ export function FiltersModal(
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ bgcolor: "background.paper" }} className={styles.modalBox}>
+        <Box sx={{ bgcolor: 'background.paper' }} className={styles.modalBox}>
           <div className={styles.nav}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Filters
@@ -83,16 +80,12 @@ export function FiltersModal(
                 </li>
               ))}
             </ul>
-            <ApplyButtonStyle
-              variant="contained"
-              disableRipple
-              onClick={handleClose}
-            >
+            <ApplyButtonStyle variant="contained" disableRipple onClick={handleClose}>
               Apply
             </ApplyButtonStyle>
           </div>
         </Box>
       </Modal>
     </div>
-  );
+  )
 }

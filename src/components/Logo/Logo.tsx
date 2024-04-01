@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react'
 
 export const Logo: FC = () => (
   <svg
@@ -11,16 +11,8 @@ export const Logo: FC = () => (
   >
     <path fill="url(#pattern0)" d="M0 0H46V49H0z"></path>
     <defs>
-      <pattern
-        id="pattern0"
-        width="1"
-        height="1"
-        patternContentUnits="objectBoundingBox"
-      >
-        <use
-          transform="matrix(.00098 0 0 .00092 0 -.003)"
-          xlinkHref="#image0_12_27"
-        ></use>
+      <pattern id="pattern0" width="1" height="1" patternContentUnits="objectBoundingBox">
+        <use transform="matrix(.00098 0 0 .00092 0 -.003)" xlinkHref="#image0_12_27"></use>
       </pattern>
       <image
         id="image0_12_27"
@@ -30,4 +22,4 @@ export const Logo: FC = () => (
       ></image>
     </defs>
   </svg>
-);
+)

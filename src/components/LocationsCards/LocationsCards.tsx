@@ -1,6 +1,6 @@
-import styles from "./locationsCards.module.scss";
-import { LocationCard } from "..";
-import { LocationsCardProps } from "../../interfaces/interfaces";
+import styles from './locationsCards.module.scss'
+import { LocationCard } from '..'
+import { LocationsCardProps } from '../../interfaces/interfaces'
 
 export const LocationsCards = ({ locations }: LocationsCardProps) => (
   <section className={styles.cards}>
@@ -8,4 +8,4 @@ export const LocationsCards = ({ locations }: LocationsCardProps) => (
       <LocationCard location={location} key={location.id} />
     ))}
   </section>
-);
+)

@@ -1,9 +1,9 @@
-import { Provider } from "react-redux";
-import { store } from "./store/store";
-import "./App.scss";
-import { Container } from "@mui/material";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Footer, Header, RoutesComponent } from "./components";
+import { Provider } from 'react-redux'
+import { store } from './store/store'
+import './App.scss'
+import { Container } from '@mui/material'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { Footer, Header, RoutesComponent } from './components'
 
 export const App = () => (
   <Provider store={store}>
@@ -13,9 +13,9 @@ export const App = () => (
         maxWidth={false}
         disableGutters
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
         }}
       >
         <Header />
@@ -24,4 +24,4 @@ export const App = () => (
       </Container>
     </Router>
   </Provider>
-);
+)

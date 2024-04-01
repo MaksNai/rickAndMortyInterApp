@@ -1,5 +1,5 @@
-@use "../../styles/mixins.scss";
-@use "../../styles/variables.scss";
+@use '../../styles/mixins.scss';
+@use '../../styles/variables.scss';
 
 .main {
   @include mixins.mainPageStyle;
@@ -95,7 +95,7 @@
 
   &::before {
     position: absolute;
-    content: "";
+    content: '';
     width: 10px;
     height: 10px;
     left: calc(100% - 25px);

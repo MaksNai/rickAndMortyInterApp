@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { FC } from "react";
-import styles from "./header.module.scss";
-import { Logo, Nav } from "..";
-import { LINKS } from "./constants";
+import { Link } from 'react-router-dom'
+import { FC } from 'react'
+import styles from './header.module.scss'
+import { Logo, Nav } from '..'
+import { LINKS } from './constants'
 
 export const Header: FC = () => (
   <header className={styles.header}>
@@ -15,4 +15,4 @@ export const Header: FC = () => (
       <Nav links={LINKS} />
     </div>
   </header>
-);
+)

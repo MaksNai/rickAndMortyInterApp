@@ -1,4 +1,4 @@
-import styles from "./loading.module.scss";
+import styles from './loading.module.scss'
 
 export const Loading = () => (
   <div className={styles.box}>
@@ -25,7 +25,7 @@ export const Loading = () => (
         <path
           fill="#73B64B"
           d="M119.675 72.5L93.175 45l17.5 5 14.5 9 2.5 9.5-8 4z"
-          style={{ mixBlendMode: "difference" }}
+          style={{ mixBlendMode: 'difference' }}
         ></path>
       </g>
       <g filter="url(#filter3_f_106_583)">
@@ -167,10 +167,7 @@ export const Loading = () => (
         fill="#8BD046"
         d="M123.175 76c-1-.5-1-1-1.5-.5s.5 18 1 19 1 0 1.5-.5 0-17.5-1-18z"
       ></path>
-      <path
-        stroke="#D1E59F"
-        d="M79.175 68.5c5.117 2.942 7.738 5.035 12 9.5"
-      ></path>
+      <path stroke="#D1E59F" d="M79.175 68.5c5.117 2.942 7.738 5.035 12 9.5"></path>
       <ellipse
         cx="110.175"
         cy="159.887"
@@ -191,11 +188,7 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
           <feGaussianBlur
             result="effect1_foregroundBlur_106_583"
             stdDeviation="12"
@@ -211,15 +204,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="1"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="1"></feGaussianBlur>
         </filter>
         <filter
           id="filter2_f_106_583"
@@ -231,11 +217,7 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
           <feGaussianBlur
             result="effect1_foregroundBlur_106_583"
             stdDeviation="12"
@@ -251,15 +233,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="2"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="2"></feGaussianBlur>
         </filter>
         <filter
           id="filter4_f_106_583"
@@ -271,11 +246,7 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
           <feGaussianBlur
             result="effect1_foregroundBlur_106_583"
             stdDeviation="1.5"
@@ -291,15 +262,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="1"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="1"></feGaussianBlur>
         </filter>
         <filter
           id="filter6_f_106_583"
@@ -311,15 +275,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="2"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="2"></feGaussianBlur>
         </filter>
         <filter
           id="filter7_f_106_583"
@@ -331,11 +288,7 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
           <feGaussianBlur
             result="effect1_foregroundBlur_106_583"
             stdDeviation="1.5"
@@ -351,11 +304,7 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
           <feGaussianBlur
             result="effect1_foregroundBlur_106_583"
             stdDeviation="0.75"
@@ -371,15 +320,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="1"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="1"></feGaussianBlur>
         </filter>
         <filter
           id="filter10_f_106_583"
@@ -391,15 +333,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="1"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="1"></feGaussianBlur>
         </filter>
         <filter
           id="filter11_f_106_583"
@@ -411,11 +346,7 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
           <feGaussianBlur
             result="effect1_foregroundBlur_106_583"
             stdDeviation="1.5"
@@ -431,15 +362,8 @@ export const Loading = () => (
           filterUnits="userSpaceOnUse"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feBlend
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          ></feBlend>
-          <feGaussianBlur
-            result="effect1_foregroundBlur_106_583"
-            stdDeviation="1"
-          ></feGaussianBlur>
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+          <feGaussianBlur result="effect1_foregroundBlur_106_583" stdDeviation="1"></feGaussianBlur>
         </filter>
         <linearGradient
           id="paint0_linear_106_583"
@@ -510,4 +434,4 @@ export const Loading = () => (
       </defs>
     </svg>
   </div>
-);
+)

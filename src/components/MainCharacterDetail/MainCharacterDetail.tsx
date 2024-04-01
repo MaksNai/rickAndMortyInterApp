@@ -1,120 +1,103 @@
-import { useEffect, useMemo, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
-import styles from "./mainCharacterDetail.module.scss";
-import { fetchCharactersByIds } from "../../store/characterSlice";
-import { fetchEpisodesByIds } from "../../store/episodeSlice";
-import { GoBackLink, Loading } from "..";
-import { INFORMATION_FIELDS } from "./constants";
-import { extractNumbersFromEnd } from "./helpers";
-import { AppState, Character, Episode } from "../../interfaces/interfaces";
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { useEffect, useMemo, useRef } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import styles from './mainCharacterDetail.module.scss'
+import { fetchCharactersByIds } from '../../store/characterSlice'
+import { fetchEpisodesByIds } from '../../store/episodeSlice'
+import { GoBackLink, Loading } from '..'
+import { INFORMATION_FIELDS } from './constants'
+import { extractNumbersFromEnd } from './helpers'
+import { AppState, Character, Episode } from '../../interfaces/interfaces'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
 
-type CharacterField = (typeof INFORMATION_FIELDS)[number];
+type CharacterField = (typeof INFORMATION_FIELDS)[number]
 
 const getFieldValue = (
   character: Character,
   field: CharacterField,
 ): string | { name: string; url: string } | undefined => {
   switch (field) {
-    case "gender":
-    case "status":
-    case "species":
-    case "type":
-      return character[field];
-    case "origin":
-    case "location":
-      return character[field];
+    case 'gender':
+    case 'status':
+    case 'species':
+    case 'type':
+      return character[field]
+    case 'origin':
+    case 'location':
+      return character[field]
     default:
-      return undefined;
+      return undefined
   }
-};
+}
 
 export const MainCharacterDetail = () => {
-  const dispatch = useAppDispatch();
-  const { characterId } = useParams<{ characterId: string }>();
-  const top = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch()
+  const { characterId } = useParams<{ characterId: string }>()
+  const top = useRef<HTMLDivElement>(null)
 
-  const characterLoading = useAppSelector(
-    (state: AppState) => state.characters.loading,
-  );
-  const episodeLoading = useAppSelector(
-    (state: AppState) => state.episodes.loading,
-  );
+  const characterLoading = useAppSelector((state: AppState) => state.characters.loading)
+  const episodeLoading = useAppSelector((state: AppState) => state.episodes.loading)
 
   const character = useAppSelector((state: AppState) =>
-    state.characters.charactersByIds.find(
-      (char) => char.id.toString() === characterId,
-    ),
-  );
+    state.characters.charactersByIds.find((char) => char.id.toString() === characterId),
+  )
 
-  const episodes: Episode[] = useAppSelector(
-    (state: AppState) => state.episodes.episodesByIds,
-  );
+  const episodes: Episode[] = useAppSelector((state: AppState) => state.episodes.episodesByIds)
 
   useEffect(() => {
     if (character) {
-      void dispatch(fetchEpisodesByIds(character.episode));
+      void dispatch(fetchEpisodesByIds(character.episode))
     }
-  }, [dispatch, character]);
+  }, [dispatch, character])
 
   useEffect(() => {
-    if (typeof characterId !== "undefined") {
-      void dispatch(fetchCharactersByIds([characterId]));
+    if (typeof characterId !== 'undefined') {
+      void dispatch(fetchCharactersByIds([characterId]))
     }
-  }, [dispatch, characterId]);
+  }, [dispatch, characterId])
 
   useEffect(() => {
-    top.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    top.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
-  const imageSrc = useMemo(() => character?.image, [character]);
-  const nameCharacter = useMemo(() => character?.name, [character]);
+  const imageSrc = useMemo(() => character?.image, [character])
+  const nameCharacter = useMemo(() => character?.name, [character])
 
   const informationContent = useMemo(() => {
     if (!characterLoading && character) {
       return INFORMATION_FIELDS.map((field) => {
-        const fieldValue = getFieldValue(character, field);
+        const fieldValue = getFieldValue(character, field)
         if (fieldValue) {
-          const content =
-            typeof fieldValue === "object" ? fieldValue.name : fieldValue;
-          const key = typeof fieldValue === "object" ? fieldValue.url : field;
-          const isLink = typeof fieldValue === "object" && fieldValue.url;
+          const content = typeof fieldValue === 'object' ? fieldValue.name : fieldValue
+          const key = typeof fieldValue === 'object' ? fieldValue.url : field
+          const isLink = typeof fieldValue === 'object' && fieldValue.url
 
           if (isLink)
             return (
               <Link
-                to={`/${extractNumbersFromEnd(fieldValue.url).join("/")}`}
+                to={`/${extractNumbersFromEnd(fieldValue.url).join('/')}`}
                 key={key}
-                className={`${styles.informationItem} ${
-                  isLink ? styles.linkedItem : ""
-                }`}
+                className={`${styles.informationItem} ${isLink ? styles.linkedItem : ''}`}
               >
-                <dt className={styles.dt}>
-                  {field[0].toUpperCase() + field.slice(1)}
-                </dt>
-                <dd className={styles.dd}>{content || "Unknown"}</dd>
+                <dt className={styles.dt}>{field[0].toUpperCase() + field.slice(1)}</dt>
+                <dd className={styles.dd}>{content || 'Unknown'}</dd>
               </Link>
-            );
+            )
 
           return (
             <div
               key={key}
-              className={`${styles.informationItem} ${
-                isLink ? styles.linkedItem : ""
-              }`}
+              className={`${styles.informationItem} ${isLink ? styles.linkedItem : ''}`}
             >
-              <dt className={styles.dt}>
-                {field[0].toUpperCase() + field.slice(1)}
-              </dt>
-              <dd className={styles.dd}>{content || "Unknown"}</dd>
+              <dt className={styles.dt}>{field[0].toUpperCase() + field.slice(1)}</dt>
+              <dd className={styles.dd}>{content || 'Unknown'}</dd>
             </div>
-          );
+          )
         }
-        return null;
-      }).filter(Boolean);
+        return null
+      }).filter(Boolean)
     }
-    return [];
-  }, [character, characterLoading]);
+    return []
+  }, [character, characterLoading])
 
   const mainCharacterInfo = useMemo(() => {
     if (!character || characterLoading) {
@@ -122,15 +105,15 @@ export const MainCharacterDetail = () => {
         <div className={styles.error}>
           {characterLoading ? <Loading /> : <p>Character not found</p>}
         </div>
-      );
+      )
     }
     return (
       <>
         <img src={imageSrc} className={styles.image} alt={nameCharacter} />
         <h1 className={styles.name}>{nameCharacter}</h1>
       </>
-    );
-  }, [character, imageSrc, nameCharacter, characterLoading]);
+    )
+  }, [character, imageSrc, nameCharacter, characterLoading])
 
   const episodesContent = useMemo(() => {
     if (!episodeLoading) {
@@ -144,16 +127,16 @@ export const MainCharacterDetail = () => {
           <span className={styles.episodeNames}>{name}</span>
           <span className={styles.episodeDate}>{air_date}</span>
         </Link>
-      ));
+      ))
     }
-    return <p>Loading episodes...</p>;
-  }, [episodes, episodeLoading]);
+    return <p>Loading episodes...</p>
+  }, [episodes, episodeLoading])
 
   return (
     <main className={styles.main}>
       <div className={styles.top} ref={top}>
         <nav className={styles.nav}>
-          <GoBackLink url="/characters/" />
+          <GoBackLink url="/characters" />
         </nav>
         <div className={styles.charactersInfo}>{mainCharacterInfo}</div>
       </div>
@@ -168,5 +151,5 @@ export const MainCharacterDetail = () => {
         </section>
       </section>
     </main>
-  );
-};
+  )
+}

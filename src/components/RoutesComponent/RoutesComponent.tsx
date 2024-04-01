@@ -1,5 +1,5 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { FC } from "react";
+import { Route, Routes, Navigate } from 'react-router-dom'
+import { FC } from 'react'
 import {
   MainCharacters,
   MainLocations,
@@ -8,25 +8,13 @@ import {
   MainLocationDetail,
   MainEpisodeDetail,
   ErrorPage,
-} from "..";
+} from '..'
 
 export const RoutesComponent: FC = () => (
   <Routes>
-    <Route
-      path="/characters"
-      element={<MainCharacters />}
-      errorElement={<ErrorPage />}
-    />
-    <Route
-      path="/locations"
-      element={<MainLocations />}
-      errorElement={<ErrorPage />}
-    />
-    <Route
-      path="/episodes"
-      element={<MainEpisodes />}
-      errorElement={<ErrorPage />}
-    />
+    <Route path="/characters" element={<MainCharacters />} errorElement={<ErrorPage />} />
+    <Route path="/locations" element={<MainLocations />} errorElement={<ErrorPage />} />
+    <Route path="/episodes" element={<MainEpisodes />} errorElement={<ErrorPage />} />
     <Route
       path="/characters/:characterId"
       element={<MainCharacterDetail />}
@@ -42,10 +30,6 @@ export const RoutesComponent: FC = () => (
       element={<MainEpisodeDetail />}
       errorElement={<ErrorPage />}
     />
-    <Route
-      path="/"
-      element={<Navigate to="/characters" replace />}
-      errorElement={<ErrorPage />}
-    />
+    <Route path="/" element={<Navigate to="/characters" replace />} errorElement={<ErrorPage />} />
   </Routes>
-);
+)

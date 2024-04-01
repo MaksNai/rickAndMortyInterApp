@@ -1,11 +1,11 @@
-import { Card, CardMedia, CardContent, Typography } from "@mui/material";
-import styles from "./characterCard.module.scss";
-import { Link } from "react-router-dom";
-import { CharacterCardProps } from "../../interfaces/interfaces";
+import { Card, CardMedia, CardContent, Typography } from '@mui/material'
+import styles from './characterCard.module.scss'
+import { Link } from 'react-router-dom'
+import { CharacterCardProps } from '../../interfaces/interfaces'
 
 export function CharacterCard({ character }: CharacterCardProps) {
-  const { id, image, name, species } = character;
-  const characterLink = `/characters/${id}`;
+  const { id, image, name, species } = character
+  const characterLink = `/characters/${id}`
 
   return (
     <Link to={characterLink} className={styles.cardLink}>
@@ -27,5 +27,5 @@ export function CharacterCard({ character }: CharacterCardProps) {
         </CardContent>
       </Card>
     </Link>
-  );
+  )
 }
