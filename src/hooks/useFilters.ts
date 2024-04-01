@@ -50,14 +50,14 @@ export const useFilters = (type: FilterType): UseFiltersReturnType => {
   const actions: FilterActions = filterActions[type];
 
   const updateFilter = (filterName: string, value: string): void => {
-    dispatch(actions.setFilter({ filterName, value }));
+    void dispatch(actions.setFilter({ filterName, value }));
     const currentFilters = getCurrentFilters();
     currentFilters[filterName] = value;
     localStorage.setItem(`${type}Filters`, JSON.stringify(currentFilters));
   };
 
   const resetAllFilters = (): void => {
-    dispatch(actions.resetFilters());
+    void dispatch(actions.resetFilters());
     localStorage.removeItem(`${type}Filters`);
   };
 

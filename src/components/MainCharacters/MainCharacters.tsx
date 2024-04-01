@@ -1,9 +1,6 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import styles from "./mainCharacters.module.scss";
-import {
-  AppState,
-  SelectFilterLabel,
-} from "../../interfaces/interfaces";
+import { AppState, SelectFilterLabel } from "../../interfaces/interfaces";
 import { getUniqueValues, sortByIdAsc } from "../../helpers/helpers";
 import { ITEMS_PER_PAGE_INITIAL, TYPE } from "./constants";
 import {
@@ -55,7 +52,7 @@ export function MainCharacters() {
 
   useEffect(() => {
     if (isNeedMore && !error) {
-      dispatch(
+      void dispatch(
         fetchCharacters({
           page: currentPage,
         }),
@@ -178,7 +175,9 @@ export function MainCharacters() {
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
       >
-        {currentPage <= maxPage && hasMore && <LoadMoreButton />}
+        {currentPage <= maxPage && hasMore && orderedCharacters.length > 0 && (
+          <LoadMoreButton />
+        )}
         {!hasMore && characters.length !== 0 && <p>No more characters</p>}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (

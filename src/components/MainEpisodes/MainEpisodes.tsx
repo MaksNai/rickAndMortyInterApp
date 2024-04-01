@@ -19,24 +19,28 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 export function MainEpisodes() {
   const dispatch = useAppDispatch();
 
-  const [itemsPerPage, setItemsPerPage] = useState<number>(ITEMS_PER_PAGE_INITIAL);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(
+    ITEMS_PER_PAGE_INITIAL,
+  );
   const [isUpToButtonVisible, setIsUpToButtonVisible] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoadMoreClicked, setIsLoadMoreClicked] = useState<boolean>(false);
   const [isNeedMore, setIsNeedMore] = useState<boolean>(true);
 
   const episodes = useAppSelector(selectFilteredEpisodes);
-  const episodeLoading = useAppSelector((state: AppState) => state.episodes.loading);
+  const episodeLoading = useAppSelector(
+    (state: AppState) => state.episodes.loading,
+  );
   const maxPage = useAppSelector((state: AppState) => state.episodes.maxPage);
   const error = useAppSelector((state: AppState) => state.locations.error);
   const hasMore = useAppSelector((state: AppState) => state.locations.hasMore);
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
-const heroImage = useRef<HTMLDivElement>(null);
+  const heroImage = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isNeedMore && !error) {
-      dispatch(fetchEpisodes({ page: currentPage }));
+      void dispatch(fetchEpisodes({ page: currentPage }));
       setIsNeedMore(false);
     }
   }, [dispatch, currentPage, isNeedMore, hasMore, error]);
@@ -107,14 +111,16 @@ const heroImage = useRef<HTMLDivElement>(null);
       {episodeLoading && (
         <div className={styles.loadingIndicator}>
           <Loading />
-        </div>
+        </div> 
       )}
       <div
         ref={loadMoreRef}
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
       >
-        {currentPage <= maxPage && hasMore && <LoadMoreButton />}
+        {currentPage <= maxPage && hasMore && episodes.length > 0 && (
+          <LoadMoreButton />
+        )}
         {(!hasMore || error) && episodes.length !== 0 && (
           <p>No more episodes</p>
         )}

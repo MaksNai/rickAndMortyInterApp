@@ -11,24 +11,28 @@ export function MainLocationDetail() {
   const dispatch = useAppDispatch();
   const { locationId } = useParams<{ locationId: string }>();
 
-  const locationLoading = useAppSelector((state: AppState) => state.locations.loading);
+  const locationLoading = useAppSelector(
+    (state: AppState) => state.locations.loading,
+  );
 
   const location = useAppSelector((state: AppState) =>
     state.locations.locationsByIds.find(
       (location) => location.id.toString() === locationId,
     ),
   );
-  const residents = useAppSelector((state: AppState) => state.characters.charactersByIds);
+  const residents = useAppSelector(
+    (state: AppState) => state.characters.charactersByIds,
+  );
 
   useEffect(() => {
-    if(typeof locationId !== 'undefined') {
-      dispatch(fetchLocationsByIds(locationId));
+    if (typeof locationId !== "undefined") {
+      void dispatch(fetchLocationsByIds(locationId));
     }
   }, [dispatch, locationId]);
 
   useEffect(() => {
     if (location && location.residents && location.residents.length > 0) {
-      dispatch(fetchCharactersByIds(location.residents));
+      void dispatch(fetchCharactersByIds(location.residents));
     }
   }, [dispatch, locationLoading, location]);
 

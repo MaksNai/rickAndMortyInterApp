@@ -5,7 +5,7 @@ import { Container } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Footer, Header, RoutesComponent } from "./components";
 
-const App = () => (
+export const App = () => (
   <Provider store={store}>
     <Router>
       <Container
@@ -25,5 +25,3 @@ const App = () => (
     </Router>
   </Provider>
 );
-
-export default App;

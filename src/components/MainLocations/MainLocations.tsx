@@ -26,7 +26,7 @@ export function MainLocations() {
   const allLocations = useAppSelector(selectAllLocations);
   const locations = useAppSelector(selectFilteredLocations);
   const locationLoading = useAppSelector(
-    (state: AppState) => state.locations.loading
+    (state: AppState) => state.locations.loading,
   );
   const maxPage = useAppSelector((state: AppState) => state.locations.maxPage);
   const error = useAppSelector((state: AppState) => state.locations.error);
@@ -43,7 +43,7 @@ export function MainLocations() {
 
   useEffect(() => {
     if (isNeedMore && !error) {
-      dispatch(fetchLocations({ page: currentPage }));
+      void dispatch(fetchLocations({ page: currentPage }));
       setIsNeedMore(false);
     }
   }, [dispatch, currentPage, isNeedMore, hasMore, error]);
@@ -84,14 +84,14 @@ export function MainLocations() {
   // Select fields
   const typeOptions = useMemo(
     () => getUniqueValues(allLocations, "type"),
-    [allLocations]
+    [allLocations],
   );
   const dimensionOptions = useMemo(
     () => getUniqueValues(allLocations, "dimension"),
-    [allLocations]
+    [allLocations],
   );
 
-  const selectFilterLabels: SelectFilterLabel[]  = useMemo(
+  const selectFilterLabels: SelectFilterLabel[] = useMemo(
     () => [
       { label: "Type", items: typeOptions },
       {
@@ -99,7 +99,7 @@ export function MainLocations() {
         items: dimensionOptions,
       },
     ],
-    [typeOptions, dimensionOptions]
+    [typeOptions, dimensionOptions],
   );
 
   // Content
@@ -158,7 +158,9 @@ export function MainLocations() {
         className={styles.loadMoreButtonContainer}
         onClick={handleLoadMoreClick}
       >
-        {currentPage <= maxPage && hasMore && <LoadMoreButton />}
+        {currentPage <= maxPage && hasMore && locations.length > 0 && (
+          <LoadMoreButton />
+        )}
         {!hasMore && locations.length !== 0 && <p>No more locations</p>}
       </div>
       {currentPage > 2 && isUpToButtonVisible && (

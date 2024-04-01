@@ -48,13 +48,12 @@ export interface CharacterRootState {
 }
 
 export interface FetchCharactersPayload {
-  results: Character[];
-  info: {
+  results?: Character[];
+  info?: {
     pages: number;
     next: string | null;
   };
 }
-
 // Locations
 export interface Location {
   id: number;
@@ -95,8 +94,8 @@ export interface LocationsCardProps {
 }
 
 export interface FetchLocationPayload {
-  results: Location[];
-  info: {
+  results?: Location[];
+  info?: {
     pages: number;
     next: string | null;
   };
@@ -131,8 +130,8 @@ export interface EpisodeRootState {
 }
 
 export interface FetchEpisodePayload {
-  results: Episode[];
-  info: {
+  results?: Episode[];
+  info?: {
     pages: number;
     next: string | null;
   };

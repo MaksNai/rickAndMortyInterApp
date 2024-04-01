@@ -2,7 +2,7 @@ import styles from "./hero.module.scss";
 import { IMG_SOURCE } from "./constants";
 
 interface HeroProps {
-  type: "names" | "circle" | "rickAndMorty",
+  type: "names" | "circle" | "rickAndMorty";
 }
 
 export function Hero({ type = "names" }: HeroProps) {

@@ -8,7 +8,7 @@ interface NavLink {
 }
 
 interface NavProps {
-  links: NavLink[]; 
+  links: NavLink[];
 }
 export function Nav({ links }: NavProps) {
   const [isOpen, setIsOpen] = useState(false);

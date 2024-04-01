@@ -16,7 +16,7 @@ import {
   FilterValue,
 } from "../interfaces/interfaces";
 
-import { parseJSON } from './helpers'
+import { parseJSON } from "./helpers";
 
 export const fetchCharacters = createAsyncThunk<
   FetchCharactersPayload,
@@ -66,7 +66,6 @@ export const fetchCharactersByIds = createAsyncThunk<
   return response.data as FetchCharactersPayload;
 });
 
-
 const initialState: CharacterState = {
   maxPage: 1,
   entities: [],
@@ -87,6 +86,12 @@ type FilterName = "name" | "species" | "status" | "gender";
 interface FilterAction {
   filterName: FilterName;
   value: FilterValue;
+}
+
+function isCharacter(
+  payload: FetchCharactersPayload | Character,
+): payload is Character {
+  return "id" in payload;
 }
 
 const charactersSlice = createSlice({
@@ -117,27 +122,33 @@ const charactersSlice = createSlice({
       })
       .addCase(fetchCharacters.fulfilled, (state, action) => {
         state.loading = false;
-        const newCharacters = new Map(
+        const newCharacters = new Map<number, Character>(
           state.entities.map((char) => [char.id, char]),
         );
-
-        action.payload.results.forEach((char) => {
+        action.payload.results?.forEach((char: Character) => {
           newCharacters.set(char.id, char);
         });
 
         state.entities = Array.from(newCharacters.values());
-        state.maxPage = action.payload.info.pages;
+        state.maxPage = action.payload.info?.pages || 1;
         state.error = null;
-        state.hasMore = !!action.payload.info.next;
+        state.hasMore = !!action.payload.info?.next || false;
       })
       .addCase(fetchCharacters.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
       .addCase(fetchCharactersByIds.fulfilled, (state, action) => {
-        const charactersData = Array.isArray(action.payload)
-          ? action.payload
-          : action.payload.results;
+        let charactersData: Character[];
+
+        if (Array.isArray(action.payload)) {
+          charactersData = action.payload;
+        } else if (isCharacter(action.payload)) {
+          charactersData = [action.payload];
+        } else {
+          console.error("Unexpected payload structure:", action.payload);
+          charactersData = [];
+        }
 
         state.charactersByIds = charactersData;
         state.loading = false;

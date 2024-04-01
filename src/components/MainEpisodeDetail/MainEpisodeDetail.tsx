@@ -12,8 +12,12 @@ export const MainEpisodeDetail = () => {
   const { episodeId } = useParams<{ episodeId: string }>();
   const top = useRef<HTMLDivElement>(null);
 
-  const episodeLoading = useAppSelector((state: AppState) => state.episodes.loading);
-  const casts = useAppSelector((state: AppState) => state.characters.charactersByIds);
+  const episodeLoading = useAppSelector(
+    (state: AppState) => state.episodes.loading,
+  );
+  const casts = useAppSelector(
+    (state: AppState) => state.characters.charactersByIds,
+  );
 
   const episode = useAppSelector((state: AppState) =>
     state.episodes.episodesByIds.find(
@@ -23,13 +27,13 @@ export const MainEpisodeDetail = () => {
 
   useEffect(() => {
     if ((episodeLoading || !episode) && episodeId) {
-      dispatch(fetchEpisodesByIds(episodeId));
+      void dispatch(fetchEpisodesByIds(episodeId));
     }
   }, [episodeLoading, dispatch, episode, episodeId]);
 
   useEffect(() => {
     if (!episodeLoading && episode && episode.characters) {
-      dispatch(fetchCharactersByIds(episode.characters));
+      void dispatch(fetchCharactersByIds(episode.characters));
     }
   }, [dispatch, episodeLoading, episode]);
 
@@ -39,17 +43,17 @@ export const MainEpisodeDetail = () => {
 
   const nameEpisode = useMemo(() => {
     if (!episodeLoading && episode) return episode.name;
-    return ""
+    return "";
   }, [episode, episodeLoading]);
 
   const episodeNumber = useMemo(() => {
     if (!episodeLoading && episode) return episode.episode;
-    return ""
+    return "";
   }, [episode, episodeLoading]);
 
   const airDate = useMemo(() => {
     if (!episodeLoading && episode) return episode.air_date;
-    return ""
+    return "";
   }, [episode, episodeLoading]);
 
   const mainEpisodeInfo = useMemo(

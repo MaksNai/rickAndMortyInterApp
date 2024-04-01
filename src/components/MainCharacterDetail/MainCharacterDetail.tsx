@@ -13,7 +13,7 @@ type CharacterField = (typeof INFORMATION_FIELDS)[number];
 
 const getFieldValue = (
   character: Character,
-  field: CharacterField
+  field: CharacterField,
 ): string | { name: string; url: string } | undefined => {
   switch (field) {
     case "gender":
@@ -35,29 +35,31 @@ export const MainCharacterDetail = () => {
   const top = useRef<HTMLDivElement>(null);
 
   const characterLoading = useAppSelector(
-    (state: AppState) => state.characters.loading
+    (state: AppState) => state.characters.loading,
   );
   const episodeLoading = useAppSelector(
-    (state: AppState) => state.episodes.loading
+    (state: AppState) => state.episodes.loading,
   );
+
   const character = useAppSelector((state: AppState) =>
     state.characters.charactersByIds.find(
-      (char) => char.id.toString() === characterId
-    )
+      (char) => char.id.toString() === characterId,
+    ),
   );
+
   const episodes: Episode[] = useAppSelector(
-    (state: AppState) => state.episodes.episodesByIds
+    (state: AppState) => state.episodes.episodesByIds,
   );
 
   useEffect(() => {
     if (character) {
-      dispatch(fetchEpisodesByIds(character.episode));
+      void dispatch(fetchEpisodesByIds(character.episode));
     }
   }, [dispatch, character]);
 
   useEffect(() => {
     if (typeof characterId !== "undefined") {
-      dispatch(fetchCharactersByIds([characterId]));
+      void dispatch(fetchCharactersByIds([characterId]));
     }
   }, [dispatch, characterId]);
 
@@ -71,7 +73,7 @@ export const MainCharacterDetail = () => {
   const informationContent = useMemo(() => {
     if (!characterLoading && character) {
       return INFORMATION_FIELDS.map((field) => {
-        const fieldValue = getFieldValue(character, field );
+        const fieldValue = getFieldValue(character, field);
         if (fieldValue) {
           const content =
             typeof fieldValue === "object" ? fieldValue.name : fieldValue;
