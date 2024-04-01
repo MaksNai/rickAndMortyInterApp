@@ -2,12 +2,12 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import "./App.scss";
 import { Container } from "@mui/material";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { Footer, Header, RoutesComponent } from "./components";
 
 export const App = () => (
   <Provider store={store}>
-    <HashRouter basename="/rickAndMortyInterApp">
+    <Router>
       <Container
         className="container"
         maxWidth={false}
@@ -22,6 +22,6 @@ export const App = () => (
         <RoutesComponent />
         <Footer />
       </Container>
-    </HashRouter>
+    </Router>
   </Provider>
 );
