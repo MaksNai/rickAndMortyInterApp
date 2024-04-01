@@ -18,9 +18,9 @@ export const App = () => (
           minHeight: '100vh',
         }}
       >
-        <Header />
-        <RoutesComponent />
-        <Footer />
+                            <Header />
+               <RoutesComponent />
+                                <Footer />
       </Container>
     </Router>
   </Provider>
