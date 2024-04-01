@@ -3,10 +3,9 @@
 
 .main {
   @include mixins.mainPageStyle;
-  justify-content: flex-start;
   width: 100%;
   padding-top: 30px;
-  padding-bottom: 30px;
+  justify-content: flex-start
 }
 
 .top {
@@ -16,6 +15,18 @@
 .name {
   @include mixins.fontMain400;
   font-size: 36px;
+}
+
+.episodesInfo {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.episodeInfoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .dl {
@@ -31,13 +42,9 @@
 }
 .dd {
   margin: 0;
-}
-
-.locationsInfo {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  color: rgba(110, 121, 140, 1);
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .sectionTitle {
@@ -46,10 +53,14 @@
   color: #8e8e93;
 }
 
-.residentLink {
-  text-decoration: none;
+.castCards {
+  @include mixins.mainCardsStyle;
+  padding-bottom: 30px;
 }
 
-.residentCards {
-  @include mixins.mainCardsStyle;
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }

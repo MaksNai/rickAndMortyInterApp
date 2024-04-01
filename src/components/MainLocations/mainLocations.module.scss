@@ -45,8 +45,12 @@
   }
 }
 
-.loading {
+.loadingIndicator {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.upToButton {
+  @include mixins.upToButton;
 }

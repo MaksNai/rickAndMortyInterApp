@@ -65,6 +65,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  align-self: center;
 }
 
 @mixin mainCardsStyle {
@@ -84,16 +85,16 @@
 @mixin mainCardStyle {
   text-decoration: none;
   display: block;
-  width: 100%; 
-  max-width: 240px; 
-  margin: 0 auto; 
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto;
 
   &:hover {
     outline: 1px solid black;
   }
 
   @media (max-width: variables.$mobileScreen) {
-    max-width: 312px; 
+    max-width: 312px;
   }
 }
 
@@ -103,5 +104,18 @@
     display: block;
     width: 100%;
     margin-bottom: $margin;
+  }
+}
+
+@mixin upToButton {
+  position: fixed;
+  bottom: 12%;
+  right: 13%;
+}
+
+@mixin top {
+  display: flex;
+  @media (max-width: variables.$mobileScreen) {
+    flex-direction: column;
   }
 }
