@@ -111,7 +111,7 @@ export function MainEpisodes() {
       {episodeLoading && (
         <div className={styles.loadingIndicator}>
           <Loading />
-        </div> 
+        </div>
       )}
       <div
         ref={loadMoreRef}

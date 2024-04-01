@@ -87,7 +87,9 @@ interface FilterAction {
   value: FilterValue;
 }
 
-function isLocation(payload: FetchLocationPayload | Location): payload is Location {
+function isLocation(
+  payload: FetchLocationPayload | Location,
+): payload is Location {
   return "id" in payload;
 }
 
@@ -118,23 +120,23 @@ const locationsSlice = createSlice({
       .addCase(fetchLocations.fulfilled, (state, action) => {
         state.loading = false;
 
-  if (action.payload.results && Array.isArray(action.payload.results)) {
-    const newLocations = new Map<number, Location>(
-      state.entities.map((location) => [location.id, location])
-    );
+        if (action.payload.results && Array.isArray(action.payload.results)) {
+          const newLocations = new Map<number, Location>(
+            state.entities.map((location) => [location.id, location]),
+          );
 
-    action.payload.results.forEach((location) => {
-      newLocations.set(location.id, location);
-    });
+          action.payload.results.forEach((location) => {
+            newLocations.set(location.id, location);
+          });
 
-    state.entities = Array.from(newLocations.values());
-  } else {
-    console.error("Unexpected payload structure:", action.payload);
-  }
+          state.entities = Array.from(newLocations.values());
+        } else {
+          console.error("Unexpected payload structure:", action.payload);
+        }
 
-  state.maxPage = action.payload.info?.pages || 1;
-  state.error = null;
-  state.hasMore = !!action.payload.info?.next;
+        state.maxPage = action.payload.info?.pages || 1;
+        state.error = null;
+        state.hasMore = !!action.payload.info?.next;
       })
       .addCase(fetchLocations.rejected, (state, action) => {
         state.loading = false;
@@ -142,7 +144,7 @@ const locationsSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(fetchLocationsByIds.fulfilled, (state, action) => {
-  let locationsData: Location[];
+        let locationsData: Location[];
 
         if (Array.isArray(action.payload)) {
           locationsData = action.payload;
