@@ -1,5 +1,5 @@
-import { FC } from "react";
-import styles from "./footer.module.scss";
+import { FC } from 'react'
+import styles from './footer.module.scss'
 
 export const Footer: FC = () => (
   <footer className={styles.footer}>
@@ -7,4 +7,4 @@ export const Footer: FC = () => (
       Make with <span>❤️</span> for the MobProgramming team
     </p>
   </footer>
-);
+)

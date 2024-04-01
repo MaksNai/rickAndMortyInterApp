@@ -1,5 +1,5 @@
-@use "../../styles/mixins.scss";
-@use "../../styles/variables.scss";
+@use '../../styles/mixins.scss';
+@use '../../styles/variables.scss';
 
 .nav {
   @include mixins.fontSecond700;
@@ -83,7 +83,7 @@
   &::before,
   &::after {
     position: absolute;
-    content: "";
+    content: '';
     width: 18px;
     height: 2px;
     background-color: rgba(0, 0, 0, 0.54);

@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import styles from "./goBackLink.module.scss";
+import { Link } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import styles from './goBackLink.module.scss'
 
 interface GoBackLinkProps {
-  url: string;
+  url: string
 }
 
 export const GoBackLink = ({ url }: GoBackLinkProps) => (
@@ -11,4 +11,4 @@ export const GoBackLink = ({ url }: GoBackLinkProps) => (
     <ArrowBackIcon />
     Go back
   </Link>
-);
+)

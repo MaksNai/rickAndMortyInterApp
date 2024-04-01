@@ -1,55 +1,49 @@
-import { useEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { GoBackLink, CharacterCard, Loading } from "..";
-import { fetchLocationsByIds } from "../../store/locationsSlice";
-import { fetchCharactersByIds } from "../../store/characterSlice";
-import styles from "./mainLocationDetail.module.scss";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { AppState } from "../../interfaces/interfaces";
+import { useEffect, useMemo } from 'react'
+import { useParams } from 'react-router-dom'
+import { GoBackLink, CharacterCard, Loading } from '..'
+import { fetchLocationsByIds } from '../../store/locationsSlice'
+import { fetchCharactersByIds } from '../../store/characterSlice'
+import styles from './mainLocationDetail.module.scss'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { AppState } from '../../interfaces/interfaces'
 
 export function MainLocationDetail() {
-  const dispatch = useAppDispatch();
-  const { locationId } = useParams<{ locationId: string }>();
+  const dispatch = useAppDispatch()
+  const { locationId } = useParams<{ locationId: string }>()
 
-  const locationLoading = useAppSelector(
-    (state: AppState) => state.locations.loading,
-  );
+  const locationLoading = useAppSelector((state: AppState) => state.locations.loading)
 
   const location = useAppSelector((state: AppState) =>
-    state.locations.locationsByIds.find(
-      (location) => location.id.toString() === locationId,
-    ),
-  );
-  const residents = useAppSelector(
-    (state: AppState) => state.characters.charactersByIds,
-  );
+    state.locations.locationsByIds.find((location) => location.id.toString() === locationId),
+  )
+  const residents = useAppSelector((state: AppState) => state.characters.charactersByIds)
 
   useEffect(() => {
-    if (typeof locationId !== "undefined") {
-      void dispatch(fetchLocationsByIds(locationId));
+    if (typeof locationId !== 'undefined') {
+      void dispatch(fetchLocationsByIds(locationId))
     }
-  }, [dispatch, locationId]);
+  }, [dispatch, locationId])
 
   useEffect(() => {
     if (location && location.residents && location.residents.length > 0) {
-      void dispatch(fetchCharactersByIds(location.residents));
+      void dispatch(fetchCharactersByIds(location.residents))
     }
-  }, [dispatch, locationLoading, location]);
+  }, [dispatch, locationLoading, location])
 
   const nameLocation = useMemo(() => {
-    if (!locationLoading && location) return location.name;
-    return "";
-  }, [location, locationLoading]);
+    if (!locationLoading && location) return location.name
+    return ''
+  }, [location, locationLoading])
 
   const typeLocation = useMemo(() => {
-    if (!locationLoading && location) return location.type;
-    return "";
-  }, [location, locationLoading]);
+    if (!locationLoading && location) return location.type
+    return ''
+  }, [location, locationLoading])
 
   const typeDimension = useMemo(() => {
-    if (!locationLoading && location) return location.dimension;
-    return "";
-  }, [location, locationLoading]);
+    if (!locationLoading && location) return location.dimension
+    return ''
+  }, [location, locationLoading])
 
   const mainLocationInfo = useMemo(
     () =>
@@ -73,7 +67,7 @@ export function MainLocationDetail() {
         </div>
       ),
     [location, nameLocation, typeDimension, typeLocation],
-  );
+  )
 
   const residentContent = useMemo(() => {
     if (!residents) {
@@ -81,10 +75,10 @@ export function MainLocationDetail() {
         <div className={styles.error}>
           <Loading />
         </div>
-      );
+      )
     }
     if (residents.length === 0) {
-      return <div className={styles.error}>There are no residents</div>;
+      return <div className={styles.error}>There are no residents</div>
     }
     return (
       <>
@@ -92,8 +86,8 @@ export function MainLocationDetail() {
           <CharacterCard character={resident} key={resident.id} />
         ))}
       </>
-    );
-  }, [residents]);
+    )
+  }, [residents])
 
   return (
     <main className={styles.main}>
@@ -108,5 +102,5 @@ export function MainLocationDetail() {
         <section className={styles.residentCards}>{residentContent}</section>
       </section>
     </main>
-  );
+  )
 }

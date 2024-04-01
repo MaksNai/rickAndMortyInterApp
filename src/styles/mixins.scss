@@ -1,7 +1,7 @@
-@use "./variables.scss";
-@import "@fontsource/roboto/400.css";
-@import "@fontsource/roboto/500.css";
-@import "@fontsource-variable/karla";
+@use './variables.scss';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource-variable/karla';
 
 @mixin sizeComponent {
   max-width: variables.$content-width;
